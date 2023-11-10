@@ -51,8 +51,8 @@ public class TPCommand implements TabExecutor {
 
                     String name = player.getName();
                     if (commander.getWorld().equals(player.getWorld())) {
-                        if (!sender.hasPermission("chunanplugin.command.tp.same") && !sender.hasPermission("chunanplugin.command.tp.across")) {
-                            sender.sendMessage("§c你，莫得权限");
+                        if (!sender.hasPermission("alsace.command.tp.same") && !sender.hasPermission("chunanplugin.command.tp.across")) {
+                            sender.sendMessage("§c你没有使用该命令的权限");
                             return true;
                         }
 
@@ -63,7 +63,7 @@ public class TPCommand implements TabExecutor {
 
                         commander.teleport(player);
                         commander.sendMessage("§a已传送至" + name);
-                    } else if (commander.hasPermission("chunanplugin.command.tp.across")) {
+                    } else if (commander.hasPermission("alsace.command.tp.across")) {
                         if ((Boolean) this.plugin.hasIgnored.get(name)) {
                             sender.sendMessage("§c玩家" + name + "已屏蔽强制传送");
                             return true;
@@ -72,7 +72,7 @@ public class TPCommand implements TabExecutor {
                         commander.teleport(player);
                         commander.sendMessage("§a已传送至" + name);
                     } else {
-                        commander.sendMessage("§c你，莫得跨世界强制传送的权限");
+                        commander.sendMessage("§c你没有使用该命令的权限");
                     }
 
                     return true;
@@ -82,12 +82,12 @@ public class TPCommand implements TabExecutor {
             }
             case 2 -> {
                 if (sender instanceof Player commander) {
-                    if (!sender.hasPermission("chunanplugin.command.tp.location")) {
-                        sender.sendMessage("§c你，莫得权限");
+                    if (!sender.hasPermission("alsace.command.tp.location")) {
+                        sender.sendMessage("§c你没有使用该命令的权限");
                         return true;
                     }
-                    if (!sender.hasPermission("chunanplugin.command.tp.other")) {
-                        sender.sendMessage("§c你，莫得权限");
+                    if (!sender.hasPermission("alsace.command.tp.other")) {
+                        sender.sendMessage("§c你没有使用该命令的权限");
                         return true;
                     } else {
                         commander = Bukkit.getPlayer(args[0]);
@@ -111,8 +111,8 @@ public class TPCommand implements TabExecutor {
             }
             case 3 -> {
                 if (sender instanceof Player commander) {
-                    if (!sender.hasPermission("chunanplugin.command.tp.location")) {
-                        sender.sendMessage("§c你，莫得权限");
+                    if (!sender.hasPermission("alsace.command.tp.location")) {
+                        sender.sendMessage("§c你没有使用该命令的权限");
                         return true;
                     }
 
@@ -135,21 +135,21 @@ public class TPCommand implements TabExecutor {
             }
             case 4 -> {
                 if (sender instanceof Player commander) {
-                    if (!sender.hasPermission("chunanplugin.command.tp.location")) {
-                        sender.sendMessage("§c你，莫得权限");
+                    if (!sender.hasPermission("alsace.command.tp.location")) {
+                        sender.sendMessage("§c你没有使用该命令的权限");
                         return true;
                     }
                     commander = args[0].equals("@s") ? (Player) sender : Bukkit.getPlayer(args[0]);
                     if (commander == null) {
-                        if (!sender.hasPermission("chunanplugin.command.tp.other")) {
-                            sender.sendMessage("§c你，莫得权限");
+                        if (!sender.hasPermission("alsace.command.tp.other")) {
+                            sender.sendMessage("§c你没有使用该命令的权限");
                             return true;
                         }
 
                         sender.sendMessage("§c玩家" + args[0] + "不在线");
                         return true;
                     } else if (!sender.getName().equals(commander.getName()) && !sender.hasPermission("chunanplugin.command.tp.other")) {
-                        sender.sendMessage("§c你，莫得权限");
+                        sender.sendMessage("§c你没有使用该命令的权限");
                         return true;
                     } else {
                         try {

@@ -17,8 +17,8 @@ public class TPIgnoreCommand implements CommandExecutor {
         if (!(sender instanceof Player)) {
             sender.sendMessage("§c该指令仅限玩家使用");
             return true;
-        } else if (!sender.hasPermission("chunanplugin.command.tpignore")) {
-            sender.sendMessage("§c你，莫得权限");
+        } else if (!sender.hasPermission("alsace.commands.tpignore")) {
+            sender.sendMessage("§c你没有使用该命令的权限");
             return true;
         } else {
             boolean now = (Boolean) this.plugin.hasIgnored.get(sender.getName());
