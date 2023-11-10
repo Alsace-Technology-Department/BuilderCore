@@ -26,13 +26,13 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        event.setJoinMessage((String) null);
+        event.setJoinMessage(null);
         this.plugin.hasIgnored.put(event.getPlayer().getName(), false);
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        event.setQuitMessage((String) null);
+        event.setQuitMessage(null);
         this.plugin.hasIgnored.remove(event.getPlayer().getName());
     }
 
@@ -65,7 +65,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event) {
-        if (event.getCause().equals(TeleportCause.SPECTATE) && !event.getPlayer().hasPermission("chunanplugin.event.spectate")) {
+        if (event.getCause().equals(TeleportCause.SPECTATE) && !event.getPlayer().hasPermission("alsace.event.spectate")) {
             event.setCancelled(true);
         }
 
@@ -74,7 +74,7 @@ public class PlayerListener implements Listener {
     private String translateHexColorCodes(String message) {
         Pattern hexPattern = Pattern.compile("#([A-Fa-f0-9]{6})");
         Matcher matcher = hexPattern.matcher(message);
-        StringBuffer buffer = new StringBuffer(message.length() + 32);
+        StringBuilder buffer = new StringBuilder(message.length() + 32);
 
         while (matcher.find()) {
             String group = matcher.group(1);
