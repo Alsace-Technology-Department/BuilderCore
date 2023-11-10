@@ -1,4 +1,4 @@
-main: work.alsace.alsacecore
+main: work.alsace.alsacecore.AlsaceCore
 name: AlsaceCore
 author:
   - 'PuddingKC'
