@@ -17,72 +17,60 @@ public class GameModeCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
-        if (strings.length == 1 && sender instanceof Player player) {
-            if (!player.hasPermission("alsace.commands.gamemode")) {
-                player.sendMessage("§c你没有使用该命令的权限");
-                return false;
-            }
-            if (Objects.equals(strings[0], "creative") || Objects.equals(strings[0], "1")) {
-                player.setGameMode(GameMode.CREATIVE);
-                player.sendMessage("§7已将你的游戏模式设置为 §f创造");
-                return true;
-            } else if (Objects.equals(strings[0], "survival") || Objects.equals(strings[0], "0")) {
-                player.setGameMode(GameMode.SURVIVAL);
-                player.sendMessage("§7已将你的游戏模式设置为 §f生存");
-                return true;
-            } else if (Objects.equals(strings[0], "spectator") || Objects.equals(strings[0], "3")) {
-                player.setGameMode(GameMode.SPECTATOR);
-                player.sendMessage("§7已将你的游戏模式设置为 §f观察者");
-                return true;
-            } else if (Objects.equals(strings[0], "adventure") || Objects.equals(strings[0], "2")) {
-                player.setGameMode(GameMode.ADVENTURE);
-                player.sendMessage("§7已将你的游戏模式设置为 §f冒险");
-                return true;
-            } else {
-                player.sendMessage(error);
-                return false;
-            }
+        if (strings.length != 1 && strings.length != 2) {
+            sender.sendMessage(error);
+            return false;
         }
 
+        if (!(sender instanceof Player) && strings.length == 1) {
+            sender.sendMessage("§c控制台无法执行该命令");
+            return false;
+        }
+
+        Player targetPlayer;
         if (strings.length == 2) {
             if (!sender.hasPermission("alsace.commands.gamemode.other")) {
                 sender.sendMessage("§c你没有使用该命令的权限");
                 return false;
             }
 
-            Player player = Bukkit.getPlayer(strings[1]);
-            if (player == null || !player.isOnline()) {
+            targetPlayer = Bukkit.getPlayer(strings[1]);
+            if (targetPlayer == null || !targetPlayer.isOnline()) {
                 sender.sendMessage("§c指定的玩家不在线或不存在");
                 return false;
             }
-
-            if (Objects.equals(strings[0], "creative") || Objects.equals(strings[0], "1")) {
-                player.setGameMode(GameMode.CREATIVE);
-                player.sendMessage("§7已将你的游戏模式设置为 §f创造");
-                sender.sendMessage("§7已将玩家 §f" + player.getName() + " §7的游戏模式设置为 §f创造");
-                return true;
-            } else if (Objects.equals(strings[0], "survival") || Objects.equals(strings[0], "0")) {
-                player.setGameMode(GameMode.SURVIVAL);
-                player.sendMessage("§7已将你的游戏模式设置为 §f生存");
-                sender.sendMessage("§7已将玩家 §f" + player.getName() + " §7的游戏模式设置为 §f生存");
-                return true;
-            } else if (Objects.equals(strings[0], "spectator") || Objects.equals(strings[0], "3")) {
-                player.setGameMode(GameMode.SPECTATOR);
-                player.sendMessage("§7已将你的游戏模式设置为 §f观察者");
-                sender.sendMessage("§7已将玩家 §f" + player.getName() + " §7的游戏模式设置为 §f观察者");
-                return true;
-            } else if (Objects.equals(strings[0], "adventure") || Objects.equals(strings[0], "2")) {
-                player.setGameMode(GameMode.ADVENTURE);
-                player.sendMessage("§7已将你的游戏模式设置为 §f冒险");
-                sender.sendMessage("§7已将玩家 §f" + player.getName() + " §7的游戏模式设置为 §f冒险");
-                return true;
-            } else {
-                sender.sendMessage(error);
+        } else {
+            targetPlayer = (Player) sender;
+            if (!targetPlayer.hasPermission("alsace.commands.gamemode")) {
+                targetPlayer.sendMessage("§c你没有使用该命令的权限");
                 return false;
             }
         }
-        sender.sendMessage(error);
-        return false;
+
+        GameMode gameMode = parseGameMode(strings[0]);
+        if (gameMode == null) {
+            sender.sendMessage(error);
+            return false;
+        }
+
+        targetPlayer.setGameMode(gameMode);
+        targetPlayer.sendMessage("§7已将你的游戏模式设置为 §f" + gameMode);
+
+        if (strings.length == 2) {
+            sender.sendMessage("§7已将玩家 §f" + targetPlayer.getName() + " §7的游戏模式设置为 §f" + gameMode);
+        }
+
+        return true;
+    }
+
+    private GameMode parseGameMode(String input) {
+        return switch (input.toLowerCase()) {
+            case "creative", "1" -> GameMode.CREATIVE;
+            case "survival", "0" -> GameMode.SURVIVAL;
+            case "spectator", "3" -> GameMode.SPECTATOR;
+            case "adventure", "2" -> GameMode.ADVENTURE;
+            default -> null;
+        };
     }
 
     @Override

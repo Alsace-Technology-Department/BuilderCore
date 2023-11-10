@@ -1,6 +1,6 @@
 main: work.alsace.alsacecore.AlsaceCore
 name: AlsaceCore
-author:
+authors:
   - 'PuddingKC'
   - 'Hanamizu_'
   - 'CHuNan'
@@ -34,6 +34,8 @@ commands:
     description: 删除家
   hat:
     description: 戴上手上的物品
+  head:
+    description: 获取指定玩家的皮肤头颅
 permissions:
   alsace.commands.fly:
     default: op
@@ -62,4 +64,6 @@ permissions:
   alsace.protect.break:
     default: op
   alsace.protect.interact:
+    default: op
+  alsace.commands.head:
     default: op
