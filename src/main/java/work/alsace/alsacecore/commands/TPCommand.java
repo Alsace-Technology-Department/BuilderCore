@@ -21,12 +21,10 @@ public class TPCommand implements TabExecutor {
 
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length != 1) {
-            return new ArrayList(0);
+            return new ArrayList<>(0);
         } else {
             String prefix = args[0].toLowerCase();
-            return (List) Bukkit.getOnlinePlayers().stream().map(Player::getName).filter((s) -> {
-                return s.toLowerCase().startsWith(prefix);
-            }).collect(Collectors.toList());
+            return Bukkit.getOnlinePlayers().stream().map(Player::getName).filter((s) -> s.toLowerCase().startsWith(prefix)).collect(Collectors.toList());
         }
     }
 
@@ -56,7 +54,7 @@ public class TPCommand implements TabExecutor {
                             return true;
                         }
 
-                        if ((Boolean) this.plugin.hasIgnored.get(name)) {
+                        if (this.plugin.hasIgnored.get(name)) {
                             sender.sendMessage("§c玩家" + name + "已屏蔽强制传送");
                             return true;
                         }
@@ -64,7 +62,7 @@ public class TPCommand implements TabExecutor {
                         commander.teleport(player);
                         commander.sendMessage("§a已传送至" + name);
                     } else if (commander.hasPermission("alsace.command.tp.across")) {
-                        if ((Boolean) this.plugin.hasIgnored.get(name)) {
+                        if (this.plugin.hasIgnored.get(name)) {
                             sender.sendMessage("§c玩家" + name + "已屏蔽强制传送");
                             return true;
                         }
