@@ -6,7 +6,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class protect implements Listener {
+public class Protect implements Listener {
 
     @EventHandler
     public void onBreak(BlockBreakEvent e) {

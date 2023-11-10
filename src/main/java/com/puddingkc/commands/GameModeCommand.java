@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-public class gamemode implements CommandExecutor, TabCompleter {
+public class GameModeCommand implements CommandExecutor, TabCompleter {
 
     private static final List<String> modes = Arrays.asList("adventure", "creative", "spectator", "survival");
     private final String error = "§7正确指令:\n§f/gamemode <模式> §7- 设置你的游戏模式\n§f/gamemode <模式> [玩家] §7- 设置指定玩家的游戏模式";

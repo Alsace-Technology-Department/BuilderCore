@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class time implements CommandExecutor, TabCompleter {
+public class TimeCommand implements CommandExecutor, TabCompleter {
 
     private final String error = "§7正确指令:\n§f/time <时间> §7- 设置你当前世界的时间\n§f/time <时间> <世界> §7- 设置指定世界的时间";
     private static final List<String> times = Arrays.asList("day", "night", "5000");

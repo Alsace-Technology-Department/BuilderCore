@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class ptime implements CommandExecutor, TabCompleter {
+public class PTimeCommand implements CommandExecutor, TabCompleter {
 
     private final String error = "§7正确指令:\n§f/ptime <时间> §7- 设置你自己的客户端时间\n§f/ptime <时间> <玩家> §7- 设置指定玩家的客户端时间";
     private static final List<String> times = Arrays.asList("day", "night", "reset");

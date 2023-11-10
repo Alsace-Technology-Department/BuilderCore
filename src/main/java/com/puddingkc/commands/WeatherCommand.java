@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class weather implements CommandExecutor, TabCompleter {
+public class WeatherCommand implements CommandExecutor, TabCompleter {
 
     private final String error = "§7正确指令:\n§f/weather <天气> §7- 设置你当前世界的天气";
     private static final List<String> weathers = Arrays.asList("clear", "rain", "thunder");

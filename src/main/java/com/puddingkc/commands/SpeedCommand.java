@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class speed implements CommandExecutor, TabCompleter {
+public class SpeedCommand implements CommandExecutor, TabCompleter {
 
     private final String error = "§7正确指令:\n§f/speed <速度> §7- 设置你的飞行或步行速度(1~15)\n§f/speed <类型> <速度> [玩家] §7- 设置指定玩家的指定类型速度";
     private static final List<String> types = Arrays.asList("walk", "fly", "1", "1.5", "1.75", "2");
