@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import work.alsace.alsacecore.AlsaceCore;
+import work.alsace.alsacecore.Util.User;
 
 public class PlayerListener implements Listener {
     private final AlsaceCore plugin;
@@ -28,6 +29,8 @@ public class PlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         event.setJoinMessage(null);
         this.plugin.hasIgnored.put(event.getPlayer().getName(), false);
+
+        AlsaceCore.instance.userProfiles.put(event.getPlayer().getUniqueId(), new User(event.getPlayer().getUniqueId()));
     }
 
     @EventHandler

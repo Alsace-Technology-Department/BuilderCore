@@ -22,6 +22,18 @@ commands:
     description: 设置所在世界或指定世界的时间
   ptime:
     description: 设置自己或指定玩家的客户端时间
+  tp:
+    description: 传送到指定玩家或坐标
+  tpignore:
+    description: 忽略传送请求
+  home:
+    description: 传送到指定家
+  sethome:
+    description: 设置家
+  delhome:
+    description: 删除家
+  hat:
+    description: 戴上手上的物品
 permissions:
   alsace.commands.fly:
     default: op

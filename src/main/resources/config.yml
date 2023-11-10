@@ -1,0 +1,2 @@
+max-home: 10
+illegal-characters: "^[A-Za-z][A-Za-z0-9]*$"
