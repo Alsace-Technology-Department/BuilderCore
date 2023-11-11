@@ -36,6 +36,12 @@ commands:
     description: 戴上手上的物品
   head:
     description: 获取指定玩家的皮肤头颅
+  warp:
+    description: 传送到指定传送点
+  delwarp:
+    description: 删除传送点
+  setwarp:
+    description: 设置传送点
 permissions:
   alsace.commands.fly:
     default: op

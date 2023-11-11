@@ -3,7 +3,8 @@ package work.alsace.alsacecore;
 import com.puddingkc.commands.*;
 import com.puddingkc.events.Protect;
 import org.bukkit.plugin.java.JavaPlugin;
-import work.alsace.alsacecore.Util.User;
+import work.alsace.alsacecore.Util.HomeDataLoader;
+import work.alsace.alsacecore.Util.WarpDataLoader;
 import work.alsace.alsacecore.commands.*;
 import work.alsace.alsacecore.listeners.PlayerListener;
 
@@ -12,13 +13,27 @@ import java.util.*;
 public class AlsaceCore extends JavaPlugin {
 
     public Map<String, Boolean> hasIgnored = new HashMap<>();
-    public HashMap<UUID, User> userProfiles = new HashMap<UUID, User>();
+    public HashMap<UUID, HomeDataLoader> homeProfiles = new HashMap<UUID, HomeDataLoader>();
+    public HashMap<String, WarpDataLoader> warpProfiles = new HashMap<String, WarpDataLoader>();
 
     public List<String> illegalCharacters = new ArrayList<>();
 
     public static AlsaceCore instance;
+
     @Override
     public void onEnable() {
+        registerCommands();
+        registerListeners();
+        loadConfig();
+        getLogger().info("插件已完全加载完成");
+    }
+
+    @Override
+    public void onDisable() {
+        getLogger().info("插件已卸载");
+    }
+
+    private void registerCommands() {
         Objects.requireNonNull(getCommand("fly")).setExecutor(new FlyCommand());
         Objects.requireNonNull(getCommand("speed")).setExecutor(new SpeedCommand());
         Objects.requireNonNull(getCommand("speed")).setTabCompleter(new SpeedCommand());
@@ -40,17 +55,16 @@ public class AlsaceCore extends JavaPlugin {
         Objects.requireNonNull(getCommand("sethome")).setExecutor(new SetHomeCommand());
         Objects.requireNonNull(getCommand("delhome")).setExecutor(new DelHomeCommand());
 
+        Objects.requireNonNull(getCommand("warp")).setExecutor(new WarpCommand());
+        Objects.requireNonNull(getCommand("setwarp")).setExecutor(new SetWarpCommand());
+        Objects.requireNonNull(getCommand("delwarp")).setExecutor(new DelWarpCommand());
         getLogger().info("指令注册完成");
-        loadConfig();
-        getServer().getPluginManager().registerEvents(new Protect(),this);
-        this.getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
-        getLogger().info("事件注册完成");
-        getLogger().info("插件已完全加载完成");
     }
 
-    @Override
-    public void onDisable() {
-        getLogger().info("插件已卸载");
+    private void registerListeners() {
+        getServer().getPluginManager().registerEvents(new Protect(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+        getLogger().info("事件注册完成");
     }
 
     private void loadConfig() {

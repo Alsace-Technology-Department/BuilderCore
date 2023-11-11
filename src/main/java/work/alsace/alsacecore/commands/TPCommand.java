@@ -39,6 +39,7 @@ public class TPCommand implements TabExecutor {
                 sender.sendMessage("§c参数不足，请补全参数");
                 return true;
             }
+            // 传送到玩家/坐标
             case 1 -> {
                 if (sender instanceof Player commander) {
                     player = Bukkit.getPlayer(args[0]);
@@ -78,6 +79,7 @@ public class TPCommand implements TabExecutor {
                 sender.sendMessage("§c该指令仅限玩家执行");
                 return true;
             }
+            //将玩家传送至args2
             case 2 -> {
                 if (sender instanceof Player commander) {
                     if (!sender.hasPermission("alsace.commands.tp.location")) {
@@ -99,6 +101,10 @@ public class TPCommand implements TabExecutor {
                                 return true;
                             }
 
+                            if (!commander.getWorld().equals(player.getWorld()) && !sender.hasPermission("alsace.commands.tp.bypass")) {
+                                sender.sendMessage("§c你没有跨地图传送的权限");
+                            }
+
                             commander.teleport(player);
                             String var10001 = commander.getName();
                             sender.sendMessage("§a已将" + var10001 + "传送至" + player.getName());
@@ -107,6 +113,7 @@ public class TPCommand implements TabExecutor {
                     }
                 }
             }
+            // 将args1传送至args2
             case 3 -> {
                 if (sender instanceof Player commander) {
                     if (!sender.hasPermission("alsace.commands.tp.location")) {

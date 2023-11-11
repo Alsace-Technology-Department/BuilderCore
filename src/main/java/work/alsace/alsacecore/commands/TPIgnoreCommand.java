@@ -21,7 +21,7 @@ public class TPIgnoreCommand implements CommandExecutor {
             sender.sendMessage("§c你没有使用该命令的权限");
             return true;
         } else {
-            boolean now = (Boolean) this.plugin.hasIgnored.get(sender.getName());
+            boolean now = this.plugin.hasIgnored.get(sender.getName());
             if (now) {
                 this.plugin.hasIgnored.put(sender.getName(), false);
                 sender.sendMessage("§a已取消屏蔽强制传送");

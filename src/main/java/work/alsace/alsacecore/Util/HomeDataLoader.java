@@ -14,19 +14,19 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-public class User {
+public class HomeDataLoader {
     private final UUID playerUUID;
     private final HashMap<String, Location> homes = new HashMap<>();
     private File userFile;
     private YamlConfiguration userConfig;
     private int maxHomes = 0;
 
-    public User(final UUID uuid) {
+    public HomeDataLoader(final UUID uuid) {
         this.playerUUID = uuid;
         Bukkit.getServer().getScheduler().runTaskAsynchronously(AlsaceCore.instance, new Runnable() {
             @Override
             public void run() {
-                userFile = new File(AlsaceCore.instance.getDataFolder() + File.separator + "userdata" + File.separator + playerUUID.toString() + ".yml");
+                userFile = new File(AlsaceCore.instance.getDataFolder() + File.separator + "userhome" + File.separator + playerUUID.toString() + ".yml");
                 if (!userFile.exists()) {
                     try {
                         userFile.createNewFile();
@@ -51,12 +51,12 @@ public class User {
         Player player = Bukkit.getServer().getPlayer(uuid);
         if (player != null) {
             for (PermissionAttachmentInfo i : player.getEffectivePermissions()) {
-                if (i.getPermission().equalsIgnoreCase("basichomes.max.unlimited")) {
+                if (i.getPermission().equalsIgnoreCase("alsace.home.max.unlimited")) {
                     maxHomes = Integer.MAX_VALUE;
                     break;
                 }
-                if (i.getPermission().startsWith("basichomes.max.")) {
-                    int value = Integer.parseInt(i.getPermission().replace("basichomes.max.", ""));
+                if (i.getPermission().startsWith("alsace.home.max.")) {
+                    int value = Integer.parseInt(i.getPermission().replace("alsace.home.max.", ""));
                     if (value > maxHomes) {
                         maxHomes = value;
                     }

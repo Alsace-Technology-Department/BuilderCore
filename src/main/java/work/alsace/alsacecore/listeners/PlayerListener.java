@@ -16,7 +16,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import work.alsace.alsacecore.AlsaceCore;
-import work.alsace.alsacecore.Util.User;
+import work.alsace.alsacecore.Util.HomeDataLoader;
 
 public class PlayerListener implements Listener {
     private final AlsaceCore plugin;
@@ -30,7 +30,7 @@ public class PlayerListener implements Listener {
         event.setJoinMessage(null);
         this.plugin.hasIgnored.put(event.getPlayer().getName(), false);
 
-        AlsaceCore.instance.userProfiles.put(event.getPlayer().getUniqueId(), new User(event.getPlayer().getUniqueId()));
+        AlsaceCore.instance.homeProfiles.put(event.getPlayer().getUniqueId(), new HomeDataLoader(event.getPlayer().getUniqueId()));
     }
 
     @EventHandler
