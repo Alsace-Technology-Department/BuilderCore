@@ -3,8 +3,6 @@ package work.alsace.alsacecore;
 import com.puddingkc.commands.*;
 import com.puddingkc.events.Protect;
 import org.bukkit.plugin.java.JavaPlugin;
-import work.alsace.alsacecore.Util.HomeDataLoader;
-import work.alsace.alsacecore.Util.WarpDataLoader;
 import work.alsace.alsacecore.commands.*;
 import work.alsace.alsacecore.listeners.PlayerListener;
 
@@ -13,9 +11,6 @@ import java.util.*;
 public class AlsaceCore extends JavaPlugin {
 
     public Map<String, Boolean> hasIgnored = new HashMap<>();
-    public HashMap<UUID, HomeDataLoader> homeProfiles = new HashMap<UUID, HomeDataLoader>();
-    public HashMap<String, WarpDataLoader> warpProfiles = new HashMap<String, WarpDataLoader>();
-
     public List<String> illegalCharacters = new ArrayList<>();
 
     public static AlsaceCore instance;
@@ -51,13 +46,6 @@ public class AlsaceCore extends JavaPlugin {
         Objects.requireNonNull(getCommand("tp")).setExecutor(new TPCommand(this));
         Objects.requireNonNull(getCommand("tpignore")).setExecutor(new TPIgnoreCommand(this));
 
-        Objects.requireNonNull(getCommand("home")).setExecutor(new HomeCommand());
-        Objects.requireNonNull(getCommand("sethome")).setExecutor(new SetHomeCommand());
-        Objects.requireNonNull(getCommand("delhome")).setExecutor(new DelHomeCommand());
-
-        Objects.requireNonNull(getCommand("warp")).setExecutor(new WarpCommand());
-        Objects.requireNonNull(getCommand("setwarp")).setExecutor(new SetWarpCommand());
-        Objects.requireNonNull(getCommand("delwarp")).setExecutor(new DelWarpCommand());
         getLogger().info("指令注册完成");
     }
 
