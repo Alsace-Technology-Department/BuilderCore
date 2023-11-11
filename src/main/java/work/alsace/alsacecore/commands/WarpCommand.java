@@ -1,14 +1,17 @@
 package work.alsace.alsacecore.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import work.alsace.alsacecore.AlsaceCore;
 import work.alsace.alsacecore.Util.WarpDataLoader;
 
-public class WarpCommand implements CommandExecutor {
+import java.util.List;
+
+public class WarpCommand implements CommandExecutor, TabCompleter {
+    private static List<String> warps;
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (!(sender instanceof Player)) {
@@ -34,5 +37,10 @@ public class WarpCommand implements CommandExecutor {
             sender.sendMessage("§7正确指令:\n§f/warp <传送点> §7- 传送至指定传送点");
         }
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String s, String[] args) {
+        return null;
     }
 }

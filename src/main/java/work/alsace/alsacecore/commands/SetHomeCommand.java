@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import work.alsace.alsacecore.AlsaceCore;
 import work.alsace.alsacecore.Util.HomeDataLoader;
 
+import java.util.regex.Pattern;
+
 public class SetHomeCommand implements CommandExecutor {
 
     @Override
@@ -44,10 +46,17 @@ public class SetHomeCommand implements CommandExecutor {
                 sender.sendMessage("§c你的家已经达到最大传送点数量");
                 return false;
             }
-            for (String i : homeName.split(AlsaceCore.instance.illegalCharacters.toString())) {
-                if (AlsaceCore.instance.illegalCharacters.contains(i.toLowerCase())) {
-                    sender.sendMessage("§c传送点名称包含非法字符");
-                    return false;
+            String separator = AlsaceCore.instance.getConfig().getString("illegal-characters");
+            Pattern pattern = null;
+            if (separator != null) {
+                pattern = Pattern.compile(separator);
+            }
+            if (pattern != null) {
+                for (String i : homeName.split(pattern.pattern())) {
+                    if (pattern.matcher(i).matches()) {
+                        sender.sendMessage("§c传送点名称包含非法字符");
+                        return false;
+                    }
                 }
             }
             homeDataLoader.addHome(homeName, player.getLocation());

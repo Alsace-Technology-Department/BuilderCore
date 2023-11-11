@@ -17,22 +17,21 @@ public class DelWarpCommand implements CommandExecutor {
             sender.sendMessage("§c该指令仅限玩家执行");
             return false;
         }
-        WarpDataLoader warpDataLoader;
-        String warpName;
-        if (args.length == 1 && (sender.hasPermission("alsace.commands.delwarp"))) {
-            warpName = args[0];
-            warpDataLoader = AlsaceCore.instance.warpProfiles.get("warps");
+        if (!sender.hasPermission("alsace.commands.delwarp")) {
+            sender.sendMessage("§c你没有使用该命令的权限");
+            return false;
+        }
+        if (args.length == 1) {
+            String warpName = args[0];
+            WarpDataLoader warpDataLoader = AlsaceCore.instance.warpProfiles.get("warps");
             if (warpDataLoader.getWarp(warpName) != null) {
                 warpDataLoader.delWarp(warpName);
                 sender.sendMessage(String.format("§a已删除传送点%s", warpName));
             } else {
-                sender.sendMessage("§c你没有传送点" + warpName);
+                sender.sendMessage("§c传送点" + warpName + "不存在");
             }
-        }
-        else if (sender.hasPermission("alsace.commands.delwarp")) {
-            sender.sendMessage("§7正确指令:\n§f/delwarp <传送点> §7- 删除传送点");
         } else {
-            sender.sendMessage("§c你没有使用该命令的权限");
+            sender.sendMessage("§7正确指令:\n§f/delwarp <传送点> §7- 删除传送点");
         }
         return false;
     }

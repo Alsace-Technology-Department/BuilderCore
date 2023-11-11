@@ -9,88 +9,90 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+
 public class WarpDataLoader {
-    private static final HashMap<String, Location> warps = new HashMap<>();
-    private final File warpsFile = new File(AlsaceCore.instance.getDataFolder() + "warps.yml");
 
-    private final YamlConfiguration warpConfig = YamlConfiguration.loadConfiguration(warpsFile);
+    private final Map<String, Location> warps = Collections.synchronizedMap(new HashMap<>());
+    private final File warpsFile;
+    private YamlConfiguration warpConfig;
 
-    public WarpDataLoader() {
-        Bukkit.getServer().getScheduler().runTaskAsynchronously(AlsaceCore.instance, new Runnable() {
-            @Override
-            public void run() {
-                if (!warpsFile.exists()) {
-                    try {
-                        warpsFile.createNewFile();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (WarpDataLoader.this.warpConfig.getConfigurationSection("Warps") != null) {
-                    for (String i : WarpDataLoader.this.warpConfig.getConfigurationSection("Warps").getKeys(false)) {
-                        warps.put(i, new Location(
-                                Bukkit.getServer().getWorld(Objects.requireNonNull(WarpDataLoader.this.warpConfig.getString("Warps." + i + ".world"))),
-                                WarpDataLoader.this.warpConfig.getDouble("Warps." + i + ".X"),
-                                WarpDataLoader.this.warpConfig.getDouble("Warps." + i + ".Y"),
-                                WarpDataLoader.this.warpConfig.getDouble("Warps." + i + ".Z"),
-                                WarpDataLoader.this.warpConfig.getLong("Warps." + i + ".Yaw"),
-                                WarpDataLoader.this.warpConfig.getLong("Warps." + i + ".Pitch")));
-                    }
-                }
+    public WarpDataLoader(String name) {
+        // 初始化时直接加载数据
+        this.warpsFile = new File(AlsaceCore.instance.getDataFolder(), name + ".yml");
+        this.loadWarps();
+    }
+
+    private synchronized void loadWarps() {
+        if (!warpsFile.exists()) {
+            try {
+                warpsFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        });
+        }
+        warpConfig = YamlConfiguration.loadConfiguration(warpsFile);
+
+        if (warpConfig.getConfigurationSection("Warps") != null) {
+            for (String i : warpConfig.getConfigurationSection("Warps").getKeys(false)) {
+                warps.put(i, new Location(
+                        Bukkit.getWorld(Objects.requireNonNull(warpConfig.getString("Warps." + i + ".World"))),
+                        warpConfig.getDouble("Warps." + i + ".X"),
+                        warpConfig.getDouble("Warps." + i + ".Y"),
+                        warpConfig.getDouble("Warps." + i + ".Z"),
+                        warpConfig.getLong("Warps." + i + ".Yaw"),
+                        warpConfig.getLong("Warps." + i + ".Pitch")));
+            }
+        }
     }
 
     public void addWarp(String name, Location location) {
-        Bukkit.getServer().getScheduler().runTaskAsynchronously(AlsaceCore.instance, new Runnable() {
-            @Override
-            public void run() {
-                warps.put(name, location);
-                warpConfig.set("Warps." + name + ".World", Objects.requireNonNull(location.getWorld()).getName());
-                warpConfig.set("Warps." + name + ".X", location.getX());
-                warpConfig.set("Warps." + name + ".Y", location.getY());
-                warpConfig.set("Warps." + name + ".Z", location.getZ());
-                warpConfig.set("Warps." + name + ".Yaw", location.getYaw());
-                warpConfig.set("Warps." + name + ".Pitch", location.getPitch());
-                try {
-                    warpConfig.save(warpsFile);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+        synchronized (warps) {
+            warps.put(name, location);
+            warpConfig.set("Warps." + name + ".World", Objects.requireNonNull(location.getWorld()).getName());
+            warpConfig.set("Warps." + name + ".X", location.getX());
+            warpConfig.set("Warps." + name + ".Y", location.getY());
+            warpConfig.set("Warps." + name + ".Z", location.getZ());
+            warpConfig.set("Warps." + name + ".Yaw", location.getYaw());
+            warpConfig.set("Warps." + name + ".Pitch", location.getPitch());
+
+            try {
+                warpConfig.save(warpsFile);
+            } catch (IOException e) {
+                e.printStackTrace(); // 最好记录错误
             }
-        });
+        }
     }
 
     public void delWarp(String name) {
-        Bukkit.getServer().getScheduler().runTaskAsynchronously(AlsaceCore.instance, new Runnable() {
-            @Override
-            public void run() {
-                for (String i : warps.keySet()) {
-                    if (i.equalsIgnoreCase(name)) {
-                        warps.remove(i);
-                        warpConfig.set("Warps." + i, null);
-                        break;
-                    }
-                }
-                try {
-                    warpConfig.save(warpsFile);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+        synchronized (warps) {
+            for (String i : warps.keySet()) {
+                if (i.equalsIgnoreCase(name)) {
+                    warps.remove(i);
+                    warpConfig.set("Warps." + i, null);
+                    break;
                 }
             }
-        });
+
+            try {
+                warpConfig.save(warpsFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public Location getWarp(String name) {
-        for (String i : warps.keySet()) {
-            if (i.equalsIgnoreCase(name)) {
-                return warps.get(i);
+        synchronized (warps) {
+            for (String i : warps.keySet()) {
+                if (i.equalsIgnoreCase(name)) {
+                    return warps.get(i);
+                }
             }
         }
         return null;
     }
 
     public Set<String> getWarps() {
-        return warps.keySet();
+        return new HashSet<>(warps.keySet());
     }
 }

@@ -26,7 +26,7 @@ public class HomeDataLoader {
         Bukkit.getServer().getScheduler().runTaskAsynchronously(AlsaceCore.instance, new Runnable() {
             @Override
             public void run() {
-                userFile = new File(AlsaceCore.instance.getDataFolder() + File.separator + "userhome" + File.separator + playerUUID.toString() + ".yml");
+                userFile = new File(AlsaceCore.instance.getDataFolder() + File.separator + "userdata" + File.separator + playerUUID.toString() + ".yml");
                 if (!userFile.exists()) {
                     try {
                         userFile.createNewFile();
