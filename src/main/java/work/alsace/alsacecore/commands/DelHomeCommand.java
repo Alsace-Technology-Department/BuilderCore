@@ -22,7 +22,7 @@ public class DelHomeCommand implements CommandExecutor {
             return false;
         }
         if (args.length == 1) {
-            HomeDataLoader homeDataLoader = null;
+            HomeDataLoader homeDataLoader;
             String homeName;
             Player player = (Player) sender;
             if (args[0].contains(":") && (sender.hasPermission("alsace.commands.delhome.other"))) {
@@ -32,7 +32,7 @@ public class DelHomeCommand implements CommandExecutor {
                 if (i.isOnline()) {
                     homeDataLoader = AlsaceCore.instance.homeProfiles.get(i.getUniqueId());
                 } else if (!i.hasPlayedBefore()) {
-                    sender.sendMessage("§c玩家" + homeDataLoader + "不存在");
+                    sender.sendMessage("§c玩家不存在");
                     return false;
                 } else {
                     homeDataLoader = new HomeDataLoader(i.getUniqueId());

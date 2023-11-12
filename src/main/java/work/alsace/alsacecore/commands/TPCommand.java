@@ -86,13 +86,11 @@ public class TPCommand implements TabExecutor {
                     }
                     if (!sender.hasPermission("alsace.commands.tp.other")) {
                         sender.sendMessage("§c你没有使用该命令的权限");
-                        return true;
                     } else {
                         commander = Bukkit.getPlayer(args[0]);
                         player = Bukkit.getPlayer(args[1]);
                         if (commander == null) {
                             sender.sendMessage("§c玩家" + args[0] + "不在线");
-                            return true;
                         } else {
                             if (player == null) {
                                 sender.sendMessage("§c玩家" + args[1] + "不在线");
@@ -102,9 +100,9 @@ public class TPCommand implements TabExecutor {
                             commander.teleport(player);
                             String var10001 = commander.getName();
                             sender.sendMessage("§a已将" + var10001 + "传送至" + player.getName());
-                            return true;
                         }
                     }
+                    return true;
                 }
             }
             case 3 -> {
@@ -146,7 +144,7 @@ public class TPCommand implements TabExecutor {
 
                         sender.sendMessage("§c玩家" + args[0] + "不在线");
                         return true;
-                    } else if (!sender.getName().equals(commander.getName()) && !sender.hasPermission("chunanplugin.command.tp.other")) {
+                    } else if (!sender.getName().equals(commander.getName()) && !sender.hasPermission("alsace.commands.tp.other")) {
                         sender.sendMessage("§c你没有使用该命令的权限");
                         return true;
                     } else {

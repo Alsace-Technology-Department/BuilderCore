@@ -25,7 +25,7 @@ public class SetHomeCommand implements CommandExecutor {
         }
         if (args.length == 1) {
             String homeName = args[0];
-            HomeDataLoader homeDataLoader = null;
+            HomeDataLoader homeDataLoader;
             Player player = (Player) sender;
             if (homeName.contains(":") && sender.hasPermission("alsace.commands.sethome.other")) {
                 String username = args[0].split(":", 2)[0];
@@ -34,7 +34,7 @@ public class SetHomeCommand implements CommandExecutor {
                 if (i.isOnline()) {
                     homeDataLoader = AlsaceCore.instance.homeProfiles.get(i.getUniqueId());
                 } else if (!i.hasPlayedBefore()) {
-                    sender.sendMessage("§c玩家" + homeDataLoader + "不存在");
+                    sender.sendMessage("§c玩家不存在");
                     return false;
                 } else {
                     homeDataLoader = new HomeDataLoader(i.getUniqueId());
