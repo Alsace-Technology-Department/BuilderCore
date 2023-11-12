@@ -10,8 +10,7 @@ import org.bukkit.entity.Player;
 import work.alsace.alsacecore.AlsaceCore;
 import work.alsace.alsacecore.Util.HomeDataLoader;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class HomeCommand implements CommandExecutor, TabCompleter {
@@ -31,7 +30,7 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
             Player player = (Player) sender;
             if (homeName.contains(":") && sender.hasPermission("alsace.commands.home.other")) {
                 String user = homeName.split(":", 2)[0];
-                OfflinePlayer i = Bukkit.getServer().getOfflinePlayer(player.getUniqueId());;
+                OfflinePlayer i = Bukkit.getServer().getOfflinePlayer(player.getUniqueId());
                 HomeDataLoader homeDataLoaderProfile;
                 if (i.isOnline()) {
                     homeDataLoaderProfile = AlsaceCore.instance.homeProfiles.get(i.getUniqueId());
@@ -65,11 +64,33 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
+    public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
         if (args.length != 1)
             return new ArrayList<>(0);
-        return AlsaceCore.instance.homeProfiles.get(((Player) commandSender).getUniqueId()).getHomes().stream()
-                .filter(home -> home.startsWith(args[0]))
-                .collect(Collectors.toList());
+        List<String> list = new ArrayList<>();
+        if (sender instanceof Player && args[0].contains(":")) {
+            String user = args[0].split(":", 2)[0];
+            OfflinePlayer i = Bukkit.getServer().getOfflinePlayer(((Player) sender).getUniqueId());
+            HomeDataLoader homeDataLoaderProfile;
+            if (i.isOnline()) {
+                homeDataLoaderProfile = AlsaceCore.instance.homeProfiles.get(i.getUniqueId());
+            } else if (!i.hasPlayedBefore()) {
+                sender.sendMessage("§c玩家" + user + "不存在");
+                return new ArrayList<>(0);
+            } else {
+                homeDataLoaderProfile = new HomeDataLoader(i.getUniqueId());
+            }
+            list.addAll(homeDataLoaderProfile.getHomes().stream().map(s1 -> user + ":" + s1).toList());
+            return list;
+        } else {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                list.add(p.getName());
+            }
+            if (sender instanceof Player) {
+                list.addAll(AlsaceCore.instance.homeProfiles.get(((Player) sender).getUniqueId()).getHomes());
+            }
+            return list;
+        }
+
     }
 }
