@@ -13,14 +13,22 @@ public class DelHomeCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        HomeDataLoader homeDataLoader = null;
-        String homeName;
-        boolean isPlayer = sender instanceof Player;
-        if (args.length == 1 && (sender.hasPermission("alsace.commands.delhome") || !isPlayer)) {
-            if (args[0].contains(":") && (sender.hasPermission("alsace.commands.delhome.other") || !isPlayer)) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage("§c该指令仅限玩家执行");
+            return false;
+        }
+        if (!sender.hasPermission("alsace.commands.delhome")) {
+            sender.sendMessage("§c你没有使用该命令的权限");
+            return false;
+        }
+        if (args.length == 1) {
+            HomeDataLoader homeDataLoader = null;
+            String homeName;
+            Player player = (Player) sender;
+            if (args[0].contains(":") && (sender.hasPermission("alsace.commands.delhome.other"))) {
                 String username = args[0].split(":", 2)[0];
                 homeName = args[0].replaceFirst(username + ":", "");
-                OfflinePlayer i = Bukkit.getServer().getOfflinePlayer(username);
+                OfflinePlayer i = Bukkit.getServer().getOfflinePlayer(player.getUniqueId());
                 if (i.isOnline()) {
                     homeDataLoader = AlsaceCore.instance.homeProfiles.get(i.getUniqueId());
                 } else if (!i.hasPlayedBefore()) {
@@ -29,9 +37,6 @@ public class DelHomeCommand implements CommandExecutor {
                 } else {
                     homeDataLoader = new HomeDataLoader(i.getUniqueId());
                 }
-            } else if (!isPlayer) {
-                sender.sendMessage("§c此命令只有管理员可以执行");
-                return false;
             } else {
                 homeName = args[0];
                 homeDataLoader = AlsaceCore.instance.homeProfiles.get(((Player) sender).getUniqueId());
@@ -40,14 +45,10 @@ public class DelHomeCommand implements CommandExecutor {
                 homeDataLoader.delHome(homeName);
                 sender.sendMessage(String.format("§a已删除传送点%s", homeName));
             } else {
-                sender.sendMessage("§c你没有传送点" + homeName);
+                sender.sendMessage("§c不存在传送点" + homeName);
             }
-        } else if (sender.hasPermission("alsace.commands.delhome.other") || !isPlayer) {
-            sender.sendMessage("§c此命令只有管理员可以执行");
-        } else if (sender.hasPermission("alsace.commands.delhome")) {
+        } else{
             sender.sendMessage("§7正确指令:\n§f/delhome <传送点> §7- 删除你的传送点\n§f/delhome <玩家>:<传送点> §7- 删除指定玩家的传送点");
-        } else {
-            sender.sendMessage("§c你没有使用该命令的权限");
         }
         return false;
     }

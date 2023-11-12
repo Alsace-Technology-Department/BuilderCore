@@ -19,6 +19,10 @@ public class SetHomeCommand implements CommandExecutor {
             sender.sendMessage("§c该指令仅限玩家执行");
             return false;
         }
+        if (!sender.hasPermission("alsace.commands.sethome")) {
+            sender.sendMessage("§c你没有使用该命令的权限");
+            return false;
+        }
         if (args.length == 1) {
             String homeName = args[0];
             HomeDataLoader homeDataLoader = null;
@@ -26,7 +30,7 @@ public class SetHomeCommand implements CommandExecutor {
             if (homeName.contains(":") && sender.hasPermission("alsace.commands.sethome.other")) {
                 String username = args[0].split(":", 2)[0];
                 homeName = args[0].replaceFirst(username + ":", "");
-                OfflinePlayer i = Bukkit.getServer().getOfflinePlayer(username);
+                OfflinePlayer i = Bukkit.getServer().getOfflinePlayer(player.getUniqueId());
                 if (i.isOnline()) {
                     homeDataLoader = AlsaceCore.instance.homeProfiles.get(i.getUniqueId());
                 } else if (!i.hasPlayedBefore()) {
@@ -39,7 +43,7 @@ public class SetHomeCommand implements CommandExecutor {
                 homeDataLoader = AlsaceCore.instance.homeProfiles.get(player.getUniqueId());
             }
             if (homeDataLoader.getHome(homeName) != null) {
-                sender.sendMessage("§c你已经有传送点" + homeName);
+                sender.sendMessage("§c已经存在传送点" + homeName);
                 return false;
             }
             if (homeDataLoader.getHomes().size() >= homeDataLoader.getMaxHomes() && !player.hasPermission("alsace.commands.sethome.other")) {
@@ -61,12 +65,8 @@ public class SetHomeCommand implements CommandExecutor {
             }
             homeDataLoader.addHome(homeName, player.getLocation());
             sender.sendMessage(String.format("§a成功设置传送点%s", homeName));
-        } else if (sender.hasPermission("alsace.commands.sethome.other")) {
-            sender.sendMessage("§c此命令只有管理员可以执行");
-        } else if (sender.hasPermission("alsace.commands.sethome")) {
-            sender.sendMessage("§7正确指令:\n§f/sethome <传送点> §7- 设置你的家\n§f/sethome <玩家>:<传送点> §7- 设置指定玩家的家");
         } else {
-            sender.sendMessage("§c你没有使用该命令的权限");
+            sender.sendMessage("§7正确指令:\n§f/sethome <传送点> §7- 设置你的家\n§f/sethome <玩家>:<传送点> §7- 设置指定玩家的家");
         }
         return false;
     }
