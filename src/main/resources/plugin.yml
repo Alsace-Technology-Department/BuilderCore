@@ -42,3 +42,11 @@ commands:
     description: 删除传送点
   setwarp:
     description: 设置传送点
+  night:
+    description: 获取永久夜视效果
+    aliases:
+      - 'n'
+  /twist:
+    description: 快捷执行创世神deform指令
+  /scale:
+    description: 快捷执行创世神deform指令

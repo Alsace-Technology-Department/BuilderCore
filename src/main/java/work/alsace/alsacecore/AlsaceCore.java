@@ -58,6 +58,10 @@ public class AlsaceCore extends JavaPlugin {
         Objects.requireNonNull(getCommand("ptime")).setExecutor(new PTimeCommand());
         Objects.requireNonNull(getCommand("ptime")).setTabCompleter(new PTimeCommand());
         Objects.requireNonNull(getCommand("head")).setExecutor(new HeadCommand());
+        Objects.requireNonNull(getCommand("night")).setExecutor(new NightvisionCommand());
+
+        Objects.requireNonNull(getCommand("/twist")).setExecutor(new TwistCommand());
+        Objects.requireNonNull(getCommand("/scale")).setExecutor(new ScaleCommand());
 
         Objects.requireNonNull(getCommand("hat")).setExecutor(new HatCommand());
         Objects.requireNonNull(getCommand("tp")).setExecutor(new TPCommand(this));
