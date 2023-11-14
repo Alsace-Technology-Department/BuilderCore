@@ -42,34 +42,3 @@ commands:
     description: 删除传送点
   setwarp:
     description: 设置传送点
-permissions:
-  alsace.commands.fly:
-    default: op
-  alsace.commands.fly.other:
-    default: op
-  alsace.commands.speed:
-    default: op
-  alsace.commands.speed.other:
-    default: op
-  alsace.commands.gamemode:
-    default: op
-  alsace.commands.gamemode.other:
-    default: op
-  alsace.commands.time:
-    default: op
-  alsace.commands.time.other:
-    default: op
-  alsace.commands.weather:
-    default: op
-  alsace.commands.ptime:
-    default: op
-  alsace.commands.ptime.other:
-    default: op
-  alsace.protect.place:
-    default: op
-  alsace.protect.break:
-    default: op
-  alsace.protect.interact:
-    default: op
-  alsace.commands.head:
-    default: op

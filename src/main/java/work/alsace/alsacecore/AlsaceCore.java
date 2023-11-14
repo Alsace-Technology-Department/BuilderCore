@@ -3,12 +3,19 @@ package work.alsace.alsacecore;
 import com.puddingkc.commands.*;
 import com.puddingkc.events.Protect;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import work.alsace.alsacecore.Util.HomeDataLoader;
 import work.alsace.alsacecore.Util.WarpDataLoader;
 import work.alsace.alsacecore.commands.*;
+import work.alsace.alsacecore.commands.home.DelHomeCommand;
+import work.alsace.alsacecore.commands.home.HomeCommand;
+import work.alsace.alsacecore.commands.home.SetHomeCommand;
+import work.alsace.alsacecore.commands.teleport.TPCommand;
+import work.alsace.alsacecore.commands.teleport.TPIgnoreCommand;
+import work.alsace.alsacecore.commands.warp.DelWarpCommand;
+import work.alsace.alsacecore.commands.warp.SetWarpCommand;
+import work.alsace.alsacecore.commands.warp.WarpCommand;
 import work.alsace.alsacecore.listeners.PlayerListener;
 
 import java.io.File;
@@ -20,6 +27,7 @@ public class AlsaceCore extends JavaPlugin {
     public HashMap<UUID, HomeDataLoader> homeProfiles = new HashMap<UUID, HomeDataLoader>();
     public HashMap<String, WarpDataLoader> warpProfiles = new HashMap<String, WarpDataLoader>();
     public List<String> illegalCharacters = new ArrayList<>();
+    public String motd;
 
     public static AlsaceCore instance;
 
@@ -59,11 +67,16 @@ public class AlsaceCore extends JavaPlugin {
         Objects.requireNonNull(getCommand("home")).setTabCompleter(new HomeCommand());
         Objects.requireNonNull(getCommand("sethome")).setExecutor(new SetHomeCommand());
         Objects.requireNonNull(getCommand("delhome")).setExecutor(new DelHomeCommand());
+        Objects.requireNonNull(getCommand("delhome")).setTabCompleter(new DelHomeCommand());
 
         Objects.requireNonNull(getCommand("warp")).setExecutor(new WarpCommand());
         Objects.requireNonNull(getCommand("warp")).setTabCompleter(new WarpCommand());
         Objects.requireNonNull(getCommand("setwarp")).setExecutor(new SetWarpCommand());
         Objects.requireNonNull(getCommand("delwarp")).setExecutor(new DelWarpCommand());
+        Objects.requireNonNull(getCommand("delwarp")).setTabCompleter(new DelWarpCommand());
+
+        Objects.requireNonNull(getCommand("alsacecore")).setExecutor(new AlsaceCoreCommand(this));
+        Objects.requireNonNull(getCommand("alsacecore")).setTabCompleter(new AlsaceCoreCommand(this));
         getLogger().info("指令注册完成");
     }
 
@@ -74,7 +87,7 @@ public class AlsaceCore extends JavaPlugin {
         getLogger().info("事件注册完成");
     }
 
-    private void loadConfig() {
+    public void loadConfig() {
         saveDefaultConfig();
         reloadConfig();
         if(this.getConfig().getConfigurationSection("illegal-characters") != null){
@@ -82,6 +95,14 @@ public class AlsaceCore extends JavaPlugin {
                 illegalCharacters.add(i.toLowerCase());
             }
         }
+
+        List<String> motdList = this.getConfig().getStringList("motd");
+        StringBuilder motdBuilder = new StringBuilder();
+        for (String line : motdList) {
+            motdBuilder.append(line).append("\n");
+        }
+        motd = motdBuilder.toString().trim();
+
 
         File folder = new File(getDataFolder(), "userdata");
         if(!folder.exists()){

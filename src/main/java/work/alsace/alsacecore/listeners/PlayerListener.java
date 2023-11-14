@@ -4,9 +4,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -28,6 +31,8 @@ public class PlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         event.setJoinMessage(null);
         this.plugin.hasIgnored.put(event.getPlayer().getName(), false);
+        Player player = event.getPlayer();
+        player.sendMessage(AlsaceCore.instance.motd);
     }
 
     @EventHandler
@@ -69,6 +74,20 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
         }
 
+    }
+
+    @EventHandler
+    public void onPlayerDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerFoodLevelChange(FoodLevelChangeEvent event) {
+        if (event.getEntity() instanceof Player) {
+            event.setCancelled(true);
+        }
     }
 
     private String translateHexColorCodes(String message) {

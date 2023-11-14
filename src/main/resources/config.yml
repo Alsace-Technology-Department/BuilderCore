@@ -1,2 +1,5 @@
 max-home: 10
 illegal-characters: ^[A-Za-z][A-Za-z0-9]*$
+motd: |-
+  &6《阿尔萨斯工业园用户服务协议》&f：&ahttps://alsaceteam.feishu.cn/wiki/F8AHwoD18iq45fk3ieSc6pcGnYy
+exploded: false
