@@ -1,4 +1,4 @@
-package work.alsace.alsacecore.commands;
+package work.alsace.alsacecore.commands.warp;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -50,6 +50,6 @@ public class SetWarpCommand implements CommandExecutor {
         } else {
             sender.sendMessage("§7正确指令:\n§f/setwarp <传送点> §7- 设置传送点");
         }
-        return false;
+        return true;
     }
 }

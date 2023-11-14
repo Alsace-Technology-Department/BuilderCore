@@ -1,4 +1,4 @@
-package work.alsace.alsacecore.commands;
+package work.alsace.alsacecore.commands.warp;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -37,7 +37,7 @@ public class WarpCommand implements CommandExecutor, TabCompleter {
         } else {
             sender.sendMessage("§7正确指令:\n§f/warp <传送点> §7- 传送至指定传送点");
         }
-        return false;
+        return true;
     }
 
     @Override

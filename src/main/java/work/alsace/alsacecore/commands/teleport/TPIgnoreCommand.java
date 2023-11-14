@@ -1,4 +1,4 @@
-package work.alsace.alsacecore.commands;
+package work.alsace.alsacecore.commands.teleport;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

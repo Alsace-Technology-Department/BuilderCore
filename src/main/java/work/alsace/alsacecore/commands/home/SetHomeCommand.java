@@ -1,4 +1,4 @@
-package work.alsace.alsacecore.commands;
+package work.alsace.alsacecore.commands.home;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -68,6 +68,6 @@ public class SetHomeCommand implements CommandExecutor {
         } else {
             sender.sendMessage("§7正确指令:\n§f/sethome <传送点> §7- 设置你的家\n§f/sethome <玩家>:<传送点> §7- 设置指定玩家的家");
         }
-        return false;
+        return true;
     }
 }

@@ -1,4 +1,4 @@
-package work.alsace.alsacecore.commands;
+package work.alsace.alsacecore.commands.teleport;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package work.alsace.alsacecore.commands;
+package work.alsace.alsacecore.commands.home;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -60,7 +60,7 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage("§7正确指令:\n§f/home <传送点> §7- 传送至你的家\n§f/home <玩家>:<传送点> §7- 传送至指定玩家的家");
         }
 
-        return false;
+        return true;
     }
 
     @Override
@@ -75,7 +75,6 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
             if (i.isOnline()) {
                 homeDataLoaderProfile = AlsaceCore.instance.homeProfiles.get(i.getUniqueId());
             } else if (!i.hasPlayedBefore()) {
-                sender.sendMessage("§c玩家" + user + "不存在");
                 return new ArrayList<>(0);
             } else {
                 homeDataLoaderProfile = new HomeDataLoader(i.getUniqueId());
@@ -91,6 +90,5 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
             }
             return list;
         }
-
     }
 }
