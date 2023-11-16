@@ -8,45 +8,92 @@ version: '1.0.1'
 description: 阿尔萨斯工业基础插件
 api-version: '1.16'
 commands:
+  alsacecore:
+    description: 主命令
+    permission: alsace.admin
   fly:
     description: 设置自己或指定玩家的飞行状态
+    permission: alsace.commands.fly
   speed:
     description: 设置自己或指定玩家的移动速度
+    permission: alsace.commands.speed
   gamemode:
     description: 设置自己或指定玩家的游戏模式
+    permission: alsace.commands.gamemode
     aliases:
       - 'gm'
   weather:
     description: 设置所在世界的天气
+    permission: alsace.commands.weather
+  pweather:
+    permission: alsace.commands.pweather
   time:
     description: 设置所在世界或指定世界的时间
+    permission: alsace.commands.time
   ptime:
     description: 设置自己或指定玩家的客户端时间
+    permission: alsace.commands.ptime
   tp:
     description: 传送到指定玩家或坐标
+    permission: alsace.commands.tp
   tpignore:
     description: 忽略传送请求
+    permission: alsace.commands.tpignore
   home:
     description: 传送到指定家
+    permission: alsace.commands.home
   sethome:
     description: 设置家
+    permission: alsace.commands.sethome
   delhome:
     description: 删除家
+    permission: alsace.commands.delhome
   hat:
     description: 戴上手上的物品
+    permission: alsace.commands.hat
   head:
     description: 获取指定玩家的皮肤头颅
+    permission: alsace.commands.head
   warp:
     description: 传送到指定传送点
+    permission: alsace.commands.warp
   delwarp:
     description: 删除传送点
+    permission: alsace.commands.delwarp
   setwarp:
     description: 设置传送点
+    permission: alsace.commands.setwarp
   night:
     description: 获取永久夜视效果
+    permission: alsace.commands.nightvision
     aliases:
+      - 'nv'
       - 'n'
+  noclip:
+    permission: alsace.commands.noclip
+    aliases:
+      - 'nc'
+  advfly:
+    permission: alsace.commands.advfly
+    aliases:
+      - 'af'
+  slab:
+    permission: alsace.commands.slab
+    aliases:
+      - 'sb'
+  debugstick:
+    permission: alsace.commands.debugstick
+    aliases:
+      - 'dbs'
   /twist:
     description: 快捷执行创世神deform指令
+    permission: alsace.commands.twist
   /scale:
     description: 快捷执行创世神deform指令
+    permission: alsace.commands.scale
+  /derot:
+    permission: alsace.commands.derot
+  /cub:
+    permission: alsace.commands.cuboid
+  /con:
+    permission: alsace.commands.convex

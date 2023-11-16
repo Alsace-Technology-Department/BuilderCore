@@ -3,6 +3,7 @@ package work.alsace.alsacecore.listeners;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.puddingkc.commands.NoClipCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,6 +40,11 @@ public class PlayerListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         event.setQuitMessage(null);
         this.plugin.hasIgnored.remove(event.getPlayer().getName());
+        if (AlsaceCore.instance.noclip.contains(e.getPlayer()) || advfly.enabledPlayers.contains(e.getPlayer()) || breakevents.slabs.contains(e.getPlayer())) {
+            noclip.remove(e.getPlayer());
+            advfly.enabledPlayers.remove(e.getPlayer());
+            breakevents.slabs.remove(e.getPlayer());
+        }
     }
 
     @EventHandler
