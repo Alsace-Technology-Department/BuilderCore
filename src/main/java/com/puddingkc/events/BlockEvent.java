@@ -37,7 +37,7 @@ public class BlockEvent implements Listener {
     )
     public void onPlayerInteractLight(PlayerInteractEvent e) {
         if (e.getClickedBlock() != null) {
-            if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getType().name().equals("LIGHT") && e.getPlayer().hasPermission("alsace.event.lightblock")) {
+            if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getType().name().equalsIgnoreCase("light")) {
                 Block block = e.getClickedBlock();
                 Levelled levelled = (Levelled) block.getBlockData();
                 int level = levelled.getLevel();
@@ -57,7 +57,7 @@ public class BlockEvent implements Listener {
             priority = EventPriority.MONITOR
     )
     public void onBlockBreak(BlockBreakEvent e) {
-        if (!e.isCancelled() && slabs.contains(e.getPlayer()) && e.getPlayer().hasPermission("pudding.command.slab")) {
+        if (!e.isCancelled() && slabs.contains(e.getPlayer()) && e.getPlayer().hasPermission("alsace.commands.slab")) {
             Material type = e.getPlayer().getInventory().getItemInMainHand().getType();
             if (type.toString().toLowerCase().contains("slab")) {
                 if (e.isCancelled()) {
@@ -65,19 +65,20 @@ public class BlockEvent implements Listener {
                 }
 
                 if (e.getBlock().getType().toString().toLowerCase().contains("slab")) {
-                    Slab blockdata;
+                    Slab blockData;
                     if (this.isTop(e.getPlayer(), e.getBlock())) {
-                        blockdata = (Slab) e.getBlock().getBlockData();
-                        if (blockdata.getType().equals(Type.DOUBLE)) {
-                            blockdata.setType(Type.BOTTOM);
-                            e.getBlock().setBlockData(blockdata, true);
+                        //TODO 这里每次获取的都是false
+                        blockData = (Slab) e.getBlock().getBlockData();
+                        if (blockData.getType().equals(Type.DOUBLE)) {
+                            blockData.setType(Type.BOTTOM);
+                            e.getBlock().setBlockData(blockData, true);
                             e.setCancelled(true);
                         }
                     } else {
-                        blockdata = (Slab) e.getBlock().getBlockData();
-                        if (blockdata.getType().equals(Type.DOUBLE)) {
-                            blockdata.setType(Type.TOP);
-                            e.getBlock().setBlockData(blockdata, true);
+                        blockData = (Slab) e.getBlock().getBlockData();
+                        if (blockData.getType().equals(Type.DOUBLE)) {
+                            blockData.setType(Type.TOP);
+                            e.getBlock().setBlockData(blockData, true);
                             e.setCancelled(true);
                         }
                     }
@@ -93,7 +94,7 @@ public class BlockEvent implements Listener {
         while (!start.getBlock().equals(block) && start.distance(player.getEyeLocation()) < 6.0) {
             start.add(player.getLocation().getDirection().multiply(0.05));
         }
-//TODO 修复slab
+
         return start.getY() % 1.0 > 0.5;
     }
 }

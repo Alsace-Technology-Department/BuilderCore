@@ -3,7 +3,8 @@ package work.alsace.alsacecore.listeners;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.puddingkc.commands.NoClipCommand;
+import com.puddingkc.commands.puddingUtilities.AdvanceFlyCommand;
+import com.puddingkc.events.BlockEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,6 +21,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import work.alsace.alsacecore.AlsaceCore;
+import work.alsace.alsacecore.Util.NoClipUtil;
 
 public class PlayerListener implements Listener {
     private final AlsaceCore plugin;
@@ -40,10 +42,10 @@ public class PlayerListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         event.setQuitMessage(null);
         this.plugin.hasIgnored.remove(event.getPlayer().getName());
-        if (AlsaceCore.instance.noclip.contains(e.getPlayer()) || advfly.enabledPlayers.contains(e.getPlayer()) || breakevents.slabs.contains(e.getPlayer())) {
-            noclip.remove(e.getPlayer());
-            advfly.enabledPlayers.remove(e.getPlayer());
-            breakevents.slabs.remove(e.getPlayer());
+        if (NoClipUtil.noclip.contains(event.getPlayer()) || AdvanceFlyCommand.enabledPlayers.contains(event.getPlayer()) || BlockEvent.slabs.contains(event.getPlayer())) {
+            NoClipUtil.noclip.remove(event.getPlayer());
+            AdvanceFlyCommand.enabledPlayers.remove(event.getPlayer());
+            BlockEvent.slabs.remove(event.getPlayer());
         }
     }
 

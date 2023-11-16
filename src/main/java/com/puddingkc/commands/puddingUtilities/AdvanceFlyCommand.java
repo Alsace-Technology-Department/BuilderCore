@@ -1,4 +1,4 @@
-package com.puddingkc.commands;
+package com.puddingkc.commands.puddingUtilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,15 +19,18 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
 
 public class AdvanceFlyCommand implements CommandExecutor, Listener {
-    private static final List<String> slower = new ArrayList<>();
-    private static final List<String> slower2 = new ArrayList<>();
-    public static Set<Player> enabledPlayers = new HashSet<>();
-    private final HashMap<String, Double> lastVelocity = new HashMap<>();
+    private static final List<String> slower = new ArrayList();
+    private static final List<String> slower2 = new ArrayList();
+    public static Set<Player> enabledPlayers = new HashSet();
+    private final HashMap<String, Double> lastVelocity = new HashMap();
+
+    public AdvanceFlyCommand() {
+    }
 
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
         if (!(sender instanceof Player)) {
             return false;
-        } else if (!sender.hasPermission("alsace.commands.advfly")) {
+        } else if (!sender.hasPermission("alsace.commands.advancefly")) {
             return false;
         } else {
             Player player = (Player) sender;
@@ -47,7 +50,9 @@ public class AdvanceFlyCommand implements CommandExecutor, Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(
+            priority = EventPriority.LOWEST
+    )
     public void onMove(PlayerMoveEvent e) {
         if (e.getPlayer().isFlying()) {
             if (!enabledPlayers.contains(e.getPlayer())) {

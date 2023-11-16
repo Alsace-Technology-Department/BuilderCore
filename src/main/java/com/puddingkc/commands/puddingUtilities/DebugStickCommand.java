@@ -1,4 +1,4 @@
-package com.puddingkc.commands;
+package com.puddingkc.commands.puddingUtilities;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

@@ -1,14 +1,16 @@
 package work.alsace.alsacecore;
 
-import com.puddingkc.commands.*;
+import com.puddingkc.commands.essentials.*;
+import com.puddingkc.commands.fawe.*;
+import com.puddingkc.commands.puddingUtilities.*;
 import com.puddingkc.events.BlockEvent;
 import com.puddingkc.events.Misc;
 import com.puddingkc.events.Protect;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import work.alsace.alsacecore.Util.HomeDataLoader;
+import work.alsace.alsacecore.Util.NoClipUtil;
 import work.alsace.alsacecore.Util.WarpDataLoader;
 import work.alsace.alsacecore.commands.*;
 import work.alsace.alsacecore.commands.home.DelHomeCommand;
@@ -30,7 +32,7 @@ public class AlsaceCore extends JavaPlugin {
     public HashMap<UUID, HomeDataLoader> homeProfiles = new HashMap<UUID, HomeDataLoader>();
     public HashMap<String, WarpDataLoader> warpProfiles = new HashMap<String, WarpDataLoader>();
     public List<String> illegalCharacters = new ArrayList<>();
-    public Set<Player> noclip = new HashSet<>();
+
     public String motd;
 
     public static AlsaceCore instance;
@@ -40,6 +42,9 @@ public class AlsaceCore extends JavaPlugin {
         registerCommands();
         registerListeners();
         loadConfig();
+        Bukkit.getScheduler().runTaskTimer(this, () -> {
+            new NoClipUtil().checkBlock();
+        }, 1L, 1L);
         getLogger().info("插件已完全加载完成");
     }
 
@@ -61,6 +66,8 @@ public class AlsaceCore extends JavaPlugin {
         Objects.requireNonNull(getCommand("weather")).setTabCompleter(new WeatherCommand());
         Objects.requireNonNull(getCommand("ptime")).setExecutor(new PTimeCommand());
         Objects.requireNonNull(getCommand("ptime")).setTabCompleter(new PTimeCommand());
+        Objects.requireNonNull(getCommand("pweather")).setExecutor(new PWeatherCommand());
+        Objects.requireNonNull(getCommand("pweather")).setTabCompleter(new PWeatherCommand());
         Objects.requireNonNull(getCommand("head")).setExecutor(new HeadCommand());
         Objects.requireNonNull(getCommand("night")).setExecutor(new NightvisionCommand());
         Objects.requireNonNull(getCommand("advfly")).setExecutor(new AdvanceFlyCommand());
@@ -68,9 +75,9 @@ public class AlsaceCore extends JavaPlugin {
         Objects.requireNonNull(getCommand("slab")).setExecutor(new SlabCommand());
         Objects.requireNonNull(getCommand("noclip")).setExecutor(new NoClipCommand());
 
-        Objects.requireNonNull(getCommand("/con")).setExecutor(new ConvexCommand());
+        Objects.requireNonNull(getCommand("/convex")).setExecutor(new ConvexCommand());
         Objects.requireNonNull(getCommand("/derot")).setExecutor(new DerotCommand());
-        Objects.requireNonNull(getCommand("/cub")).setExecutor(new CuboidCommand());
+        Objects.requireNonNull(getCommand("/cuboid")).setExecutor(new CuboidCommand());
         Objects.requireNonNull(getCommand("/twist")).setExecutor(new TwistCommand());
         Objects.requireNonNull(getCommand("/scale")).setExecutor(new ScaleCommand());
 
@@ -129,51 +136,5 @@ public class AlsaceCore extends JavaPlugin {
             homeProfiles.put(i.getUniqueId(), new HomeDataLoader(i.getUniqueId()));
         }
         warpProfiles.put("warps", new WarpDataLoader("warps"));
-    }
-
-    private void checkblock() {
-        Iterator<Player> var1 = noclip.iterator();
-
-        while (true) {
-            while (true) {
-                Player id;
-                do {
-                    do {
-                        if (!var1.hasNext()) {
-                            return;
-                        }
-
-                        id = (Player) var1.next();
-                    } while (id == null);
-                } while (!id.isOnline());
-
-                boolean noClip;
-                if (id.getGameMode() == GameMode.CREATIVE) {
-                    if (id.getLocation().add(0.0, -0.1, 0.0).getBlock().getType().isSolid() && id.isSneaking()) {
-                        noClip = true;
-                    } else {
-                        noClip = this.shouldNoClip(id);
-                    }
-
-                    if (noClip) {
-                        id.setGameMode(GameMode.SPECTATOR);
-                    }
-                } else if (id.getGameMode() == GameMode.SPECTATOR) {
-                    if (id.getLocation().add(0.0, -0.1, 0.0).getBlock().getType().isSolid()) {
-                        noClip = true;
-                    } else {
-                        noClip = this.shouldNoClip(id);
-                    }
-
-                    if (!noClip) {
-                        id.setGameMode(GameMode.CREATIVE);
-                    }
-                }
-            }
-        }
-    }
-
-    private boolean shouldNoClip(Player player) {
-        return player.getLocation().add(0.4, 0.0, 0.0).getBlock().getType().isSolid() || player.getLocation().add(-0.4, 0.0, 0.0).getBlock().getType().isSolid() || player.getLocation().add(0.0, 0.0, 0.4).getBlock().getType().isSolid() || player.getLocation().add(0.0, 0.0, -0.4).getBlock().getType().isSolid() || player.getLocation().add(0.4, 1.0, 0.0).getBlock().getType().isSolid() || player.getLocation().add(-0.4, 1.0, 0.0).getBlock().getType().isSolid() || player.getLocation().add(0.0, 1.0, 0.4).getBlock().getType().isSolid() || player.getLocation().add(0.0, 1.0, -0.4).getBlock().getType().isSolid() || player.getLocation().add(0.0, 1.9, 0.0).getBlock().getType().isSolid();
     }
 }

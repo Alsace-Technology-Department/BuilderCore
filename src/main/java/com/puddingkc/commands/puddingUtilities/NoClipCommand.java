@@ -1,11 +1,11 @@
-package com.puddingkc.commands;
+package com.puddingkc.commands.puddingUtilities;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import work.alsace.alsacecore.AlsaceCore;
+import work.alsace.alsacecore.Util.NoClipUtil;
 
 public class NoClipCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
@@ -15,14 +15,13 @@ public class NoClipCommand implements CommandExecutor {
             return false;
         } else {
             Player player = (Player)sender;
-            if (AlsaceCore.noclip.contains(player)) {
-                AlsaceCore.noclip.remove(player);
+            if (NoClipUtil.noclip.contains(player)) {
+                NoClipUtil.noclip.remove(player);
                 player.sendMessage(ChatColor.GREEN + "已禁用自动穿墙");
             } else {
-                AlsaceCore.noclip.add(player);
+                NoClipUtil.noclip.add(player);
                 player.sendMessage(ChatColor.GREEN + "已启用自动穿墙");
             }
-//TODO 修改noclip的位置（alsace.ins）
             return true;
         }
     }

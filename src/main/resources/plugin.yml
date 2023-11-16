@@ -93,7 +93,11 @@ commands:
     permission: alsace.commands.scale
   /derot:
     permission: alsace.commands.derot
-  /cub:
+  /cuboid:
     permission: alsace.commands.cuboid
-  /con:
+    aliases:
+      - '/cub'
+  /convex:
     permission: alsace.commands.convex
+    aliases:
+      - '/con'

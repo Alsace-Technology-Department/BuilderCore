@@ -1,4 +1,4 @@
-package com.puddingkc.commands;
+package com.puddingkc.commands.essentials;
 
 import org.bukkit.World;
 import org.bukkit.command.Command;

@@ -1,4 +1,4 @@
-package com.puddingkc.commands;
+package com.puddingkc.commands.puddingUtilities;
 
 import com.puddingkc.events.BlockEvent;
 import org.bukkit.ChatColor;
@@ -8,6 +8,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class SlabCommand implements CommandExecutor {
+    public SlabCommand() {
+    }
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
         if (!(sender instanceof Player)) {
             return false;
