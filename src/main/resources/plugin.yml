@@ -92,12 +92,15 @@ commands:
     description: 快捷执行创世神deform指令
     permission: alsace.commands.scale
   /derot:
+    description: 快捷执行创世神deform指令
     permission: alsace.commands.derot
   /cuboid:
+    description: 快捷执行创世神sel指令
     permission: alsace.commands.cuboid
     aliases:
       - '/cub'
   /convex:
+    description: 快捷执行创世神sel指令
     permission: alsace.commands.convex
     aliases:
       - '/con'

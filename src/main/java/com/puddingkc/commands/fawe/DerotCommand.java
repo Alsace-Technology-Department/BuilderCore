@@ -7,36 +7,38 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class DerotCommand implements CommandExecutor {
+
+    private final String error = "§7正确指令:\n§f//derot [轴线 X,Y,Z] [度数] §7- 快捷执行创世神deform指令";
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
-        if (!(sender instanceof Player)) {
-            return false;
-        } else if (!sender.hasPermission("alsace.commands.derot")) {
-            return false;
-        } else if (strings.length != 2) {
-            sender.sendMessage(ChatColor.YELLOW + "正确指令: //derot [轴线 X,Y,Z] [度数]");
-            return false;
-        } else {
+        if (strings.length == 2 && sender instanceof Player player) {
+            if (!player.hasPermission("alsace.commands.derot")) {
+                player.sendMessage(error);
+                return false;
+            }
+
             int degrees;
             try {
                 degrees = Integer.parseInt(strings[1]);
             } catch (Exception var8) {
-                sender.sendMessage(ChatColor.YELLOW + "正确指令: //derot [轴线 X,Y,Z] [度数]");
+                player.sendMessage(error);
                 return false;
             }
 
             float radiansPerDegree = 0.0174533F;
             float radian = (float)degrees * radiansPerDegree;
             if (strings[0].equalsIgnoreCase("x")) {
-                ((Player)sender).performCommand("/deform rotate(y,z," + radian + ")");
+                player.performCommand("/deform rotate(y,z," + radian + ")");
             } else if (strings[0].equalsIgnoreCase("y")) {
-                ((Player)sender).performCommand("/deform rotate(x,z," + radian + ")");
+                player.performCommand("/deform rotate(x,z," + radian + ")");
             } else if (strings[0].equalsIgnoreCase("z")) {
-                ((Player)sender).performCommand("/deform rotate(x,y," + radian + ")");
+                player.performCommand("/deform rotate(x,y," + radian + ")");
             } else {
-                sender.sendMessage(ChatColor.YELLOW + "正确指令: //derot [轴线 X,Y,Z] [度数]");
+                player.sendMessage(error);
+                return false;
             }
-
             return true;
         }
+        sender.sendMessage(error);
+        return false;
     }
 }

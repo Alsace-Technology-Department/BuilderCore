@@ -6,14 +6,19 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class ConvexCommand implements CommandExecutor {
+
+    private final String error = "§7正确指令:\n§f//convex §7- 快捷执行创世神sel指令";
+
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
-        if (!(sender instanceof Player)) {
-            return false;
-        } else if (!sender.hasPermission("alsace.commands.convex")) {
-            return false;
-        } else {
-            ((Player) sender).performCommand("/sel convex");
+        if (sender instanceof Player player) {
+            if (!player.hasPermission("alsace.commands.convex")) {
+                player.sendMessage(error);
+                return false;
+            }
+            player.performCommand("/sel convex");
             return true;
         }
+        sender.sendMessage(error);
+        return false;
     }
 }

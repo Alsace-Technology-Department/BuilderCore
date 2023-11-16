@@ -24,52 +24,42 @@ public class AdvanceFlyCommand implements CommandExecutor, Listener {
     public static Set<Player> enabledPlayers = new HashSet();
     private final HashMap<String, Double> lastVelocity = new HashMap();
 
-    public AdvanceFlyCommand() {
-    }
-
+    @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
-        if (!(sender instanceof Player)) {
-            return false;
-        } else if (!sender.hasPermission("alsace.commands.advancefly")) {
-            return false;
-        } else {
-            Player player = (Player) sender;
-            if (enabledPlayers.contains(player)) {
-                enabledPlayers.remove(player);
-                if (player.getGameMode() == GameMode.SPECTATOR) {
-                    player.setGameMode(GameMode.CREATIVE);
-                }
+        if (!(sender instanceof Player)) { return false; }
+        if (!sender.hasPermission("pudding.command.advfly")) { return false; }
 
-                player.sendMessage(ChatColor.GREEN + "已禁用进阶飞行模式");
-            } else {
-                enabledPlayers.add(player);
-                player.sendMessage(ChatColor.GREEN + "已启用进阶飞行模式");
+        Player player = (Player) sender;
+
+        if (enabledPlayers.contains(player)) {
+            enabledPlayers.remove(player);
+            if (player.getGameMode() == GameMode.SPECTATOR) {
+                player.setGameMode(GameMode.CREATIVE);
             }
-
-            return true;
+            player.sendMessage(ChatColor.GREEN + "已禁用进阶飞行模式");
+        } else {
+            enabledPlayers.add(player);
+            player.sendMessage(ChatColor.GREEN + "已启用进阶飞行模式");
         }
+
+        return true;
     }
 
-    @EventHandler(
-            priority = EventPriority.LOWEST
-    )
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onMove(PlayerMoveEvent e) {
         if (e.getPlayer().isFlying()) {
             if (!enabledPlayers.contains(e.getPlayer())) {
                 return;
             }
-
             Double speed = e.getFrom().clone().add(0.0, -e.getFrom().getY(), 0.0).distance(e.getTo().clone().add(0.0, -e.getTo().getY(), 0.0));
-            if ((double) Math.abs(e.getFrom().getYaw() - e.getTo().getYaw()) > 2.5) {
+            if (Math.abs(e.getFrom().getYaw() - e.getTo().getYaw()) > 2.5) {
                 return;
             }
-
-            if ((double) Math.abs(e.getFrom().getPitch() - e.getTo().getPitch()) > 2.5) {
+            if (Math.abs(e.getFrom().getPitch() - e.getTo().getPitch()) > 2.5) {
                 return;
             }
-
-            if (this.lastVelocity.containsKey(e.getPlayer().getName())) {
-                Double lastSpeed = (Double) this.lastVelocity.get(e.getPlayer().getName());
+            if (lastVelocity.containsKey(e.getPlayer().getName())) {
+                Double lastSpeed = lastVelocity.get(e.getPlayer().getName());
                 if (speed * 1.3 < lastSpeed) {
                     if (slower.contains(e.getPlayer().getName())) {
                         if (slower2.contains(e.getPlayer().getName())) {
@@ -77,7 +67,7 @@ public class AdvanceFlyCommand implements CommandExecutor, Listener {
                             v.setX(0);
                             v.setZ(0);
                             e.getPlayer().setVelocity(v);
-                            this.lastVelocity.put(e.getPlayer().getName(), 0.0);
+                            lastVelocity.put(e.getPlayer().getName(), 0.0);
                             slower.remove(e.getPlayer().getName());
                             slower2.remove(e.getPlayer().getName());
                         } else {
@@ -87,16 +77,14 @@ public class AdvanceFlyCommand implements CommandExecutor, Listener {
                         slower.add(e.getPlayer().getName());
                     }
                 } else if (speed > lastSpeed) {
-                    this.lastVelocity.put(e.getPlayer().getName(), speed);
+                    lastVelocity.put(e.getPlayer().getName(), speed);
                     slower.remove(e.getPlayer().getName());
                     slower2.remove(e.getPlayer().getName());
                 }
             } else {
-                this.lastVelocity.put(e.getPlayer().getName(), speed);
+                lastVelocity.put(e.getPlayer().getName(), speed);
                 slower.remove(e.getPlayer().getName());
             }
         }
-
     }
-
 }

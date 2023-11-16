@@ -6,14 +6,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class CuboidCommand implements CommandExecutor {
+
+    private final String error = "§7正确指令:\n§f//convex §7- 快捷执行创世神sel指令";
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
-        if (!(sender instanceof Player)) {
-            return false;
-        } else if (!sender.hasPermission("alsace.commands.cuboid")) {
-            return false;
-        } else {
-            ((Player)sender).performCommand("/sel cuboid");
+        if (sender instanceof Player player) {
+            if (!player.hasPermission("alsace.commands.cuboid")) {
+                player.sendMessage(error);
+                return false;
+            }
+            player.performCommand("/sel cuboid");
             return true;
         }
+        sender.sendMessage(error);
+        return false;
     }
 }

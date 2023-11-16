@@ -108,6 +108,7 @@ public class AlsaceCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         getServer().getPluginManager().registerEvents(new BlockEvent(), this);
         getServer().getPluginManager().registerEvents(new Misc(), this);
+        getServer().getPluginManager().registerEvents(new AdvanceFlyCommand(), this);
         getLogger().info("事件注册完成");
     }
 
