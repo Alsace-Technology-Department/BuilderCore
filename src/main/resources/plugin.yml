@@ -104,3 +104,7 @@ commands:
     permission: alsace.commands.convex
     aliases:
       - '/con'
+  undo:
+    permission: alsace.commands.undo
+    aliases:
+      - 'u'

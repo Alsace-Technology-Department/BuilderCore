@@ -80,6 +80,7 @@ public class AlsaceCore extends JavaPlugin {
         Objects.requireNonNull(getCommand("/cuboid")).setExecutor(new CuboidCommand());
         Objects.requireNonNull(getCommand("/twist")).setExecutor(new TwistCommand());
         Objects.requireNonNull(getCommand("/scale")).setExecutor(new ScaleCommand());
+        Objects.requireNonNull(getCommand("undo")).setExecutor(new UndoCommand());
 
         Objects.requireNonNull(getCommand("hat")).setExecutor(new HatCommand());
         Objects.requireNonNull(getCommand("tp")).setExecutor(new TPCommand(this));
