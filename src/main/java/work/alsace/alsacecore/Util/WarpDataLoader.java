@@ -2,12 +2,14 @@ package work.alsace.alsacecore.Util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import work.alsace.alsacecore.AlsaceCore;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class WarpDataLoader {
@@ -95,4 +97,11 @@ public class WarpDataLoader {
     public Set<String> getWarps() {
         return new HashSet<>(warps.keySet());
     }
+
+//    public Set<String> getWarpsWorld() {
+//        // 返回带world的warp
+//        return warps.keySet().stream()
+//                .collect(Collectors.toMap(warp -> warp + " " + warps.get(warp), warp -> warps.get(warp).getWorld()))
+//                .keySet();
+//    }
 }
