@@ -98,10 +98,10 @@ public class WarpDataLoader {
         return new HashSet<>(warps.keySet());
     }
 
-//    public Set<String> getWarpsWorld() {
-//        // 返回带world的warp
-//        return warps.keySet().stream()
-//                .collect(Collectors.toMap(warp -> warp + " " + warps.get(warp), warp -> warps.get(warp).getWorld()))
-//                .keySet();
-//    }
+    public Set<String> getWarpsWorld() {
+        // 返回带world的warp
+        return warps.keySet().stream()
+                .collect(Collectors.toMap(warp -> warp + " " + warps.get(warp), warp -> warps.get(warp).getWorld()))
+                .keySet();
+    }
 }

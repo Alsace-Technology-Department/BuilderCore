@@ -53,6 +53,7 @@ public class DelWarpCommand implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command cmd, String s, String[] args) {
         if (args.length != 1)
             return new ArrayList<>(0);
+        //TODO 根据玩家是否有权限进入世界来过滤传送点
         return AlsaceCore.instance.warpProfiles.get("warps").getWarps().stream()
                 .filter(warps -> sender.hasPermission("multiverse.access" + warps))
                 .collect(Collectors.toList());
