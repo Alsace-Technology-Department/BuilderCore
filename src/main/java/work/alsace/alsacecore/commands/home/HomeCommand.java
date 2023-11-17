@@ -1,6 +1,7 @@
 package work.alsace.alsacecore.commands.home;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -41,18 +42,30 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
                     homeDataLoaderProfile = new HomeDataLoader(player.getUniqueId());
                 }
                 homeName = homeName.replaceFirst(user + ":", "");
+                Location location = homeDataLoaderProfile.getHome(homeName);
                 if (homeDataLoaderProfile.getHome(homeName) != null) {
-                    player.teleport(homeDataLoaderProfile.getHome(homeName));
+                    if (location.getWorld() == null) {
+                        sender.sendMessage("§c世界" + location.getWorld() + "不存在");
+                        return false;
+                    }
+                    player.teleport(location);
                     sender.sendMessage("§a已传送至玩家" + user + "的家" + homeName);
                 } else {
                     sender.sendMessage("§c玩家" + user + "没有传送点" + homeName);
+                    return false;
                 }
             } else {
                 HomeDataLoader homeDataLoader = AlsaceCore.instance.homeProfiles.get(player.getUniqueId());
-                if (homeDataLoader.getHome(homeName) == null) {
+                Location loc = homeDataLoader.getHome(homeName);
+                if (loc == null) {
                     sender.sendMessage("§c你没有传送点" + homeName);
+                    return false;
                 } else {
-                    player.teleport(homeDataLoader.getHome(homeName));
+                    if (loc.getWorld() == null) {
+                        sender.sendMessage("§c世界" + loc.getWorld() + "不存在");
+                        return false;
+                    }
+                    player.teleport(loc);
                     sender.sendMessage("§a已传送至家" + homeName);
                 }
             }

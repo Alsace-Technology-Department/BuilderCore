@@ -13,14 +13,12 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import work.alsace.alsacecore.AlsaceCore;
+import work.alsace.alsacecore.Util.HomeDataLoader;
 import work.alsace.alsacecore.Util.NoClipUtil;
 
 public class PlayerListener implements Listener {
@@ -33,6 +31,8 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         event.setJoinMessage(null);
+        BlockEvent.slabs.add(event.getPlayer());
+        plugin.homeProfiles.put(event.getPlayer().getUniqueId(), new HomeDataLoader(event.getPlayer().getUniqueId()));
         this.plugin.hasIgnored.put(event.getPlayer().getName(), false);
         Player player = event.getPlayer();
         player.sendMessage(AlsaceCore.instance.motd);
@@ -42,11 +42,17 @@ public class PlayerListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         event.setQuitMessage(null);
         this.plugin.hasIgnored.remove(event.getPlayer().getName());
+        plugin.homeProfiles.remove(event.getPlayer().getUniqueId());
         if (NoClipUtil.noclip.contains(event.getPlayer()) || AdvanceFlyCommand.enabledPlayers.contains(event.getPlayer()) || BlockEvent.slabs.contains(event.getPlayer())) {
             NoClipUtil.noclip.remove(event.getPlayer());
             AdvanceFlyCommand.enabledPlayers.remove(event.getPlayer());
             BlockEvent.slabs.remove(event.getPlayer());
         }
+    }
+
+    @EventHandler
+    public void onPlayerKick(PlayerKickEvent event) {
+        plugin.homeProfiles.remove(event.getPlayer().getUniqueId());
     }
 
     @EventHandler

@@ -50,6 +50,8 @@ public class AlsaceCore extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        homeProfiles.clear();
+        warpProfiles.clear();
         getLogger().info("插件已卸载");
     }
 
@@ -128,7 +130,6 @@ public class AlsaceCore extends JavaPlugin {
             motdBuilder.append(line).append("\n");
         }
         motd = motdBuilder.toString().trim();
-
 
         File folder = new File(getDataFolder(), "userdata");
         if (!folder.exists()) {

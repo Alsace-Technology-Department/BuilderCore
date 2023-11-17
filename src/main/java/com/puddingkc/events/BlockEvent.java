@@ -67,7 +67,6 @@ public class BlockEvent implements Listener {
                 if (e.getBlock().getType().toString().toLowerCase().contains("slab")) {
                     Slab blockData;
                     if (this.isTop(e.getPlayer(), e.getBlock())) {
-                        //TODO 这里每次获取的都是false
                         blockData = (Slab) e.getBlock().getBlockData();
                         if (blockData.getType().equals(Type.DOUBLE)) {
                             blockData.setType(Type.BOTTOM);

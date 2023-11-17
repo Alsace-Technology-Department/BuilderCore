@@ -39,6 +39,7 @@ public class TPCommand implements TabExecutor {
                 sender.sendMessage("§c参数不足，请补全参数");
                 return true;
             }
+            //tp到玩家
             case 1 -> {
                 if (sender instanceof Player commander) {
                     player = Bukkit.getPlayer(args[0]);
@@ -78,6 +79,7 @@ public class TPCommand implements TabExecutor {
                 sender.sendMessage("§c该指令仅限玩家执行");
                 return true;
             }
+            //tp玩家到坐标
             case 2 -> {
                 if (sender instanceof Player commander) {
                     if (!sender.hasPermission("alsace.commands.tp.location")) {
@@ -105,6 +107,7 @@ public class TPCommand implements TabExecutor {
                     return true;
                 }
             }
+            //tp到坐标
             case 3 -> {
                 if (sender instanceof Player commander) {
                     if (!sender.hasPermission("alsace.commands.tp.location")) {
@@ -129,6 +132,7 @@ public class TPCommand implements TabExecutor {
                 sender.sendMessage("§c该指令仅限玩家执行");
                 return true;
             }
+            //tp玩家到坐标
             case 4 -> {
                 if (sender instanceof Player commander) {
                     if (!sender.hasPermission("alsace.commands.tp.location")) {

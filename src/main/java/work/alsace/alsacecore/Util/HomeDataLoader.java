@@ -23,28 +23,25 @@ public class HomeDataLoader {
 
     public HomeDataLoader(final UUID uuid) {
         this.playerUUID = uuid;
-        Bukkit.getServer().getScheduler().runTaskAsynchronously(AlsaceCore.instance, new Runnable() {
-            @Override
-            public void run() {
-                userFile = new File(AlsaceCore.instance.getDataFolder() + File.separator + "userdata" + File.separator + playerUUID.toString() + ".yml");
-                if (!userFile.exists()) {
-                    try {
-                        userFile.createNewFile();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+        Bukkit.getServer().getScheduler().runTaskAsynchronously(AlsaceCore.instance, () -> {
+            userFile = new File(AlsaceCore.instance.getDataFolder() + File.separator + "userdata" + File.separator + playerUUID.toString() + ".yml");
+            if (!userFile.exists()) {
+                try {
+                    userFile.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                userConfig = YamlConfiguration.loadConfiguration(userFile);
-                if (userConfig.getConfigurationSection("Home") != null) {
-                    for (String i : userConfig.getConfigurationSection("Home").getKeys(false)) {
-                        homes.put(i, new Location(
-                                Bukkit.getServer().getWorld(Objects.requireNonNull(userConfig.getString("Home." + i + ".World"))),
-                                userConfig.getDouble("Home." + i + ".X"),
-                                userConfig.getDouble("Home." + i + ".Y"),
-                                userConfig.getDouble("Home." + i + ".Z"),
-                                userConfig.getLong("Home." + i + ".Yaw"),
-                                userConfig.getLong("Home." + i + ".Pitch")));
-                    }
+            }
+            userConfig = YamlConfiguration.loadConfiguration(userFile);
+            if (userConfig.getConfigurationSection("Home") != null) {
+                for (String i : userConfig.getConfigurationSection("Home").getKeys(false)) {
+                    homes.put(i, new Location(
+                            Bukkit.getServer().getWorld(Objects.requireNonNull(userConfig.getString("Home." + i + ".World"))),
+                            userConfig.getDouble("Home." + i + ".X"),
+                            userConfig.getDouble("Home." + i + ".Y"),
+                            userConfig.getDouble("Home." + i + ".Z"),
+                            userConfig.getLong("Home." + i + ".Yaw"),
+                            userConfig.getLong("Home." + i + ".Pitch")));
                 }
             }
         });

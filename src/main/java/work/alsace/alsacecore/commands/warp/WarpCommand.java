@@ -1,5 +1,6 @@
 package work.alsace.alsacecore.commands.warp;
 
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -24,10 +25,16 @@ public class WarpCommand implements CommandExecutor, TabCompleter {
             if (sender.hasPermission("alsace.commands.warp." + warpName)) {
                 Player player = (Player) sender;
                 WarpDataLoader warpDataLoader = AlsaceCore.instance.warpProfiles.get("warps");
-                if (warpDataLoader.getWarp(warpName) == null) {
+                Location location = warpDataLoader.getWarp(warpName);
+                if (location == null) {
                     sender.sendMessage("§c传送点" + warpName + "不存在");
+                    return false;
                 } else {
-                    player.teleport(warpDataLoader.getWarp(warpName));
+                    if (location.getWorld() == null) {
+                        sender.sendMessage("§c世界" + location.getWorld() + "不存在");
+                        return false;
+                    }
+                    player.teleport(location);
                     sender.sendMessage("§a已传送至" + warpName);
                 }
 
