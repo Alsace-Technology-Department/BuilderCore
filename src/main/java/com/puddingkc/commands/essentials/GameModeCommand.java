@@ -1,6 +1,7 @@
 package com.puddingkc.commands.essentials;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,7 +14,7 @@ import java.util.*;
 public class GameModeCommand implements CommandExecutor, TabCompleter {
 
     private static final List<String> modes = Arrays.asList("adventure", "creative", "spectator", "survival");
-    private final String error = "§7正确指令:\n§f/gamemode <模式> §7- 设置你的游戏模式\n§f/gamemode <模式> [玩家] §7- 设置指定玩家的游戏模式";
+    private final String error = ChatColor.GRAY + "正确指令:\n§f/gamemode <模式> §7- 设置你的游戏模式\n§f/gamemode <模式> [玩家] §7- 设置指定玩家的游戏模式";
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
@@ -23,26 +24,26 @@ public class GameModeCommand implements CommandExecutor, TabCompleter {
         }
 
         if (!(sender instanceof Player) && strings.length == 1) {
-            sender.sendMessage("§c控制台无法执行该命令");
+            sender.sendMessage(ChatColor.RED + "控制台无法执行该命令");
             return false;
         }
 
         Player targetPlayer;
         if (strings.length == 2) {
             if (!sender.hasPermission("alsace.commands.gamemode.other")) {
-                sender.sendMessage("§c你没有使用该命令的权限");
+                sender.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
                 return false;
             }
 
             targetPlayer = Bukkit.getPlayer(strings[1]);
             if (targetPlayer == null || !targetPlayer.isOnline()) {
-                sender.sendMessage("§c指定的玩家不在线或不存在");
+                sender.sendMessage(ChatColor.RED + "指定的玩家不在线或不存在");
                 return false;
             }
         } else {
             targetPlayer = (Player) sender;
             if (!targetPlayer.hasPermission("alsace.commands.gamemode")) {
-                targetPlayer.sendMessage("§c你没有使用该命令的权限");
+                targetPlayer.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
                 return false;
             }
         }
@@ -54,10 +55,10 @@ public class GameModeCommand implements CommandExecutor, TabCompleter {
         }
 
         targetPlayer.setGameMode(gameMode);
-        targetPlayer.sendMessage("§7已将你的游戏模式设置为 §f" + gameMode);
+        targetPlayer.sendMessage(ChatColor.GRAY + "已将你的游戏模式设置为 §f" + gameMode);
 
         if (strings.length == 2) {
-            sender.sendMessage("§7已将玩家 §f" + targetPlayer.getName() + " §7的游戏模式设置为 §f" + gameMode);
+            sender.sendMessage(ChatColor.GRAY + "已将玩家 §f" + targetPlayer.getName() + " §7的游戏模式设置为 §f" + gameMode);
         }
 
         return true;

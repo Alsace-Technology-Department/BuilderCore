@@ -1,6 +1,7 @@
 package com.puddingkc.commands.essentials;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class SpeedCommand implements CommandExecutor, TabCompleter {
 
-    private final String error = "§7正确指令:\n§f/speed <速度> §7- 设置你的飞行或步行速度(1~15)\n§f/speed <类型> <速度> [玩家] §7- 设置指定玩家的指定类型速度";
+    private final String error = ChatColor.GRAY + "正确指令:\n§f/speed <速度> §7- 设置你的飞行或步行速度(1~15)\n§f/speed <类型> <速度> [玩家] §7- 设置指定玩家的指定类型速度";
     private static final List<String> types = Arrays.asList("walk", "fly", "1", "1.5", "1.75", "2");
     private static final List<String> speeds = Arrays.asList("1", "1.5", "1.75", "2");
 
@@ -22,7 +23,7 @@ public class SpeedCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
         if (strings.length == 1 && sender instanceof Player player) {
             if (!player.hasPermission("alsace.commands.speed")) {
-                player.sendMessage("§c你没有使用该命令的权限");
+                player.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
                 return false;
             }
             try {
@@ -33,10 +34,10 @@ public class SpeedCommand implements CommandExecutor, TabCompleter {
                 }
                 if (player.isFlying()) {
                     player.setFlySpeed(speed/10F);
-                    player.sendMessage("§7已将你的 §f飞行 §7速度设置为 §f" + speed);
+                    player.sendMessage(ChatColor.GRAY + "已将你的 §f飞行 §7速度设置为 §f" + speed);
                 } else {
                     player.setWalkSpeed(speed/10F);
-                    player.sendMessage("§7已将你的 §f步行 §7速度设置为 §f" + speed);
+                    player.sendMessage(ChatColor.GRAY + "已将你的 §f步行 §7速度设置为 §f" + speed);
                 }
                 return true;
             } catch (NumberFormatException e) {
@@ -47,7 +48,7 @@ public class SpeedCommand implements CommandExecutor, TabCompleter {
 
         if (strings.length == 2 && sender instanceof Player player) {
             if (!player.hasPermission("alsace.commands.speed")) {
-                player.sendMessage("§c你没有使用该命令的权限");
+                player.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
                 return false;
             }
             switch (strings[0]) {
@@ -59,7 +60,7 @@ public class SpeedCommand implements CommandExecutor, TabCompleter {
                             return false;
                         }
                         player.setWalkSpeed(speed / 10F);
-                        player.sendMessage("§7已将你的 §f步行 §7速度设置为 §f" + speed);
+                        player.sendMessage(ChatColor.GRAY + "已将你的 §f步行 §7速度设置为 §f" + speed);
                         return true;
                     } catch (NumberFormatException e) {
                         player.sendMessage(error);
@@ -74,7 +75,7 @@ public class SpeedCommand implements CommandExecutor, TabCompleter {
                             return false;
                         }
                         player.setFlySpeed(speed / 10F);
-                        player.sendMessage("§7已将你的 §f飞行 §7速度设置为 §f" + speed);
+                        player.sendMessage(ChatColor.GRAY + "已将你的 §f飞行 §7速度设置为 §f" + speed);
                         return true;
                     } catch (NumberFormatException e) {
                         player.sendMessage(error);
@@ -90,13 +91,13 @@ public class SpeedCommand implements CommandExecutor, TabCompleter {
 
         if (strings.length == 3) {
             if (!sender.hasPermission("alsace.commands.speed.other")) {
-                sender.sendMessage("§c你没有使用该命令的权限");
+                sender.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
                 return false;
             }
 
             Player player = Bukkit.getPlayer(strings[2]);
             if (player == null || !player.isOnline()) {
-                sender.sendMessage("§c指定的玩家不在线或不存在");
+                sender.sendMessage(ChatColor.RED + "指定的玩家不在线或不存在");
                 return false;
             }
 
@@ -109,8 +110,8 @@ public class SpeedCommand implements CommandExecutor, TabCompleter {
                             return false;
                         }
                         player.setWalkSpeed(speed / 10F);
-                        sender.sendMessage("§7已将玩家 §f" + player.getName() + " §7的 §f步行 §7速度设置为 §f" + speed);
-                        player.sendMessage("§7已将你的 §f步行 §7速度设置为 §f" + speed);
+                        sender.sendMessage(ChatColor.GRAY + "已将玩家 §f" + player.getName() + " §7的 §f步行 §7速度设置为 §f" + speed);
+                        player.sendMessage(ChatColor.GRAY + "已将你的 §f步行 §7速度设置为 §f" + speed);
                         return true;
                     } catch (NumberFormatException e) {
                         sender.sendMessage(error);
@@ -125,8 +126,8 @@ public class SpeedCommand implements CommandExecutor, TabCompleter {
                             return false;
                         }
                         player.setFlySpeed(speed / 10F);
-                        sender.sendMessage("§7已将玩家 §f" + player.getName() + " §7的 §f飞行 §7速度设置为 §f" + speed);
-                        player.sendMessage("§7已将你的 §f飞行 §7速度设置为 §f" + speed);
+                        sender.sendMessage(ChatColor.GRAY + "已将玩家 §f" + player.getName() + " §7的 §f飞行 §7速度设置为 §f" + speed);
+                        player.sendMessage(ChatColor.GRAY + "已将你的 §f飞行 §7速度设置为 §f" + speed);
                         return true;
                     } catch (NumberFormatException e) {
                         sender.sendMessage(error);

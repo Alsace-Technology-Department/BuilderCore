@@ -16,10 +16,10 @@ public class DebugStickCommand implements CommandExecutor {
         } else if (!sender.hasPermission("alsace.commands.debugstick")) {
             return false;
         } else {
-            Player player = (Player)sender;
+            Player player = (Player) sender;
             ItemStack itemStack = new ItemStack(Material.DEBUG_STICK, 1);
             player.getInventory().addItem(itemStack);
-            player.sendMessage(ChatColor.GREEN + "你获得了一个调试棒");
+            player.sendMessage(ChatColor.GRAY + "你获得了一个调试棒");
             return true;
         }
     }

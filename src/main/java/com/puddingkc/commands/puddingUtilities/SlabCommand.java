@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 public class SlabCommand implements CommandExecutor {
     public SlabCommand() {
     }
+
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
         if (!(sender instanceof Player)) {
             return false;
@@ -19,10 +20,10 @@ public class SlabCommand implements CommandExecutor {
             Player player = (Player) sender;
             if (BlockEvent.slabs.contains(player)) {
                 BlockEvent.slabs.remove(player);
-                player.sendMessage(ChatColor.GREEN + "已禁用半砖破坏模式");
+                player.sendMessage(ChatColor.GRAY + "已禁用半砖破坏模式");
             } else {
                 BlockEvent.slabs.add(player);
-                player.sendMessage(ChatColor.GREEN + "已启用半砖破坏模式");
+                player.sendMessage(ChatColor.GRAY + "已启用半砖破坏模式");
             }
 
             return true;

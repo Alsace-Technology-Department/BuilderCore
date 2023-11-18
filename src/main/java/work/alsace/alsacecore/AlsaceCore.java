@@ -32,7 +32,6 @@ public class AlsaceCore extends JavaPlugin {
     public HashMap<UUID, HomeDataLoader> homeProfiles = new HashMap<UUID, HomeDataLoader>();
     public HashMap<String, WarpDataLoader> warpProfiles = new HashMap<String, WarpDataLoader>();
     public List<String> illegalCharacters = new ArrayList<>();
-
     public String motd;
 
     public static AlsaceCore instance;

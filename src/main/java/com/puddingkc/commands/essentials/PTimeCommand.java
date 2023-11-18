@@ -1,6 +1,7 @@
 package com.puddingkc.commands.essentials;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class PTimeCommand implements CommandExecutor, TabCompleter {
 
-    private final String error = "§7正确指令:\n§f/ptime <时间> §7- 设置你自己的客户端时间\n§f/ptime <时间> <玩家> §7- 设置指定玩家的客户端时间";
+    private final String error = ChatColor.GRAY + "正确指令:\n§f/ptime <时间> §7- 设置你自己的客户端时间\n§f/ptime <时间> <玩家> §7- 设置指定玩家的客户端时间";
     private static final List<String> times = Arrays.asList("day", "night", "reset");
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
@@ -24,26 +25,26 @@ public class PTimeCommand implements CommandExecutor, TabCompleter {
         }
 
         if (!(sender instanceof Player) && strings.length == 1) {
-            sender.sendMessage("§c控制台无法执行该命令");
+            sender.sendMessage(ChatColor.RED + "控制台无法执行该命令");
             return false;
         }
 
         Player targetPlayer;
         if (strings.length == 2) {
             if (!sender.hasPermission("alsace.commands.ptime.other")) {
-                sender.sendMessage("§c你没有使用该命令的权限");
+                sender.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
                 return false;
             }
 
             targetPlayer = Bukkit.getPlayer(strings[1]);
             if (targetPlayer == null || !targetPlayer.isOnline()) {
-                sender.sendMessage("§c指定的玩家不在线或不存在");
+                sender.sendMessage(ChatColor.RED + "指定的玩家不在线或不存在");
                 return false;
             }
         } else {
             targetPlayer = (Player) sender;
             if (!targetPlayer.hasPermission("alsace.commands.ptime")) {
-                targetPlayer.sendMessage("§c你没有使用该命令的权限");
+                targetPlayer.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
                 return false;
             }
         }
@@ -54,9 +55,9 @@ public class PTimeCommand implements CommandExecutor, TabCompleter {
             case "night" -> time = 14000;
             case "reset" -> {
                 targetPlayer.setPlayerTime(0, false);
-                targetPlayer.sendMessage("§7已将你的客户端时间重置");
+                targetPlayer.sendMessage(ChatColor.GRAY + "已将你的客户端时间重置");
                 if (strings.length == 2) {
-                    sender.sendMessage("§7已将玩家 §f" + targetPlayer.getName() + " §7的客户端时间重置");
+                    sender.sendMessage(ChatColor.GRAY + "已将玩家 §f" + targetPlayer.getName() + " §7的客户端时间重置");
                 }
                 return true;
             }
@@ -71,10 +72,10 @@ public class PTimeCommand implements CommandExecutor, TabCompleter {
         }
 
         targetPlayer.setPlayerTime(time, true);
-        targetPlayer.sendMessage("§7已将你的客户端时间设置为 §f" + time + " ticks");
+        targetPlayer.sendMessage(ChatColor.GRAY + "已将你的客户端时间设置为 §f" + time + " ticks");
 
         if (strings.length == 2) {
-            sender.sendMessage("§7已将玩家 §f" + targetPlayer.getName() + " §7的客户端时间设置为 §f" + time + " ticks");
+            sender.sendMessage(ChatColor.GRAY + "已将玩家 §f" + targetPlayer.getName() + " §7的客户端时间设置为 §f" + time + " ticks");
         }
 
         return true;

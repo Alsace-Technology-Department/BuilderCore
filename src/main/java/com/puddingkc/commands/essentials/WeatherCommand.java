@@ -1,5 +1,6 @@
 package com.puddingkc.commands.essentials;
 
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,13 +14,13 @@ import java.util.List;
 
 public class WeatherCommand implements CommandExecutor, TabCompleter {
 
-    private final String error = "§7正确指令:\n§f/weather <天气> §7- 设置你当前世界的天气";
+    private final String error = ChatColor.GRAY + "正确指令:\n§f/weather <天气> §7- 设置你当前世界的天气";
     private static final List<String> weathers = Arrays.asList("clear", "rain", "thunder");
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
         if (strings.length == 1 && sender instanceof Player player) {
             if (!player.hasPermission("alsace.commands.weather")) {
-                player.sendMessage("§c你没有使用该命令的权限");
+                player.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
                 return false;
             }
             World world = player.getWorld();

@@ -1,6 +1,7 @@
 package work.alsace.alsacecore.commands.home;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,11 +17,11 @@ public class SetHomeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("§c该指令仅限玩家执行");
+            sender.sendMessage(ChatColor.RED + "该指令仅限玩家执行");
             return false;
         }
         if (!sender.hasPermission("alsace.commands.sethome")) {
-            sender.sendMessage("§c你没有使用该命令的权限");
+            sender.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
             return false;
         }
         if (args.length == 1) {
@@ -34,7 +35,7 @@ public class SetHomeCommand implements CommandExecutor {
                 if (i.isOnline()) {
                     homeDataLoader = AlsaceCore.instance.homeProfiles.get(i.getUniqueId());
                 } else if (!i.hasPlayedBefore()) {
-                    sender.sendMessage("§c玩家不存在");
+                    sender.sendMessage(ChatColor.RED + "玩家不存在");
                     return false;
                 } else {
                     homeDataLoader = new HomeDataLoader(i.getUniqueId());
@@ -43,11 +44,11 @@ public class SetHomeCommand implements CommandExecutor {
                 homeDataLoader = AlsaceCore.instance.homeProfiles.get(player.getUniqueId());
             }
             if (homeDataLoader.getHome(homeName) != null) {
-                sender.sendMessage("§c已经存在传送点" + homeName);
+                sender.sendMessage(ChatColor.RED + "已经存在传送点" + homeName);
                 return false;
             }
             if (homeDataLoader.getHomes().size() >= homeDataLoader.getMaxHomes() && !player.hasPermission("alsace.commands.sethome.other")) {
-                sender.sendMessage("§c你的家已经达到最大传送点数量");
+                sender.sendMessage(ChatColor.RED + "你的家已经达到最大传送点数量");
                 return false;
             }
             String separator = AlsaceCore.instance.getConfig().getString("illegal-characters");
@@ -58,15 +59,15 @@ public class SetHomeCommand implements CommandExecutor {
             if (pattern != null) {
                 for (String i : homeName.split(pattern.pattern())) {
                     if (pattern.matcher(i).matches()) {
-                        sender.sendMessage("§c传送点名称包含非法字符");
+                        sender.sendMessage(ChatColor.RED + "传送点名称包含非法字符");
                         return false;
                     }
                 }
             }
             homeDataLoader.addHome(homeName, player.getLocation());
-            sender.sendMessage(String.format("§a成功设置传送点%s", homeName));
+            sender.sendMessage(String.format(ChatColor.GRAY + "成功设置传送点%s", homeName));
         } else {
-            sender.sendMessage("§7正确指令:\n§f/sethome <传送点> §7- 设置你的家\n§f/sethome <玩家>:<传送点> §7- 设置指定玩家的家");
+            sender.sendMessage(ChatColor.GRAY + "正确指令:\n§f/sethome <传送点> §7- 设置你的家\n§f/sethome <玩家>:<传送点> §7- 设置指定玩家的家");
         }
         return true;
     }

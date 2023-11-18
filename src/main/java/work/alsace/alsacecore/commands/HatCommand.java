@@ -14,7 +14,7 @@ public class HatCommand implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(ChatColor.RED + "§c该指令仅限玩家使用");
+            sender.sendMessage(ChatColor.RED + "该指令仅限玩家使用");
         } else {
             PlayerInventory inventory = player.getInventory();
             ItemStack item = inventory.getItemInMainHand();

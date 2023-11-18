@@ -1,6 +1,7 @@
 package work.alsace.alsacecore.commands.warp;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,11 +17,11 @@ public class SetWarpCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("§c该指令仅限玩家执行");
+            sender.sendMessage(ChatColor.RED + "该指令仅限玩家执行");
             return false;
         }
         if (!sender.hasPermission("alsace.commands.setwarp")) {
-            sender.sendMessage("§c你没有使用该命令的权限");
+            sender.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
             return false;
         }
         if (args.length == 1) {
@@ -29,7 +30,7 @@ public class SetWarpCommand implements CommandExecutor {
             Player player = (Player) sender;
             warpDataLoader = AlsaceCore.instance.warpProfiles.get("warps");
             if (warpDataLoader.getWarp(warpName) != null) {
-                sender.sendMessage("§c已经存在送点" + warpName);
+                sender.sendMessage(ChatColor.RED + "已经存在送点" + warpName);
                 return false;
             }
             String separator = AlsaceCore.instance.getConfig().getString("illegal-characters");
@@ -40,15 +41,15 @@ public class SetWarpCommand implements CommandExecutor {
             if (pattern != null) {
                 for (String i : warpName.split(pattern.pattern())) {
                     if (pattern.matcher(i).matches()) {
-                        sender.sendMessage("§c传送点名称包含非法字符");
+                        sender.sendMessage(ChatColor.RED + "传送点名称包含非法字符");
                         return false;
                     }
                 }
             }
             warpDataLoader.addWarp(warpName, player.getLocation());
-            sender.sendMessage(String.format("§a成功设置传送点%s", warpName));
+            sender.sendMessage(String.format(ChatColor.GRAY + "成功设置传送点%s", warpName));
         } else {
-            sender.sendMessage("§7正确指令:\n§f/setwarp <传送点> §7- 设置传送点");
+            sender.sendMessage(ChatColor.GRAY + "正确指令:\n§f/setwarp <传送点> §7- 设置传送点");
         }
         return true;
     }

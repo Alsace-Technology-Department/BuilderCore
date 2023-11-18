@@ -26,8 +26,12 @@ public class AdvanceFlyCommand implements CommandExecutor, Listener {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
-        if (!(sender instanceof Player)) { return false; }
-        if (!sender.hasPermission("pudding.command.advfly")) { return false; }
+        if (!(sender instanceof Player)) {
+            return false;
+        }
+        if (!sender.hasPermission("alsace.commands.advfly")) {
+            return false;
+        }
 
         Player player = (Player) sender;
 
@@ -36,10 +40,10 @@ public class AdvanceFlyCommand implements CommandExecutor, Listener {
             if (player.getGameMode() == GameMode.SPECTATOR) {
                 player.setGameMode(GameMode.CREATIVE);
             }
-            player.sendMessage(ChatColor.GREEN + "已禁用进阶飞行模式");
+            player.sendMessage(ChatColor.GRAY + "已禁用进阶飞行模式");
         } else {
             enabledPlayers.add(player);
-            player.sendMessage(ChatColor.GREEN + "已启用进阶飞行模式");
+            player.sendMessage(ChatColor.GRAY + "已启用进阶飞行模式");
         }
 
         return true;

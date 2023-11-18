@@ -14,13 +14,13 @@ public class NoClipCommand implements CommandExecutor {
         } else if (!sender.hasPermission("alsace.commands.noclip")) {
             return false;
         } else {
-            Player player = (Player)sender;
+            Player player = (Player) sender;
             if (NoClipUtil.noclip.contains(player)) {
                 NoClipUtil.noclip.remove(player);
-                player.sendMessage(ChatColor.GREEN + "已禁用自动穿墙");
+                player.sendMessage(ChatColor.GRAY + "已禁用自动穿墙");
             } else {
                 NoClipUtil.noclip.add(player);
-                player.sendMessage(ChatColor.GREEN + "已启用自动穿墙");
+                player.sendMessage(ChatColor.GRAY + "已启用自动穿墙");
             }
             return true;
         }

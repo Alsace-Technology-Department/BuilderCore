@@ -1,5 +1,6 @@
 package com.puddingkc.events;
 
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -12,7 +13,7 @@ public class Protect implements Listener {
     public void onBreak(BlockBreakEvent e) {
         if (!e.getPlayer().hasPermission("alsace.protect.break")) {
             e.setCancelled(true);
-            e.getPlayer().sendMessage("§c你没有权限破坏方块");
+            e.getPlayer().sendMessage(ChatColor.RED + "你没有权限破坏方块");
         }
     }
 
@@ -20,7 +21,7 @@ public class Protect implements Listener {
     public void onPlace(BlockPlaceEvent e) {
         if (!e.getPlayer().hasPermission("alsace.protect.place")) {
             e.setCancelled(true);
-            e.getPlayer().sendMessage("§c你没有权限放置方块");
+            e.getPlayer().sendMessage(ChatColor.RED + "你没有权限放置方块");
         }
     }
 
@@ -28,7 +29,7 @@ public class Protect implements Listener {
     public void onInteract(PlayerInteractEvent e) {
         if (!e.getPlayer().hasPermission("alsace.protect.interact")) {
             e.setCancelled(true);
-            e.getPlayer().sendMessage("§c你没有权限与方块和物品进行交互");
+            e.getPlayer().sendMessage(ChatColor.RED + "你没有权限与方块和物品进行交互");
         }
     }
 }

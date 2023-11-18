@@ -1,6 +1,7 @@
 package work.alsace.alsacecore.commands.warp;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -19,11 +20,11 @@ public class WarpCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("§c该指令仅限玩家执行");
+            sender.sendMessage(ChatColor.RED + "该指令仅限玩家执行");
             return false;
         }
         if (!sender.hasPermission("alsace.commands.warp")) {
-            sender.sendMessage("§c你没有使用该命令的权限");
+            sender.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
             return false;
         }
         if (args.length == 1) {
@@ -35,23 +36,23 @@ public class WarpCommand implements CommandExecutor, TabCompleter {
                 if (sender.hasPermission("multiverse.access." + warpWorld.getName())) {
                     Player player = (Player) sender;
                     if (location.getWorld() == null) {
-                        sender.sendMessage("§c世界" + location.getWorld() + "不存在");
+                        sender.sendMessage(ChatColor.RED + "世界" + location.getWorld() + "不存在");
                         return false;
                     }
                     player.teleport(location);
-                    sender.sendMessage("§a已传送至" + warpName);
+                    sender.sendMessage(ChatColor.GRAY + "已传送至" + warpName);
                 } else {
-                    sender.sendMessage("§c你没有权限传送至" + warpName);
+                    sender.sendMessage(ChatColor.RED + "你没有权限传送至" + warpName);
                     return false;
                 }
             } else {
-                sender.sendMessage("§c传送点" + location.getWorld() + "不存在");
+                sender.sendMessage(ChatColor.RED + "传送点" + location.getWorld() + "不存在");
                 return false;
             }
 
 
         } else {
-            sender.sendMessage("§7正确指令:\n§f/warp <传送点> §7- 传送至指定传送点");
+            sender.sendMessage(ChatColor.GRAY + "正确指令:\n§f/warp <传送点> §7- 传送至指定传送点");
         }
         return true;
     }
@@ -60,22 +61,22 @@ public class WarpCommand implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command cmd, String s, String[] args) {
         if (args.length != 1)
             return new ArrayList<>(0);
-//        WarpDataLoader warpDataLoader = AlsaceCore.instance.warpProfiles.get("warps");
-//
-//        //TODO 根据玩家是否有权限进入世界来过滤传送点
-//        return warpDataLoader.getWarpsWorld().stream()
-//                .filter(warp -> {
-//                    String[] parts = warp.split(" ");
-//                    if (parts.length == 2) {
-//                        World world = Bukkit.getWorld(parts[1]);
-//                        return world != null && sender.hasPermission("multiverse.access." + world.getName());
-//                    }
-//                    return false;
-//                })
-//                .collect(Collectors.toList());
-        return AlsaceCore.instance.warpProfiles.get("warps").getWarps().stream()
-                .filter(warps -> sender.hasPermission("multiverse.access" + warps))
-                .collect(Collectors.toList());
+        return new ArrayList<>(getAccessWarps((Player) sender));
+
+    }
+
+    private List<String> getAccessWarps(Player sender) {
+        List<String> warps = new ArrayList<>();
+        AlsaceCore.instance.warpProfiles.get("warps").getWarps().forEach(warp -> {
+            Location location = AlsaceCore.instance.warpProfiles.get("warps").getWarp(warp);
+            World world = location.getWorld();
+            if (world != null) {
+                if (sender.hasPermission("multiverse.access." + world.getName())) {
+                    warps.add(warp);
+                }
+            }
+        });
+        return warps;
     }
 
 }

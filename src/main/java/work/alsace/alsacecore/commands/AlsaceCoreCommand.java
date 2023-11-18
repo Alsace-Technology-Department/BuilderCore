@@ -1,6 +1,7 @@
 package work.alsace.alsacecore.commands;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,20 +26,20 @@ public class AlsaceCoreCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
         if (!sender.hasPermission("alsace.admin")) {
-            sender.sendMessage("§c你没有使用该命令的权限");
+            sender.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
             return false;
         }
         switch (args[0]) {
             case "info" -> {
                 // TODO 插件信息
-                sender.sendMessage("§7插件名称: §fAlsaceCore\n§7插件版本: §f" + plugin.getDescription().getVersion() + "\n§7插件作者: §f" + Arrays.toString(plugin.getDescription().getAuthors().toArray()));
+                sender.sendMessage(ChatColor.GRAY + "插件名称: §fAlsaceCore\n§7插件版本: §f" + plugin.getDescription().getVersion() + "\n§7插件作者: §f" + Arrays.toString(plugin.getDescription().getAuthors().toArray()));
             }
             case "reload" -> {
                 plugin.loadConfig();
-                sender.sendMessage("§a重载成功");
+                sender.sendMessage(ChatColor.GRAY + "重载成功");
             }
             default -> {
-                sender.sendMessage("§7正确指令:\n§f/alsacecore info §7- 查看插件信息\n§f/alsacecore reload §7- 重载插件");
+                sender.sendMessage(ChatColor.GRAY + "正确指令:\n§f/alsacecore info §7- 查看插件信息\n§f/alsacecore reload §7- 重载插件");
             }
         }
         return true;

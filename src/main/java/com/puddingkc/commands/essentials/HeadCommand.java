@@ -1,6 +1,7 @@
 package com.puddingkc.commands.essentials;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,17 +12,17 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 public class HeadCommand implements CommandExecutor {
 
-    private final String error = "§7正确指令:\n§f/head <玩家名称> §7- 获取指定玩家的皮肤头颅";
+    private final String error = ChatColor.GRAY + "正确指令:\n§f/head <玩家名称> §7- 获取指定玩家的皮肤头颅";
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] strings) {
         if (strings.length == 1 && sender instanceof Player player) {
             if (!player.hasPermission("alsace.commands.head")) {
-                player.sendMessage("§c你没有使用该命令的权限");
+                player.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
                 return false;
             }
             ItemStack head = createPlayerHead(strings[0]);
             player.getInventory().addItem(head);
-            player.sendMessage("§7成功获得了玩家 §f" + strings[0] + " §7的头颅");
+            player.sendMessage(ChatColor.GRAY + "成功获得了玩家 §f" + strings[0] + " §7的头颅");
             return true;
         }
         sender.sendMessage(error);

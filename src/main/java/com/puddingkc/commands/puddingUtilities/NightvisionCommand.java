@@ -13,7 +13,7 @@ public class NightvisionCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player player) {
             if (!player.hasPermission("alsace.commands.nightvision")) {
-                player.sendMessage("§c你没有使用该命令的权限");
+                player.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
                 return false;
             }
 
