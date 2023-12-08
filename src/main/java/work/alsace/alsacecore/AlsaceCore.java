@@ -12,7 +12,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import work.alsace.alsacecore.Util.HomeDataLoader;
 import work.alsace.alsacecore.Util.NoClipUtil;
 import work.alsace.alsacecore.Util.WarpDataLoader;
-import work.alsace.alsacecore.commands.*;
+import work.alsace.alsacecore.commands.AlsaceCoreCommand;
+import work.alsace.alsacecore.commands.HatCommand;
 import work.alsace.alsacecore.commands.home.DelHomeCommand;
 import work.alsace.alsacecore.commands.home.HomeCommand;
 import work.alsace.alsacecore.commands.home.SetHomeCommand;
@@ -123,12 +124,19 @@ public class AlsaceCore extends JavaPlugin {
             }
         }
 
-        List<String> motdList = this.getConfig().getStringList("motd");
-        StringBuilder motdBuilder = new StringBuilder();
-        for (String line : motdList) {
-            motdBuilder.append(line).append("\n");
+        List<String> motdLines = this.getConfig().getStringList("motd");
+        try {
+            StringBuilder motdBuilder = new StringBuilder();
+            for (String line : motdLines) {
+                motdBuilder.append(line).append("\n");
+            }
+            String motdString = motdBuilder.toString().trim();
+        } catch (IllegalArgumentException e) {
+            getLogger().warning("MOTD configuration not found or invalid");
+            motd = "";
         }
-        motd = motdBuilder.toString().trim();
+
+        this.motd = motd;
 
         File folder = new File(getDataFolder(), "userdata");
         if (!folder.exists()) {
