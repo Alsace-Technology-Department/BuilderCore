@@ -65,7 +65,7 @@ public class TPCommand implements TabExecutor {
 
                         commander.teleport(player);
                         commander.sendMessage(ChatColor.GRAY + "已传送至" + name);
-                    } else if (commander.hasPermission("alsace.commands.tp.across")) {
+                    } else if (commander.hasPermission("alsace.commands.tp") && commander.hasPermission("multiverse.access." + player.getWorld().getName())) {
                         if (this.plugin.hasIgnored.get(name)) {
                             sender.sendMessage(ChatColor.RED + "玩家" + name + "已屏蔽强制传送");
                             return true;
@@ -74,7 +74,7 @@ public class TPCommand implements TabExecutor {
                         commander.teleport(player);
                         commander.sendMessage(ChatColor.GRAY + "已传送至" + name);
                     } else {
-                        commander.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
+                        commander.sendMessage(ChatColor.RED + "你没有使用该命令或传送到目标世界权限");
                     }
 
                     return true;
