@@ -66,7 +66,7 @@ public class TPCommand implements TabExecutor {
                         commander.teleport(player);
                         commander.sendMessage(ChatColor.GRAY + "已传送至" + name);
                     } else if (commander.hasPermission("alsace.commands.tp") && commander.hasPermission("multiverse.access." + player.getWorld().getName())) {
-                        if (this.plugin.hasIgnored.get(name)) {
+                        if (this.plugin.hasIgnored.get(name) != null && this.plugin.hasIgnored.get(name)) {
                             sender.sendMessage(ChatColor.RED + "玩家" + name + "已屏蔽强制传送");
                             return true;
                         }
