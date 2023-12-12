@@ -7,13 +7,17 @@ import com.puddingkc.events.BlockEvent;
 import com.puddingkc.events.Misc;
 import com.puddingkc.events.Protect;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import work.alsace.alsacecore.Util.DataBaseManager;
 import work.alsace.alsacecore.Util.HomeDataLoader;
 import work.alsace.alsacecore.Util.NoClipUtil;
 import work.alsace.alsacecore.Util.WarpDataLoader;
 import work.alsace.alsacecore.commands.AlsaceCoreCommand;
 import work.alsace.alsacecore.commands.HatCommand;
+import work.alsace.alsacecore.commands.agree.AgreeCommand;
+import work.alsace.alsacecore.commands.agree.DisagreeCommand;
 import work.alsace.alsacecore.commands.home.DelHomeCommand;
 import work.alsace.alsacecore.commands.home.HomeCommand;
 import work.alsace.alsacecore.commands.home.SetHomeCommand;
@@ -30,18 +34,25 @@ import java.util.*;
 public class AlsaceCore extends JavaPlugin {
 
     public Map<String, Boolean> hasIgnored = new HashMap<>();
+    public Map<String, Boolean> hasAgree = new HashMap<>();
     public HashMap<UUID, HomeDataLoader> homeProfiles = new HashMap<UUID, HomeDataLoader>();
     public HashMap<String, WarpDataLoader> warpProfiles = new HashMap<String, WarpDataLoader>();
     public List<String> illegalCharacters = new ArrayList<>();
-    public String motd;
-
     public static AlsaceCore instance;
+    private DataBaseManager databaseManager;
+
+    private String host;
+    private String dataBase;
+    private String userName;
+    private String password;
 
     @Override
     public void onEnable() {
+        loadConfig();
+        databaseManager = new DataBaseManager(host, dataBase, userName, password);
+        loadPlayerAgreementStatus();
         registerCommands();
         registerListeners();
-        loadConfig();
         Bukkit.getScheduler().runTaskTimer(this, () -> {
             new NoClipUtil().checkBlock();
         }, 1L, 1L);
@@ -52,6 +63,9 @@ public class AlsaceCore extends JavaPlugin {
     public void onDisable() {
         homeProfiles.clear();
         warpProfiles.clear();
+        if (databaseManager != null) {
+            databaseManager.closeConnection();
+        }
         getLogger().info("插件已卸载");
     }
 
@@ -100,6 +114,9 @@ public class AlsaceCore extends JavaPlugin {
         Objects.requireNonNull(getCommand("delwarp")).setExecutor(new DelWarpCommand());
         Objects.requireNonNull(getCommand("delwarp")).setTabCompleter(new DelWarpCommand());
 
+        Objects.requireNonNull(getCommand("agree")).setExecutor(new AgreeCommand(this));
+        Objects.requireNonNull(getCommand("disagree")).setExecutor(new DisagreeCommand(this));
+
         Objects.requireNonNull(getCommand("alsacecore")).setExecutor(new AlsaceCoreCommand(this));
         Objects.requireNonNull(getCommand("alsacecore")).setTabCompleter(new AlsaceCoreCommand(this));
         getLogger().info("指令注册完成");
@@ -123,21 +140,6 @@ public class AlsaceCore extends JavaPlugin {
                 illegalCharacters.add(i.toLowerCase());
             }
         }
-
-        List<String> motdLines = this.getConfig().getStringList("motd");
-        try {
-            StringBuilder motdBuilder = new StringBuilder();
-            for (String line : motdLines) {
-                motdBuilder.append(line).append("\n");
-            }
-            String motdString = motdBuilder.toString().trim();
-        } catch (IllegalArgumentException e) {
-            getLogger().warning("MOTD configuration not found or invalid");
-            motd = "";
-        }
-
-        this.motd = motd;
-
         File folder = new File(getDataFolder(), "userdata");
         if (!folder.exists()) {
             folder.mkdirs();
@@ -146,5 +148,30 @@ public class AlsaceCore extends JavaPlugin {
             homeProfiles.put(i.getUniqueId(), new HomeDataLoader(i.getUniqueId()));
         }
         warpProfiles.put("warps", new WarpDataLoader("warps"));
+        ConfigurationSection dbConfig = this.getConfig().getConfigurationSection("database");
+        host = dbConfig.getString("host");
+        dataBase = dbConfig.getString("database");
+        userName = dbConfig.getString("username");
+        password = dbConfig.getString("password");
+
     }
+
+    public DataBaseManager getDatabaseManager() {
+        return databaseManager;
+    }
+
+    private void loadPlayerAgreementStatus() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            UUID playerUUID = player.getUniqueId();
+            boolean hasAgreed = databaseManager.hasPlayerAgreed(playerUUID);
+            if (hasAgreed) {
+                // 如果数据库中有同意记录，将其标记为已同意
+                this.hasAgree.put(player.getName(), false);
+            } else {
+                // 如果数据库中没有同意记录，将其标记为待同意
+                this.hasAgree.put(player.getName(), true);
+            }
+        }
+    }
+
 }

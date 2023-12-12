@@ -1,3 +1,8 @@
 illegal-characters: ^[A-Za-z][A-Za-z0-9]*$
-motd: |-
-  &6《阿尔萨斯工业园用户服务协议》&f：&ahttps://alsaceteam.feishu.cn/wiki/F8AHwoD18iq45fk3ieSc6pcGnYy
+database:
+  host: "your_mysql_host"
+  port: 3306
+  database: "your_database"
+  username: "your_username"
+  password: "your_password"
+

@@ -11,6 +11,10 @@ commands:
   alsacecore:
     description: 主命令
     permission: alsace.admin
+  agree:
+    description: 同意用户协议
+  disagree:
+    description: 不同意用户协议
   fly:
     description: 设置自己或指定玩家的飞行状态
     permission: alsace.commands.fly
