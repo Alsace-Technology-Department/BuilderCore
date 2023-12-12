@@ -46,6 +46,9 @@ commands:
   home:
     description: 传送到指定家
     permission: alsace.commands.home
+  homes:
+    description: 查看家
+    permission: alsace.commands.homes
   sethome:
     description: 设置家
     permission: alsace.commands.sethome
@@ -58,6 +61,9 @@ commands:
   head:
     description: 获取指定玩家的皮肤头颅
     permission: alsace.commands.head
+  warps:
+    description: 查看传送点
+    permission: alsace.commands.warps
   warp:
     description: 传送到指定传送点
     permission: alsace.commands.warp

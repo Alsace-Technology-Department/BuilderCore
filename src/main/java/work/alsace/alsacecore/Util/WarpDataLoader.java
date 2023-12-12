@@ -2,6 +2,7 @@ package work.alsace.alsacecore.Util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -96,4 +97,8 @@ public class WarpDataLoader {
     }
 
 
+    public World getWarpWorld(String name) {
+        Location location = getWarp(name);
+        return (location != null) ? location.getWorld() : null;
+    }
 }

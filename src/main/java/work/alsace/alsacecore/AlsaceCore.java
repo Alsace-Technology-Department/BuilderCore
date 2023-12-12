@@ -20,12 +20,14 @@ import work.alsace.alsacecore.commands.agree.AgreeCommand;
 import work.alsace.alsacecore.commands.agree.DisagreeCommand;
 import work.alsace.alsacecore.commands.home.DelHomeCommand;
 import work.alsace.alsacecore.commands.home.HomeCommand;
+import work.alsace.alsacecore.commands.home.HomesCommand;
 import work.alsace.alsacecore.commands.home.SetHomeCommand;
 import work.alsace.alsacecore.commands.teleport.TPCommand;
 import work.alsace.alsacecore.commands.teleport.TPIgnoreCommand;
 import work.alsace.alsacecore.commands.warp.DelWarpCommand;
 import work.alsace.alsacecore.commands.warp.SetWarpCommand;
 import work.alsace.alsacecore.commands.warp.WarpCommand;
+import work.alsace.alsacecore.commands.warp.WarpsCommand;
 import work.alsace.alsacecore.listeners.PlayerListener;
 
 import java.io.File;
@@ -104,12 +106,14 @@ public class AlsaceCore extends JavaPlugin {
 
         Objects.requireNonNull(getCommand("home")).setExecutor(new HomeCommand());
         Objects.requireNonNull(getCommand("home")).setTabCompleter(new HomeCommand());
+        Objects.requireNonNull(getCommand("homes")).setExecutor(new HomesCommand());
         Objects.requireNonNull(getCommand("sethome")).setExecutor(new SetHomeCommand());
         Objects.requireNonNull(getCommand("delhome")).setExecutor(new DelHomeCommand());
         Objects.requireNonNull(getCommand("delhome")).setTabCompleter(new DelHomeCommand());
 
         Objects.requireNonNull(getCommand("warp")).setExecutor(new WarpCommand());
         Objects.requireNonNull(getCommand("warp")).setTabCompleter(new WarpCommand());
+        Objects.requireNonNull(getCommand("warps")).setExecutor(new WarpsCommand());
         Objects.requireNonNull(getCommand("setwarp")).setExecutor(new SetWarpCommand());
         Objects.requireNonNull(getCommand("delwarp")).setExecutor(new DelWarpCommand());
         Objects.requireNonNull(getCommand("delwarp")).setTabCompleter(new DelWarpCommand());
