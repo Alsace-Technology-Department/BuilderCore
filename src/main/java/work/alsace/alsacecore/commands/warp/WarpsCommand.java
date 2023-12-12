@@ -1,6 +1,8 @@
 package work.alsace.alsacecore.commands.warp;
 
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -39,14 +41,15 @@ public class WarpsCommand implements CommandExecutor {
         for (Map.Entry<String, List<String>> entry : worldWarps.entrySet()) {
             String worldName = entry.getKey();
             List<String> warps = entry.getValue();
-
-            StringJoiner warpJoiner = new StringJoiner(ChatColor.GRAY + " | ");
+            TextComponent message = new TextComponent(ChatColor.GRAY + worldName + ": ");
             for (String warp : warps) {
                 TextComponent warpComponent = createClickableWarpComponent(warp);
-                warpJoiner.add(warpComponent.toPlainText());
+                //warpJoiner.add(warpComponent.toPlainText());
+                message.addExtra(warpComponent);
+                message.addExtra(" §7| ");
             }
 
-            player.sendMessage(ChatColor.GRAY + worldName + ": " + warpJoiner.toString());
+            player.spigot().sendMessage(message);
         }
 
         return true;
@@ -67,6 +70,8 @@ public class WarpsCommand implements CommandExecutor {
     private TextComponent createClickableWarpComponent(String warp) {
         TextComponent warpComponent = new TextComponent(ChatColor.GOLD + warp);
         warpComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/warp " + warp));
+        TextComponent hoverText = new TextComponent("点击快捷传送");
+        warpComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{hoverText}));
         return warpComponent;
     }
 }

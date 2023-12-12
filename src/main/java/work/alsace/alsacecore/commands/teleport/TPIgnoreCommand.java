@@ -22,15 +22,19 @@ public class TPIgnoreCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
             return true;
         } else {
-            boolean now = this.plugin.hasIgnored.get(sender.getName());
-            if (now) {
-                this.plugin.hasIgnored.put(sender.getName(), false);
-                sender.sendMessage(ChatColor.GRAY + "已取消屏蔽强制传送");
+            Boolean now = this.plugin.hasIgnored.get(sender.getName());
+            if (now != null) {
+                if (now) {
+                    this.plugin.hasIgnored.put(sender.getName(), false);
+                    sender.sendMessage(ChatColor.GRAY + "已取消屏蔽强制传送");
+                } else {
+                    this.plugin.hasIgnored.put(sender.getName(), true);
+                    sender.sendMessage(ChatColor.GRAY + "已成功屏蔽强制传送");
+                }
             } else {
                 this.plugin.hasIgnored.put(sender.getName(), true);
                 sender.sendMessage(ChatColor.GRAY + "已成功屏蔽强制传送");
             }
-
             return true;
         }
     }

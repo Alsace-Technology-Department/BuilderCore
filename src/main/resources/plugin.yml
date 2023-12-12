@@ -61,6 +61,8 @@ commands:
   head:
     description: 获取指定玩家的皮肤头颅
     permission: alsace.commands.head
+    aliases:
+      - 'skull'
   warps:
     description: 查看传送点
     permission: alsace.commands.warps
@@ -80,18 +82,22 @@ commands:
       - 'nv'
       - 'n'
   noclip:
+    description: 开关自动穿墙
     permission: alsace.commands.noclip
     aliases:
       - 'nc'
   advfly:
+    description: 开关更好的飞行
     permission: alsace.commands.advfly
     aliases:
       - 'af'
   slab:
+    description: 开关半砖破坏
     permission: alsace.commands.slab
     aliases:
       - 'sb'
   debugstick:
+    description: 获取调试棒
     permission: alsace.commands.debugstick
     aliases:
       - 'dbs'
@@ -115,6 +121,7 @@ commands:
     aliases:
       - '/con'
   undo:
+    description: 快捷执行创世神undo指令
     permission: alsace.commands.undo
     aliases:
       - 'u'

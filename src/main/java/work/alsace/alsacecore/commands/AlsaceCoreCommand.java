@@ -29,18 +29,22 @@ public class AlsaceCoreCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
             return false;
         }
-        switch (args[0]) {
-            case "info" -> {
-                // TODO 插件信息
-                sender.sendMessage(ChatColor.GRAY + "插件名称: §fAlsaceCore\n§7插件版本: §f" + plugin.getDescription().getVersion() + "\n§7插件作者: §f" + Arrays.toString(plugin.getDescription().getAuthors().toArray()));
+        if (args.length == 1) {
+            switch (args[0]) {
+                case "info" -> {
+                    // TODO 插件信息
+                    sender.sendMessage(ChatColor.GRAY + "插件名称: §fAlsaceCore\n§7插件版本: §f" + plugin.getDescription().getVersion() + "\n§7插件作者: §f" + Arrays.toString(plugin.getDescription().getAuthors().toArray()));
+                }
+                case "reload" -> {
+                    plugin.loadConfig();
+                    sender.sendMessage(ChatColor.GRAY + "重载成功");
+                }
+                default -> {
+                    sender.sendMessage(ChatColor.GRAY + "正确指令:\n§f/alsacecore info §7- 查看插件信息\n§f/alsacecore reload §7- 重载插件");
+                }
             }
-            case "reload" -> {
-                plugin.loadConfig();
-                sender.sendMessage(ChatColor.GRAY + "重载成功");
-            }
-            default -> {
-                sender.sendMessage(ChatColor.GRAY + "正确指令:\n§f/alsacecore info §7- 查看插件信息\n§f/alsacecore reload §7- 重载插件");
-            }
+        } else {
+            sender.sendMessage(ChatColor.GRAY + "正确指令:\n§f/alsacecore info §7- 查看插件信息\n§f/alsacecore reload §7- 重载插件");
         }
         return true;
     }

@@ -58,7 +58,7 @@ public class TPCommand implements TabExecutor {
                             return true;
                         }
 
-                        if (this.plugin.hasIgnored.get(name)) {
+                        if (this.plugin.hasIgnored.get(name) != null && this.plugin.hasIgnored.get(name)) {
                             sender.sendMessage(ChatColor.RED + "玩家" + name + "已屏蔽强制传送");
                             return true;
                         }

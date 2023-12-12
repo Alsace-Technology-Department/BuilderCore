@@ -1,7 +1,10 @@
 package work.alsace.alsacecore.commands.home;
 
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -29,7 +32,7 @@ public class HomesCommand implements CommandExecutor {
         Player player = (Player) sender;
         HomeDataLoader homeDataLoader = AlsaceCore.instance.homeProfiles.get(player.getUniqueId());
 
-        List<TextComponent> homeComponents = homeDataLoader.getHomes().stream()
+        List<BaseComponent> homeComponents = homeDataLoader.getHomes().stream()
                 .map(home -> createClickableHomeComponent(home))
                 .collect(Collectors.toList());
 
@@ -38,10 +41,18 @@ public class HomesCommand implements CommandExecutor {
             return false;
         }
 
-        StringJoiner joiner = new StringJoiner(ChatColor.GRAY + " | ");
-        homeComponents.forEach(component -> joiner.add(component.toPlainText()));
+        //StringJoiner joiner = new StringJoiner(ChatColor.GRAY + " | ");
+        //homeComponents.forEach(component -> joiner.add(component.toLegacyText()));
 
-        player.sendMessage(ChatColor.GRAY + "你的家: " + joiner.toString());
+        //player.sendMessage(ChatColor.GRAY + "你的家: " + joiner);
+
+        TextComponent message = new TextComponent(ChatColor.GRAY + "你的家: ");
+        for (BaseComponent component : homeComponents) {
+            message.addExtra(component);
+            message.addExtra(" §7| ");
+        }
+
+        player.spigot().sendMessage(message);
 
         return true;
     }
@@ -49,6 +60,8 @@ public class HomesCommand implements CommandExecutor {
     private TextComponent createClickableHomeComponent(String home) {
         TextComponent homeComponent = new TextComponent(ChatColor.GOLD + home);
         homeComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/home " + home));
+        TextComponent hoverText = new TextComponent("点击快捷传送");
+        homeComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{hoverText}));
         return homeComponent;
     }
 }
