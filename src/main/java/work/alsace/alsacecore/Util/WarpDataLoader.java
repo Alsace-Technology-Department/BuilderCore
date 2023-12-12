@@ -3,7 +3,6 @@ package work.alsace.alsacecore.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
-import work.alsace.alsacecore.AlsaceCore;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +17,7 @@ public class WarpDataLoader {
 
     public WarpDataLoader(String name) {
         // 初始化时直接加载数据
-        this.warpsFile = new File(AlsaceCore.instance.getDataFolder(), name + ".yml");
+        this.warpsFile = new File(name + ".yml");
         this.loadWarps();
     }
 

@@ -30,7 +30,7 @@ public class WarpCommand implements CommandExecutor, TabCompleter {
             WarpDataLoader warpDataLoader = AlsaceCore.instance.warpProfiles.get("warps");
             Location location = warpDataLoader.getWarp(warpName);
             World warpWorld = location.getWorld();
-            if (warpWorld != null) {
+            if (warpWorld != null || warpName != null) {
                 if (sender.hasPermission("multiverse.access." + warpWorld.getName())) {
                     Player player = (Player) sender;
                     if (location.getWorld() == null) {
