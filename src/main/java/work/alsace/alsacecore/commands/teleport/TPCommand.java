@@ -53,7 +53,7 @@ public class TPCommand implements TabExecutor {
 
                     String name = player.getName();
                     if (commander.getWorld().equals(player.getWorld())) {
-                        if (!sender.hasPermission("alsace.commands.tp.same") && !sender.hasPermission("alsace.commands.tp.across")) {
+                        if (!sender.hasPermission("alsace.commands.tp")) {
                             sender.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
                             return true;
                         }
