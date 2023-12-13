@@ -20,7 +20,9 @@ import work.alsace.alsacecore.AlsaceCore;
 import work.alsace.alsacecore.Util.DataBaseManager;
 import work.alsace.alsacecore.Util.HomeDataLoader;
 import work.alsace.alsacecore.Util.NoClipUtil;
+import work.alsace.alsacecore.commands.BackCommand;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,9 +31,12 @@ public class PlayerListener implements Listener {
     private final AlsaceCore plugin;
     private final DataBaseManager databaseManager;
 
+    private final BackCommand backCommand;
+
     public PlayerListener(AlsaceCore plugin) {
         this.plugin = plugin;
         this.databaseManager = plugin.getDatabaseManager();
+        this.backCommand = new BackCommand(plugin);
     }
 
     @EventHandler
@@ -84,6 +89,19 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        if (event.getCause().equals(TeleportCause.SPECTATE) && !event.getPlayer().hasPermission("alsace.event.spectate")) {
+            event.setCancelled(true);
+        }
+
+        // 检查/back命令是否已注册
+        if (plugin.getCommand("back") != null) {
+            BackCommand backCommand = (BackCommand) Objects.requireNonNull(plugin.getCommand("back")).getExecutor();
+            backCommand.addToHistory(event.getPlayer());
+        }
+    }
+
+    @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         if (!databaseManager.hasPlayerAgreed(player.getUniqueId())) {
@@ -116,14 +134,6 @@ public class PlayerListener implements Listener {
                 event.setResult(item);
             }
         }
-    }
-
-    @EventHandler
-    public void onPlayerTeleport(PlayerTeleportEvent event) {
-        if (event.getCause().equals(TeleportCause.SPECTATE) && !event.getPlayer().hasPermission("alsace.event.spectate")) {
-            event.setCancelled(true);
-        }
-
     }
 
     @EventHandler

@@ -5,4 +5,5 @@ database:
   database: "your_database"
   username: "your_username"
   password: "your_password"
-
+afk:
+  threshold: 300

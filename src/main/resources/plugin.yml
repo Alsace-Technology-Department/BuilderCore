@@ -37,6 +37,9 @@ commands:
   ptime:
     description: 设置自己或指定玩家的客户端时间
     permission: alsace.commands.ptime
+  back:
+    description: 返回上一个位置
+    permission: alsace.commands.back
   tp:
     description: 传送到指定玩家或坐标
     permission: alsace.commands.tp

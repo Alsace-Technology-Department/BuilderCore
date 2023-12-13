@@ -7,6 +7,7 @@ import com.puddingkc.events.BlockEvent;
 import com.puddingkc.events.Misc;
 import com.puddingkc.events.Protect;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,6 +16,7 @@ import work.alsace.alsacecore.Util.HomeDataLoader;
 import work.alsace.alsacecore.Util.NoClipUtil;
 import work.alsace.alsacecore.Util.WarpDataLoader;
 import work.alsace.alsacecore.commands.AlsaceCoreCommand;
+import work.alsace.alsacecore.commands.BackCommand;
 import work.alsace.alsacecore.commands.HatCommand;
 import work.alsace.alsacecore.commands.agree.AgreeCommand;
 import work.alsace.alsacecore.commands.agree.DisagreeCommand;
@@ -28,6 +30,7 @@ import work.alsace.alsacecore.commands.warp.DelWarpCommand;
 import work.alsace.alsacecore.commands.warp.SetWarpCommand;
 import work.alsace.alsacecore.commands.warp.WarpCommand;
 import work.alsace.alsacecore.commands.warp.WarpsCommand;
+import work.alsace.alsacecore.listeners.AFKListener;
 import work.alsace.alsacecore.listeners.PlayerListener;
 
 import java.io.File;
@@ -39,6 +42,7 @@ public class AlsaceCore extends JavaPlugin {
     public Map<String, Boolean> hasAgree = new HashMap<>();
     public HashMap<UUID, HomeDataLoader> homeProfiles = new HashMap<UUID, HomeDataLoader>();
     public HashMap<String, WarpDataLoader> warpProfiles = new HashMap<String, WarpDataLoader>();
+    private Map<UUID, Deque<Location>> backHistory = new HashMap<>();
     public List<String> illegalCharacters = new ArrayList<>();
     public static AlsaceCore instance;
     private DataBaseManager databaseManager;
@@ -101,6 +105,8 @@ public class AlsaceCore extends JavaPlugin {
         Objects.requireNonNull(getCommand("undo")).setExecutor(new UndoCommand());
 
         Objects.requireNonNull(getCommand("hat")).setExecutor(new HatCommand());
+        Objects.requireNonNull(getCommand("back")).setExecutor(new BackCommand(this));
+
         Objects.requireNonNull(getCommand("tp")).setExecutor(new TPCommand(this));
         Objects.requireNonNull(getCommand("tpignore")).setExecutor(new TPIgnoreCommand(this));
 
@@ -133,6 +139,7 @@ public class AlsaceCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BlockEvent(), this);
         getServer().getPluginManager().registerEvents(new Misc(), this);
         getServer().getPluginManager().registerEvents(new AdvanceFlyCommand(), this);
+        getServer().getPluginManager().registerEvents(new AFKListener(this), this);
         getLogger().info("事件注册完成");
     }
 
@@ -162,6 +169,10 @@ public class AlsaceCore extends JavaPlugin {
 
     public DataBaseManager getDatabaseManager() {
         return databaseManager;
+    }
+
+    public Map<UUID, Deque<Location>> getBackHistory() {
+        return backHistory;
     }
 
     private void loadPlayerAgreementStatus() {
