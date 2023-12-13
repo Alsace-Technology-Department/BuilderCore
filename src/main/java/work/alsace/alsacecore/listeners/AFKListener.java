@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import work.alsace.alsacecore.AlsaceCore;
 
@@ -48,7 +49,7 @@ public class AFKListener implements Listener {
             } else {
                 if (player.hasMetadata("afk")) {
                     player.sendMessage(ChatColor.GRAY + "你已取消暂离状态");
-                    //TODO 移除玩家afk状态
+                    player.removeMetadata("afk", plugin);
                 }
             }
         }
@@ -57,14 +58,14 @@ public class AFKListener implements Listener {
     private void handleAFK(Player player) {
         if (!player.hasMetadata("afk")) {
             player.sendMessage(ChatColor.GRAY + "你已进入暂离状态");
-            //TODO 为玩家添加afk状态
+            player.setMetadata("afk", new FixedMetadataValue(plugin, true));
         }
     }
 
     private void cancelAFK(Player player) {
         if (player.hasMetadata("afk")) {
             player.sendMessage(ChatColor.GRAY + "你已取消暂离状态");
-            //TODO 移除玩家afk状态
+            player.removeMetadata("afk", plugin);
         }
     }
 }

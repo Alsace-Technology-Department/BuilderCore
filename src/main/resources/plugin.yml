@@ -5,6 +5,8 @@ authors:
   - 'Hanamizu_'
   - 'CHuNan'
 version: ${version}
+softdepend:
+  - 'PlaceholderAPI'
 description: 阿尔萨斯工业基础插件
 api-version: '1.16'
 commands:

@@ -11,10 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import work.alsace.alsacecore.Util.DataBaseManager;
-import work.alsace.alsacecore.Util.HomeDataLoader;
-import work.alsace.alsacecore.Util.NoClipUtil;
-import work.alsace.alsacecore.Util.WarpDataLoader;
+import work.alsace.alsacecore.Util.*;
 import work.alsace.alsacecore.commands.AlsaceCoreCommand;
 import work.alsace.alsacecore.commands.BackCommand;
 import work.alsace.alsacecore.commands.HatCommand;
@@ -51,6 +48,8 @@ public class AlsaceCore extends JavaPlugin {
     private String dataBase;
     private String userName;
     private String password;
+
+    public static String afkPrefix;
 
     @Override
     public void onEnable() {
@@ -139,7 +138,14 @@ public class AlsaceCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BlockEvent(), this);
         getServer().getPluginManager().registerEvents(new Misc(), this);
         getServer().getPluginManager().registerEvents(new AdvanceFlyCommand(), this);
-        getServer().getPluginManager().registerEvents(new AFKListener(this), this);
+
+        if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            new Placeholder(this).register();
+            getServer().getPluginManager().registerEvents(new AFKListener(this), this);
+        } else {
+            getLogger().warning("前置插件 PlaceholderAPI 不存在，Afk功能注册失败");
+        }
+
         getLogger().info("事件注册完成");
     }
 
@@ -165,6 +171,7 @@ public class AlsaceCore extends JavaPlugin {
         userName = dbConfig.getString("username");
         password = dbConfig.getString("password");
 
+        afkPrefix = this.getConfig().getString("afk-placeholder","&7[AFK]&r");
     }
 
     public DataBaseManager getDatabaseManager() {
