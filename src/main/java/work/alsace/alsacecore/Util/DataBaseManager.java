@@ -1,26 +1,35 @@
 package work.alsace.alsacecore.Util;
 
-import java.sql.*;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.UUID;
 
 public class DataBaseManager {
-    private Connection connection;
+
+    private final HikariDataSource dataSource;
 
     public DataBaseManager(String host, String database, String username, String password) {
-        try {
-            connection = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database, username, password);
-            createTable();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl("jdbc:mysql://" + host + "/" + database);
+        config.setUsername(username);
+        config.setPassword(password);
+
+        dataSource = new HikariDataSource(config);
+        createTable();
     }
 
     private void createTable() {
-        try (PreparedStatement statement = connection.prepareStatement(
-                "CREATE TABLE IF NOT EXISTS player_agreement (" +
-                        "id INT AUTO_INCREMENT PRIMARY KEY," +
-                        "player_uuid VARCHAR(36) NOT NULL," +
-                        "agreed BOOLEAN NOT NULL);")) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "CREATE TABLE IF NOT EXISTS player_agreement (" +
+                             "id INT AUTO_INCREMENT PRIMARY KEY," +
+                             "player_uuid VARCHAR(36) NOT NULL," +
+                             "agreed BOOLEAN NOT NULL);")) {
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -28,8 +37,9 @@ public class DataBaseManager {
     }
 
     public boolean hasPlayerAgreed(UUID playerUUID) {
-        try (PreparedStatement statement = connection.prepareStatement(
-                "SELECT agreed FROM player_agreement WHERE player_uuid = ?")) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT agreed FROM player_agreement WHERE player_uuid = ?")) {
             statement.setString(1, playerUUID.toString());
             ResultSet resultSet = statement.executeQuery();
             return resultSet.next() && resultSet.getBoolean("agreed");
@@ -40,8 +50,9 @@ public class DataBaseManager {
     }
 
     public void setPlayerAgreed(UUID playerUUID, boolean agreed) {
-        try (PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO player_agreement (player_uuid, agreed) VALUES (?, ?)")) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "INSERT INTO player_agreement (player_uuid, agreed) VALUES (?, ?)")) {
             statement.setString(1, playerUUID.toString());
             statement.setBoolean(2, agreed);
             statement.executeUpdate();
@@ -51,8 +62,9 @@ public class DataBaseManager {
     }
 
     public void delPlayerAgreed(UUID playerUUID, boolean agreed) {
-        try (PreparedStatement statement = connection.prepareStatement(
-                "DELETE FROM player_agreement WHERE player_uuid = ?")) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "DELETE FROM player_agreement WHERE player_uuid = ?")) {
             statement.setString(1, playerUUID.toString());
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -60,14 +72,9 @@ public class DataBaseManager {
         }
     }
 
-
-    public void closeConnection() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public void closeDataSource() {
+        if (dataSource != null && !dataSource.isClosed()) {
+            dataSource.close();
         }
     }
 }

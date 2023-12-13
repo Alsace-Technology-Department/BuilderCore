@@ -66,7 +66,7 @@ public class AlsaceCore extends JavaPlugin {
         homeProfiles.clear();
         warpProfiles.clear();
         if (databaseManager != null) {
-            databaseManager.closeConnection();
+            databaseManager.closeDataSource();
         }
         getLogger().info("插件已卸载");
     }
