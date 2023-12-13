@@ -4,7 +4,7 @@ authors:
   - 'PuddingKC'
   - 'Hanamizu_'
   - 'CHuNan'
-version: '1.0.1'
+version: ${version}
 description: 阿尔萨斯工业基础插件
 api-version: '1.16'
 commands:

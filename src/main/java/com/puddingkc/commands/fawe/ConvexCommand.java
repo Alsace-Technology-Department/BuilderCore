@@ -1,8 +1,8 @@
 package com.puddingkc.commands.fawe;
 
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -12,7 +12,7 @@ public class ConvexCommand implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
         if (sender instanceof Player player) {
-            if (!player.hasPermission("alsace.commands.convex")) {
+            if (!player.hasPermission("alsace.aliases")) {
                 player.sendMessage(error);
                 return false;
             }

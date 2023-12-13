@@ -10,7 +10,7 @@ public class UndoCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
         if (!(sender instanceof Player)) {
             return false;
-        } else if (!sender.hasPermission("alsace.commands.undo")) {
+        } else if (!sender.hasPermission("alsace.aliases")) {
             sender.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
             return false;
         } else {

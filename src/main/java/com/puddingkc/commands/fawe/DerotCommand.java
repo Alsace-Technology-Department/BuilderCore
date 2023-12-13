@@ -11,7 +11,7 @@ public class DerotCommand implements CommandExecutor {
     private final String error = ChatColor.GRAY + "正确指令:\n§f//derot [轴线 X,Y,Z] [度数] §7- 快捷执行创世神deform指令";
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
         if (strings.length == 2 && sender instanceof Player player) {
-            if (!player.hasPermission("alsace.commands.derot")) {
+            if (!player.hasPermission("alsace.aliases")) {
                 player.sendMessage(error);
                 return false;
             }

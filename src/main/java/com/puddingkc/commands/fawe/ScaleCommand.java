@@ -12,7 +12,7 @@ public class ScaleCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 1 && sender instanceof Player player) {
-            if (!player.hasPermission("alsace.commands.scale")) {
+            if (!player.hasPermission("alsace.aliases")) {
                 player.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
                 return false;
             }

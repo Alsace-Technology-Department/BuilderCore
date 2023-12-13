@@ -11,7 +11,7 @@ public class CuboidCommand implements CommandExecutor {
     private final String error = ChatColor.GRAY + "正确指令:\n§f//convex §7- 快捷执行创世神sel指令";
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
         if (sender instanceof Player player) {
-            if (!player.hasPermission("alsace.commands.cuboid")) {
+            if (!player.hasPermission("alsace.aliases")) {
                 player.sendMessage(error);
                 return false;
             }
