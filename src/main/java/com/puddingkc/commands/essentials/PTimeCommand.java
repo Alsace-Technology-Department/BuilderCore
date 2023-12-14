@@ -16,7 +16,8 @@ import java.util.List;
 public class PTimeCommand implements CommandExecutor, TabCompleter {
 
     private final String error = ChatColor.GRAY + "正确指令:\n§f/ptime <时间> §7- 设置你自己的客户端时间\n§f/ptime <时间> <玩家> §7- 设置指定玩家的客户端时间";
-    private static final List<String> times = Arrays.asList("day", "night", "reset");
+    private static final List<String> times = Arrays.asList("day", "night", "sunrise", "morning", "noon", "afternoon", "sunset", "midnight", "reset");
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
         if (strings.length != 1 && strings.length != 2) {
@@ -53,6 +54,12 @@ public class PTimeCommand implements CommandExecutor, TabCompleter {
         switch (strings[0].toLowerCase()) {
             case "day" -> time = 0;
             case "night" -> time = 14000;
+            case "sunrise" -> time = 23000;
+            case "morning" -> time = 1000;
+            case "noon" -> time = 6000;
+            case "afternoon" -> time = 9000;
+            case "sunset" -> time = 12000;
+            case "midnight" -> time = 18000;
             case "reset" -> {
                 targetPlayer.setPlayerTime(0, false);
                 targetPlayer.sendMessage(ChatColor.GRAY + "已将你的客户端时间重置");
@@ -80,7 +87,6 @@ public class PTimeCommand implements CommandExecutor, TabCompleter {
 
         return true;
     }
-
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] strings) {

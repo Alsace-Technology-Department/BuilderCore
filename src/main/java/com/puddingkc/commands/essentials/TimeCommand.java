@@ -17,7 +17,8 @@ import java.util.List;
 public class TimeCommand implements CommandExecutor, TabCompleter {
 
     private final String error = ChatColor.GRAY + "正确指令:\n§f/time <时间> §7- 设置你当前世界的时间\n§f/time <时间> <世界> §7- 设置指定世界的时间";
-    private static final List<String> times = Arrays.asList("day", "night", "5000");
+    private static final List<String> times = Arrays.asList("sunrise", "day", "morning", "noon", "afternoon", "sunset", "night", "midnight", "5000");
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
         if (strings.length == 1 && sender instanceof Player player) {
@@ -26,28 +27,14 @@ public class TimeCommand implements CommandExecutor, TabCompleter {
                 return false;
             }
             World world = player.getWorld();
-            switch (strings[0]) {
-                case "day" -> {
-                    world.setTime(0);
-                    player.sendMessage(ChatColor.GRAY + "已将当前世界时间设置为 §f" + "0" + " ticks");
-                    return true;
-                }
-                case "night" -> {
-                    world.setTime(14000);
-                    player.sendMessage(ChatColor.GRAY + "已将当前世界时间设置为 §f" + "14000" + " ticks");
-                    return true;
-                }
-                default -> {
-                    try {
-                        world.setTime(Long.parseLong(strings[0]));
-                        player.sendMessage(ChatColor.GRAY + "已将当前世界时间设置为 §f" + strings[0] + " ticks");
-                        return true;
-                    } catch (NumberFormatException e) {
-                        player.sendMessage(error);
-                        return false;
-                    }
-                }
+            long timeTicks = getTimeFromKeyword(strings[0]);
+            if (timeTicks == -1) {
+                player.sendMessage(error);
+                return false;
             }
+            world.setTime(timeTicks);
+            player.sendMessage(ChatColor.GRAY + "已将当前世界时间设置为 §f" + timeTicks + " ticks");
+            return true;
         }
 
         if (strings.length == 2) {
@@ -60,31 +47,44 @@ public class TimeCommand implements CommandExecutor, TabCompleter {
                 sender.sendMessage(ChatColor.RED + "指定的世界不存在");
                 return false;
             }
-            switch (strings[0]) {
-                case "day" -> {
-                    world.setTime(0);
-                    sender.sendMessage(ChatColor.GRAY + "已将世界 §f" + strings[1] + " §7的时间设置为 §f" + "0" + " ticks");
-                    return true;
-                }
-                case "night" -> {
-                    world.setTime(14000);
-                    sender.sendMessage(ChatColor.GRAY + "已将世界 §f" + strings[1] + " §7的时间设置为 §f" + "14000" + " ticks");
-                    return true;
-                }
-                default -> {
-                    try {
-                        world.setTime(Long.parseLong(strings[0]));
-                        sender.sendMessage(ChatColor.GRAY + "已将世界 §f" + strings[1] + " §7的时间设置为 §f" + strings[0] + " ticks");
-                        return true;
-                    } catch (NumberFormatException e) {
-                        sender.sendMessage(error);
-                        return false;
-                    }
-                }
+            long timeTicks = getTimeFromKeyword(strings[0]);
+            if (timeTicks == -1) {
+                sender.sendMessage(error);
+                return false;
             }
+            world.setTime(timeTicks);
+            sender.sendMessage(ChatColor.GRAY + "已将世界 §f" + strings[1] + " §7的时间设置为 §f" + timeTicks + " ticks");
+            return true;
         }
         sender.sendMessage(error);
         return false;
+    }
+
+    private long getTimeFromKeyword(String keyword) {
+        switch (keyword.toLowerCase()) {
+            case "sunrise":
+                return 23000;
+            case "day":
+                return 0;
+            case "morning":
+                return 1000;
+            case "noon":
+                return 6000;
+            case "afternoon":
+                return 9000;
+            case "sunset":
+                return 12000;
+            case "night":
+                return 14000;
+            case "midnight":
+                return 18000;
+            default:
+                try {
+                    return Long.parseLong(keyword);
+                } catch (NumberFormatException e) {
+                    return -1;
+                }
+        }
     }
 
     @Override
