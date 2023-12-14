@@ -139,3 +139,5 @@ commands:
     permission: alsace.commands.undo
     aliases:
       - 'u'
+  afk:
+    description: 进入暂离状态

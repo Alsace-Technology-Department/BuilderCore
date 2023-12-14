@@ -12,6 +12,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import work.alsace.alsacecore.Util.*;
+import work.alsace.alsacecore.commands.AFKCommand;
 import work.alsace.alsacecore.commands.AlsaceCoreCommand;
 import work.alsace.alsacecore.commands.BackCommand;
 import work.alsace.alsacecore.commands.HatCommand;
@@ -109,6 +110,7 @@ public class AlsaceCore extends JavaPlugin {
 
         Objects.requireNonNull(getCommand("hat")).setExecutor(new HatCommand());
         Objects.requireNonNull(getCommand("back")).setExecutor(new BackCommand(this));
+        Objects.requireNonNull(getCommand("afk")).setExecutor(new AFKCommand(this));
 
         Objects.requireNonNull(getCommand("tp")).setExecutor(new TPCommand(this));
         Objects.requireNonNull(getCommand("tpignore")).setExecutor(new TPIgnoreCommand(this));
