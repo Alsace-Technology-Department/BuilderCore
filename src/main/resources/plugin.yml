@@ -48,6 +48,15 @@ commands:
   tpignore:
     description: 忽略传送请求
     permission: alsace.commands.tpignore
+  tpahere:
+    description: 向玩家发送传送请求
+    permission: alsace.commands.tp
+  tpaccept:
+    description: 同意请求
+    permission: alsace.commands.tp
+  tpdeny:
+    description: 拒绝请求
+    permission: alsace.commands.tp
   home:
     description: 传送到指定家
     permission: alsace.commands.home

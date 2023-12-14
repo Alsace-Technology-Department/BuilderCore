@@ -21,6 +21,7 @@ import work.alsace.alsacecore.commands.home.DelHomeCommand;
 import work.alsace.alsacecore.commands.home.HomeCommand;
 import work.alsace.alsacecore.commands.home.HomesCommand;
 import work.alsace.alsacecore.commands.home.SetHomeCommand;
+import work.alsace.alsacecore.commands.teleport.TPACommand;
 import work.alsace.alsacecore.commands.teleport.TPCommand;
 import work.alsace.alsacecore.commands.teleport.TPIgnoreCommand;
 import work.alsace.alsacecore.commands.warp.DelWarpCommand;
@@ -40,6 +41,8 @@ public class AlsaceCore extends JavaPlugin {
     public HashMap<UUID, HomeDataLoader> homeProfiles = new HashMap<UUID, HomeDataLoader>();
     public HashMap<String, WarpDataLoader> warpProfiles = new HashMap<String, WarpDataLoader>();
     private Map<UUID, Deque<Location>> backHistory = new HashMap<>();
+    private TPAHandler tpaHandler;
+
     public List<String> illegalCharacters = new ArrayList<>();
     public static AlsaceCore instance;
     private DataBaseManager databaseManager;
@@ -54,6 +57,7 @@ public class AlsaceCore extends JavaPlugin {
     @Override
     public void onEnable() {
         loadConfig();
+        tpaHandler = new TPAHandler(this);
         databaseManager = new DataBaseManager(host, dataBase, userName, password);
         loadPlayerAgreementStatus();
         registerCommands();
@@ -108,6 +112,9 @@ public class AlsaceCore extends JavaPlugin {
 
         Objects.requireNonNull(getCommand("tp")).setExecutor(new TPCommand(this));
         Objects.requireNonNull(getCommand("tpignore")).setExecutor(new TPIgnoreCommand(this));
+        Objects.requireNonNull(getCommand("tpahere")).setExecutor(new TPACommand(this));
+        Objects.requireNonNull(getCommand("tpaccept")).setExecutor(new TPACommand(this));
+        Objects.requireNonNull(getCommand("tpdeny")).setExecutor(new TPACommand(this));
 
         Objects.requireNonNull(getCommand("home")).setExecutor(new HomeCommand());
         Objects.requireNonNull(getCommand("home")).setTabCompleter(new HomeCommand());
@@ -194,6 +201,10 @@ public class AlsaceCore extends JavaPlugin {
                 this.hasAgree.put(player.getName(), true);
             }
         }
+    }
+
+    public TPAHandler getTPAHandler() {
+        return tpaHandler;
     }
 
 }
