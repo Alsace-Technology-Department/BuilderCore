@@ -50,6 +50,7 @@ public class AFKListener implements Listener {
                 if (player.hasMetadata("afk")) {
                     player.sendMessage(ChatColor.GRAY + "你已取消暂离状态");
                     player.removeMetadata("afk", plugin);
+                    Bukkit.broadcastMessage("§7玩家 §f" + player.getName() + " §7回来了");
                 }
             }
         }
@@ -59,6 +60,7 @@ public class AFKListener implements Listener {
         if (!player.hasMetadata("afk")) {
             player.sendMessage(ChatColor.GRAY + "你已进入暂离状态");
             player.setMetadata("afk", new FixedMetadataValue(plugin, true));
+            Bukkit.broadcastMessage("§7玩家 §f" + player.getName() + " §7暂时离开了");
         }
     }
 
@@ -66,6 +68,7 @@ public class AFKListener implements Listener {
         if (player.hasMetadata("afk")) {
             player.sendMessage(ChatColor.GRAY + "你已取消暂离状态");
             player.removeMetadata("afk", plugin);
+            Bukkit.broadcastMessage("§7玩家 §f" + player.getName() + " §7回来了");
         }
     }
 }

@@ -137,6 +137,8 @@ public class AlsaceCore extends JavaPlugin {
 
         Objects.requireNonNull(getCommand("alsacecore")).setExecutor(new AlsaceCoreCommand(this));
         Objects.requireNonNull(getCommand("alsacecore")).setTabCompleter(new AlsaceCoreCommand(this));
+
+        Objects.requireNonNull(getCommand("whois")).setExecutor(new WhoisCommand());
         getLogger().info("指令注册完成");
     }
 

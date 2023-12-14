@@ -141,3 +141,6 @@ commands:
       - 'u'
   afk:
     description: 进入暂离状态
+  whois:
+    description: 查询指定玩家信息
+    permission: alsace.commands.whois
