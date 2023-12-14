@@ -28,15 +28,19 @@ public class WarpCommand implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             String warpName = args[0];
             WarpDataLoader warpDataLoader = AlsaceCore.instance.warpProfiles.get("warps");
+            if (warpName == null) {
+                sender.sendMessage(ChatColor.RED + "传送点" + warpName + "不存在");
+                return false;
+            }
             Location location = warpDataLoader.getWarp(warpName);
+            if (location == null) {
+                sender.sendMessage(ChatColor.RED + "传送点" + warpName + "不存在");
+                return false;
+            }
             World warpWorld = location.getWorld();
-            if (warpWorld != null || warpName != null) {
+            if (warpWorld != null) {
                 if (sender.hasPermission("multiverse.access." + warpWorld.getName())) {
                     Player player = (Player) sender;
-                    if (location.getWorld() == null) {
-                        sender.sendMessage(ChatColor.RED + "世界" + location.getWorld() + "不存在");
-                        return false;
-                    }
                     player.teleport(location);
                     sender.sendMessage(ChatColor.GRAY + "已传送至" + warpName);
                 } else {
@@ -44,7 +48,7 @@ public class WarpCommand implements CommandExecutor, TabCompleter {
                     return false;
                 }
             } else {
-                sender.sendMessage(ChatColor.RED + "传送点" + location.getWorld() + "不存在");
+                sender.sendMessage(ChatColor.RED + "世界" + warpWorld + "不存在");
                 return false;
             }
         } else {

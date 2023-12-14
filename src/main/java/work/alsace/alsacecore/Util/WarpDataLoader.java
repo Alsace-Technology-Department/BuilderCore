@@ -4,21 +4,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
+import work.alsace.alsacecore.AlsaceCore;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-
 public class WarpDataLoader {
-
     private final Map<String, Location> warps = Collections.synchronizedMap(new HashMap<>());
+    private final Map<String, String> aliases = Collections.synchronizedMap(new HashMap<>());
     private final File warpsFile;
     private YamlConfiguration warpConfig;
 
-    public WarpDataLoader(String name) {
-        // 初始化时直接加载数据
-        this.warpsFile = new File(name + ".yml");
+    public WarpDataLoader(AlsaceCore plugin) {
+        this.warpsFile = new File(plugin.getDataFolder() + File.separator + "warps.yml");
         this.loadWarps();
     }
 
@@ -41,11 +40,17 @@ public class WarpDataLoader {
                         warpConfig.getDouble("Warps." + i + ".Z"),
                         warpConfig.getLong("Warps." + i + ".Yaw"),
                         warpConfig.getLong("Warps." + i + ".Pitch")));
+
+                // 加载别名
+                String alias = warpConfig.getString("Aliases." + i);
+                if (alias != null) {
+                    aliases.put(alias, i);
+                }
             }
         }
     }
 
-    public void addWarp(String name, Location location) {
+    public void addWarp(String name, String alias, Location location) {
         synchronized (warps) {
             warps.put(name, location);
             warpConfig.set("Warps." + name + ".World", Objects.requireNonNull(location.getWorld()).getName());
@@ -55,22 +60,9 @@ public class WarpDataLoader {
             warpConfig.set("Warps." + name + ".Yaw", location.getYaw());
             warpConfig.set("Warps." + name + ".Pitch", location.getPitch());
 
-            try {
-                warpConfig.save(warpsFile);
-            } catch (IOException e) {
-                e.printStackTrace(); // 最好记录错误
-            }
-        }
-    }
-
-    public void delWarp(String name) {
-        synchronized (warps) {
-            for (String i : warps.keySet()) {
-                if (i.equalsIgnoreCase(name)) {
-                    warps.remove(i);
-                    warpConfig.set("Warps." + i, null);
-                    break;
-                }
+            if (alias != null && !alias.isEmpty()) {
+                warpConfig.set("Aliases." + alias, name);
+                aliases.put(alias, name);
             }
 
             try {
@@ -81,24 +73,53 @@ public class WarpDataLoader {
         }
     }
 
-    public Location getWarp(String name) {
+    public void delWarp(String name) {
         synchronized (warps) {
-            for (String i : warps.keySet()) {
-                if (i.equalsIgnoreCase(name)) {
-                    return warps.get(i);
-                }
+            warps.remove(name);
+            warpConfig.set("Warps." + name, null);
+
+            // 删除别名
+            String alias = getWarpAlias(name);
+            if (alias != null) {
+                warpConfig.set("Aliases." + alias, null);
+                aliases.remove(alias);
+            }
+
+            try {
+                warpConfig.save(warpsFile);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
-        return null;
+    }
+
+    public Location getWarp(String nameOrAlias) {
+        synchronized (warps) {
+            Location location = warps.get(nameOrAlias);
+            if (location == null) {
+                String realName = aliases.get(nameOrAlias);
+                if (realName != null) {
+                    location = warps.get(realName);
+                }
+            }
+            return location;
+        }
     }
 
     public Set<String> getWarps() {
         return new HashSet<>(warps.keySet());
     }
 
-
     public World getWarpWorld(String name) {
         Location location = getWarp(name);
         return (location != null) ? location.getWorld() : null;
+    }
+
+    public String getWarpAlias(String name) {
+        return aliases.get(name);
+    }
+
+    public String getRealWarpName(String alias) {
+        return aliases.getOrDefault(alias, alias);
     }
 }

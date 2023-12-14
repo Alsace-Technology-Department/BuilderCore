@@ -1,8 +1,6 @@
 package work.alsace.alsacecore.commands.warp;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -24,13 +22,14 @@ public class SetWarpCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
             return false;
         }
-        if (args.length == 1) {
+        if (args.length >= 1) {
             String warpName = args[0];
+            String alias = (args.length == 2) ? args[1] : null;  // 获取别名，如果提供的话
             WarpDataLoader warpDataLoader;
             Player player = (Player) sender;
             warpDataLoader = AlsaceCore.instance.warpProfiles.get("warps");
             if (warpDataLoader.getWarp(warpName) != null) {
-                sender.sendMessage(ChatColor.RED + "已经存在送点" + warpName);
+                sender.sendMessage(ChatColor.RED + "已经存在传送点" + warpName);
                 return false;
             }
             String separator = AlsaceCore.instance.getConfig().getString("illegal-characters");
@@ -46,8 +45,8 @@ public class SetWarpCommand implements CommandExecutor {
                     }
                 }
             }
-            warpDataLoader.addWarp(warpName, player.getLocation());
-            sender.sendMessage(String.format(ChatColor.GRAY + "成功设置传送点%s", warpName));
+            warpDataLoader.addWarp(warpName, alias, player.getLocation());
+            sender.sendMessage(String.format(ChatColor.GRAY + "成功设置传送点 %s", warpName));
         } else {
             sender.sendMessage(ChatColor.GRAY + "正确指令:\n§f/setwarp <传送点> §7- 设置传送点");
         }

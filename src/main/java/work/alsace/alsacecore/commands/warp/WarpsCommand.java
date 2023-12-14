@@ -1,3 +1,4 @@
+// WarpsCommand.java
 package work.alsace.alsacecore.commands.warp;
 
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -12,7 +13,10 @@ import org.bukkit.entity.Player;
 import work.alsace.alsacecore.AlsaceCore;
 import work.alsace.alsacecore.Util.WarpDataLoader;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class WarpsCommand implements CommandExecutor {
     @Override
@@ -44,7 +48,6 @@ public class WarpsCommand implements CommandExecutor {
             TextComponent message = new TextComponent(ChatColor.GRAY + worldName + ": ");
             for (String warp : warps) {
                 TextComponent warpComponent = createClickableWarpComponent(warp);
-                //warpJoiner.add(warpComponent.toPlainText());
                 message.addExtra(warpComponent);
                 message.addExtra(" §7| ");
             }
@@ -59,17 +62,20 @@ public class WarpsCommand implements CommandExecutor {
         Map<String, List<String>> worldWarps = new HashMap<>();
         AlsaceCore.instance.warpProfiles.get("warps").getWarps().forEach(warp -> {
             String worldName = AlsaceCore.instance.warpProfiles.get("warps").getWarpWorld(warp).getName();
+            String alias = AlsaceCore.instance.warpProfiles.get("warps").getWarpAlias(warp);
 
             if (sender.hasPermission("multiverse.access." + worldName)) {
-                worldWarps.computeIfAbsent(worldName, k -> new ArrayList<>()).add(warp);
+                worldWarps.computeIfAbsent(worldName, k -> new ArrayList<>()).add(alias != null ? alias : warp);
             }
         });
         return worldWarps;
     }
 
     private TextComponent createClickableWarpComponent(String warp) {
+        String realWarp = AlsaceCore.instance.warpProfiles.get("warps").getRealWarpName(warp);
+
         TextComponent warpComponent = new TextComponent(ChatColor.GOLD + warp);
-        warpComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/warp " + warp));
+        warpComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/warp " + realWarp));
         TextComponent hoverText = new TextComponent("点击快捷传送");
         warpComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{hoverText}));
         return warpComponent;

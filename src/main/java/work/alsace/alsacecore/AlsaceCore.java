@@ -164,7 +164,7 @@ public class AlsaceCore extends JavaPlugin {
         for (Player i : Bukkit.getServer().getOnlinePlayers()) {
             homeProfiles.put(i.getUniqueId(), new HomeDataLoader(i.getUniqueId()));
         }
-        warpProfiles.put("warps", new WarpDataLoader("warps"));
+        warpProfiles.put("warps", new WarpDataLoader(this));
         ConfigurationSection dbConfig = this.getConfig().getConfigurationSection("database");
         host = dbConfig.getString("host");
         dataBase = dbConfig.getString("database");
