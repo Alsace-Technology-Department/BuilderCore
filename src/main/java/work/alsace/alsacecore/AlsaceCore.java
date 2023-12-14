@@ -51,7 +51,6 @@ public class AlsaceCore extends JavaPlugin {
     private String dataBase;
     private String userName;
     private String password;
-
     public static String afkPrefix;
 
     @Override
@@ -177,8 +176,7 @@ public class AlsaceCore extends JavaPlugin {
         dataBase = dbConfig.getString("database");
         userName = dbConfig.getString("username");
         password = dbConfig.getString("password");
-
-        afkPrefix = this.getConfig().getString("afk-placeholder","&7[AFK]&r");
+        afkPrefix = this.getConfig().getConfigurationSection("afk").getString("placeholder");
     }
 
     public DataBaseManager getDatabaseManager() {

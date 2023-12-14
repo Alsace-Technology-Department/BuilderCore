@@ -7,4 +7,4 @@ database:
   password: "your_password"
 afk:
   threshold: 300
-afk-placeholder: "[AFK]"
+  placeholder: "[AFK]"
