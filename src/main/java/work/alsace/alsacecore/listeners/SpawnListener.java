@@ -13,14 +13,16 @@ public class SpawnListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.getItem() != null && event.getItem().getType().toString().endsWith("SPAWN_EGG") &&
-                event.getPlayer().hasPermission("alsace.protect.place")) {
-            if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-                event.setCancelled(true);
-                spawnBaby(event);
-            } else if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                event.setCancelled(true);
-                spawnDefault(event);
+        if (event.getPlayer().isSneaking()) {
+            if (event.getItem() != null && event.getItem().getType().toString().endsWith("SPAWN_EGG") &&
+                    event.getPlayer().hasPermission("alsace.protect.place")) {
+                if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
+                    event.setCancelled(true);
+                    spawnBaby(event);
+                } else if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                    event.setCancelled(true);
+                    spawnDefault(event);
+                }
             }
         }
     }
