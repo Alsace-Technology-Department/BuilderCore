@@ -28,15 +28,15 @@ public class SpeedCommand implements CommandExecutor, TabCompleter {
             }
             try {
                 float speed = Float.parseFloat(strings[0]);
-                if (speed > 15 || speed < 0.1) {
+                if (speed > 10 || speed < 0.1) {
                     player.sendMessage(error);
                     return false;
                 }
                 if (player.isFlying()) {
-                    player.setFlySpeed(speed/10F);
+                    player.setFlySpeed(speed / 10F);
                     player.sendMessage(ChatColor.GRAY + "已将你的 §f飞行 §7速度设置为 §f" + speed);
                 } else {
-                    player.setWalkSpeed(speed/10F);
+                    player.setWalkSpeed(speed / 10F);
                     player.sendMessage(ChatColor.GRAY + "已将你的 §f步行 §7速度设置为 §f" + speed);
                 }
                 return true;
@@ -70,7 +70,7 @@ public class SpeedCommand implements CommandExecutor, TabCompleter {
                 case "fly" -> {
                     try {
                         float speed = Float.parseFloat(strings[1]);
-                        if (speed > 15 || speed < 0.1) {
+                        if (speed > 10 || speed < 0.1) {
                             player.sendMessage(error);
                             return false;
                         }
@@ -105,7 +105,7 @@ public class SpeedCommand implements CommandExecutor, TabCompleter {
                 case "walk" -> {
                     try {
                         float speed = Float.parseFloat(strings[1]);
-                        if (speed > 15 || speed < 0.1) {
+                        if (speed > 10 || speed < 0.1) {
                             sender.sendMessage(error);
                             return false;
                         }
@@ -121,7 +121,7 @@ public class SpeedCommand implements CommandExecutor, TabCompleter {
                 case "fly" -> {
                     try {
                         float speed = Float.parseFloat(strings[1]);
-                        if (speed > 15 || speed < 0.1) {
+                        if (speed > 10 || speed < 0.1) {
                             sender.sendMessage(error);
                             return false;
                         }
