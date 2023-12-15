@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import work.alsace.alsacecore.AlsaceCore;
 
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class TPCommand implements TabExecutor {
                             return true;
                         }
 
-                        commander.teleport(player);
+                        teleportAfterDelay(commander, player);
                         commander.sendMessage(ChatColor.GRAY + "已传送至" + name);
                     } else if (commander.hasPermission("alsace.commands.tp") && commander.hasPermission("multiverse.access." + player.getWorld().getName())) {
                         if (this.plugin.hasIgnored.get(name) != null && this.plugin.hasIgnored.get(name)) {
@@ -71,7 +72,7 @@ public class TPCommand implements TabExecutor {
                             return true;
                         }
 
-                        commander.teleport(player);
+                        teleportAfterDelay(commander, player);
                         commander.sendMessage(ChatColor.GRAY + "已传送至" + name);
                     } else {
                         commander.sendMessage(ChatColor.RED + "你没有使用该命令或传送到目标世界权限");
@@ -102,7 +103,7 @@ public class TPCommand implements TabExecutor {
                                 return true;
                             }
 
-                            commander.teleport(player);
+                            teleportAfterDelay(commander, player);
                             String var10001 = commander.getName();
                             sender.sendMessage(ChatColor.GRAY + "已将" + var10001 + "传送至" + player.getName());
                         }
@@ -214,5 +215,16 @@ public class TPCommand implements TabExecutor {
                 players.add(player);
         });
         return players;
+    }
+
+    private void teleportAfterDelay(Player fromPlayer, Player toPlayer) {
+        toPlayer.sendMessage(fromPlayer.getName() + ChatColor.GRAY + " 正在传送到你身边，请稍候...");
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                fromPlayer.teleport(toPlayer);
+                fromPlayer.sendMessage(ChatColor.GRAY + "你已成功传送到 " + toPlayer.getName() + " 身边！");
+            }
+        }.runTaskLater(plugin, 20L); // 1s
     }
 }
