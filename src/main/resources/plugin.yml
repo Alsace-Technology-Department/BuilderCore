@@ -1,6 +1,7 @@
 main: work.alsace.alsacecore.AlsaceCore
 name: AlsaceCore
 authors:
+  - "Usine d' Alsace"
   - 'PuddingKC'
   - 'Hanamizu_'
   - 'CHuNan'

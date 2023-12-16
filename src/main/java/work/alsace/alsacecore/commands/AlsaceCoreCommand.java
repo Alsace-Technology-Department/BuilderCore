@@ -1,8 +1,6 @@
 package work.alsace.alsacecore.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,7 +9,6 @@ import work.alsace.alsacecore.AlsaceCore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class AlsaceCoreCommand implements CommandExecutor, TabCompleter {
@@ -32,7 +29,6 @@ public class AlsaceCoreCommand implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             switch (args[0]) {
                 case "info" -> {
-                    // TODO 插件信息
                     sender.sendMessage(ChatColor.GRAY + "插件名称: §fAlsaceCore\n§7插件版本: §f" + plugin.getDescription().getVersion() + "\n§7插件作者: §f" + Arrays.toString(plugin.getDescription().getAuthors().toArray()));
                 }
                 case "reload" -> {
