@@ -1,4 +1,5 @@
 illegal-characters: ^[A-Za-z][A-Za-z0-9]*$
+agreement: false
 database:
   host: "your_mysql_host"
   port: 3306

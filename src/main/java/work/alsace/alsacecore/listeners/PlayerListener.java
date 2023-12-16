@@ -31,12 +31,9 @@ public class PlayerListener implements Listener {
     private final AlsaceCore plugin;
     private final DataBaseManager databaseManager;
 
-    private final BackCommand backCommand;
-
     public PlayerListener(AlsaceCore plugin) {
         this.plugin = plugin;
         this.databaseManager = plugin.getDatabaseManager();
-        this.backCommand = new BackCommand(plugin);
     }
 
     @EventHandler
@@ -45,14 +42,16 @@ public class PlayerListener implements Listener {
         BlockEvent.slabs.add(event.getPlayer());
         plugin.homeProfiles.put(event.getPlayer().getUniqueId(), new HomeDataLoader(event.getPlayer().getUniqueId()));
         Player player = event.getPlayer();
-
-        boolean hasAgreed = databaseManager.hasPlayerAgreed(player.getUniqueId());
-
-        if (!hasAgreed) {
-            sendAgreementMessage(player);
-            plugin.hasAgree.put(player.getName(), true); //disagree
+        if (plugin.agreement) {
+            boolean hasAgreed = databaseManager.hasPlayerAgreed(player.getUniqueId());
+            if (!hasAgreed) {
+                sendAgreementMessage(player);
+                plugin.hasAgree.put(player.getName(), true); //disagree
+            } else {
+                plugin.hasAgree.put(player.getName(), false); //agree
+            }
         } else {
-            plugin.hasAgree.put(player.getName(), false); //agree
+            plugin.hasAgree.put(player.getName(), false);
         }
     }
 
@@ -79,11 +78,13 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
-        if (!databaseManager.hasPlayerAgreed(player.getUniqueId())) {
-            String message = event.getMessage().toLowerCase();
-            if (!message.startsWith("/agree") && !message.startsWith("/disagree")) {
-                event.setCancelled(true);
-                player.sendMessage(ChatColor.RED + "你必须先同意用户协议才能使用命令！");
+        if (plugin.agreement) {
+            if (!databaseManager.hasPlayerAgreed(player.getUniqueId())) {
+                String message = event.getMessage().toLowerCase();
+                if (!message.startsWith("/agree") && !message.startsWith("/disagree")) {
+                    event.setCancelled(true);
+                    player.sendMessage(ChatColor.RED + "你必须先同意用户协议才能使用命令！");
+                }
             }
         }
     }
@@ -104,9 +105,11 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        if (!databaseManager.hasPlayerAgreed(player.getUniqueId())) {
-            event.setCancelled(true);
-            player.sendMessage(ChatColor.RED + "你必须先同意用户协议才能聊天！");
+        if (plugin.agreement) {
+            if (!databaseManager.hasPlayerAgreed(player.getUniqueId())) {
+                event.setCancelled(true);
+                player.sendMessage(ChatColor.RED + "你必须先同意用户协议才能聊天！");
+            }
         }
     }
 

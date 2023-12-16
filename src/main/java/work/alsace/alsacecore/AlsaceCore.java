@@ -39,15 +39,16 @@ import java.util.*;
 
 public class AlsaceCore extends JavaPlugin {
 
+    public static AlsaceCore instance;
     public Map<String, Boolean> hasIgnored = new HashMap<>();
     public Map<String, Boolean> hasAgree = new HashMap<>();
+    public Boolean agreement;
     public HashMap<UUID, HomeDataLoader> homeProfiles = new HashMap<UUID, HomeDataLoader>();
     public HashMap<String, WarpDataLoader> warpProfiles = new HashMap<String, WarpDataLoader>();
-    private Map<UUID, Deque<Location>> backHistory = new HashMap<>();
+    private final Map<UUID, Deque<Location>> backHistory = new HashMap<>();
     private TPAHandler tpaHandler;
 
     public List<String> illegalCharacters = new ArrayList<>();
-    public static AlsaceCore instance;
     private DataBaseManager databaseManager;
 
     private String host;
@@ -60,8 +61,10 @@ public class AlsaceCore extends JavaPlugin {
     public void onEnable() {
         loadConfig();
         tpaHandler = new TPAHandler(this);
-        databaseManager = new DataBaseManager(host, dataBase, userName, password);
-        loadPlayerAgreementStatus();
+        if (agreement) {
+            databaseManager = new DataBaseManager(host, dataBase, userName, password);
+            loadPlayerAgreementStatus();
+        }
         registerCommands();
         registerListeners();
         Bukkit.getScheduler().runTaskTimer(this, () -> {
@@ -74,8 +77,10 @@ public class AlsaceCore extends JavaPlugin {
     public void onDisable() {
         homeProfiles.clear();
         warpProfiles.clear();
-        if (databaseManager != null) {
-            databaseManager.closeDataSource();
+        if (agreement) {
+            if (databaseManager != null) {
+                databaseManager.closeDataSource();
+            }
         }
         getLogger().info("插件已卸载");
     }
@@ -133,8 +138,10 @@ public class AlsaceCore extends JavaPlugin {
         Objects.requireNonNull(getCommand("delwarp")).setExecutor(new DelWarpCommand());
         Objects.requireNonNull(getCommand("delwarp")).setTabCompleter(new DelWarpCommand());
 
-        Objects.requireNonNull(getCommand("agree")).setExecutor(new AgreeCommand(this));
-        Objects.requireNonNull(getCommand("disagree")).setExecutor(new DisagreeCommand(this));
+        if (agreement) {
+            Objects.requireNonNull(getCommand("agree")).setExecutor(new AgreeCommand(this));
+            Objects.requireNonNull(getCommand("disagree")).setExecutor(new DisagreeCommand(this));
+        }
 
         Objects.requireNonNull(getCommand("alsacecore")).setExecutor(new AlsaceCoreCommand(this));
         Objects.requireNonNull(getCommand("alsacecore")).setTabCompleter(new AlsaceCoreCommand(this));
@@ -179,6 +186,7 @@ public class AlsaceCore extends JavaPlugin {
             homeProfiles.put(i.getUniqueId(), new HomeDataLoader(i.getUniqueId()));
         }
         warpProfiles.put("warps", new WarpDataLoader(this));
+        agreement = this.getConfig().getBoolean("agreement");
         ConfigurationSection dbConfig = this.getConfig().getConfigurationSection("database");
         host = dbConfig.getString("host");
         dataBase = dbConfig.getString("database");
