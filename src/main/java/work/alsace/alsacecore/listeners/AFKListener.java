@@ -45,7 +45,9 @@ public class AFKListener implements Listener {
             long lastActiveTime = lastActivity.getOrDefault(playerId, currentTime);
 
             if (currentTime - lastActiveTime > afkThreshold * 1000) {
-                handleAFK(player);
+                if (!player.hasPermission("alsace.afk.bypass")) {
+                    handleAFK(player);
+                }
             } else {
                 if (player.hasMetadata("afk")) {
                     player.sendMessage(ChatColor.GRAY + "你已取消暂离状态");
