@@ -29,10 +29,7 @@ import work.alsace.alsacecore.commands.warp.DelWarpCommand;
 import work.alsace.alsacecore.commands.warp.SetWarpCommand;
 import work.alsace.alsacecore.commands.warp.WarpCommand;
 import work.alsace.alsacecore.commands.warp.WarpsCommand;
-import work.alsace.alsacecore.listeners.AFKListener;
-import work.alsace.alsacecore.listeners.CatListener;
-import work.alsace.alsacecore.listeners.PlayerListener;
-import work.alsace.alsacecore.listeners.SpawnListener;
+import work.alsace.alsacecore.listeners.*;
 
 import java.io.File;
 import java.util.*;
@@ -162,6 +159,7 @@ public class AlsaceCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new AdvanceFlyCommand(), this);
         getServer().getPluginManager().registerEvents(new SpawnListener(), this);
         getServer().getPluginManager().registerEvents(new CatListener(), this);
+        getServer().getPluginManager().registerEvents(new JoinListener(), this);
 
         if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new Placeholder(this).register();
