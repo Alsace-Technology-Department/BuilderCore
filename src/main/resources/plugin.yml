@@ -145,3 +145,18 @@ commands:
   whois:
     description: 查询指定玩家信息
     permission: alsace.commands.whois
+  itemname:
+    description: 修改手中物品名称
+    permission: alsace.commands.itemname
+    aliases:
+      - 'iname'
+  itemnbt:
+    description: 获取手中物品的详细信息
+    permission: alsace.commands.itemnbt
+    aliases:
+      - 'inbt'
+  itemcolor:
+    description: aa
+    permission: alsace.commands.itemcolor
+    aliases:
+      - 'icolor'
