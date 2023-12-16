@@ -140,6 +140,9 @@ public class AlsaceCore extends JavaPlugin {
         Objects.requireNonNull(getCommand("alsacecore")).setTabCompleter(new AlsaceCoreCommand(this));
 
         Objects.requireNonNull(getCommand("whois")).setExecutor(new WhoisCommand());
+        Objects.requireNonNull(getCommand("itemname")).setExecutor(new ItemNameCommand());
+        Objects.requireNonNull(getCommand("itemnbt")).setExecutor(new ItemNbtCommand());
+        Objects.requireNonNull(getCommand("itemcolor")).setExecutor(new ItemColorCommand());
         getLogger().info("指令注册完成");
     }
 
