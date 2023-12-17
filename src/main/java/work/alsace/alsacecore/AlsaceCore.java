@@ -53,6 +53,7 @@ public class AlsaceCore extends JavaPlugin {
     private String userName;
     private String password;
     public static String afkPrefix;
+    public static List<String> blockedCommands;
 
     @Override
     public void onEnable() {
@@ -147,6 +148,8 @@ public class AlsaceCore extends JavaPlugin {
         Objects.requireNonNull(getCommand("itemname")).setExecutor(new ItemNameCommand());
         Objects.requireNonNull(getCommand("itemnbt")).setExecutor(new ItemNbtCommand());
         Objects.requireNonNull(getCommand("itemcolor")).setExecutor(new ItemColorCommand());
+
+        blockedCommands = Arrays.asList("/plugins", "/?", "/help", "/bukkit");
         getLogger().info("指令注册完成");
     }
 

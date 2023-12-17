@@ -1,6 +1,11 @@
 package com.puddingkc.commands.essentials;
 
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -27,9 +32,15 @@ public class ItemNbtCommand implements CommandExecutor {
                 return false;
             }
 
-            player.sendMessage("§7物品信息:");
+            TextComponent Component = new TextComponent("§7物品NBT: §a" + itemInHand.getItemMeta().toString());
+            Component.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, itemInHand.getItemMeta().toString()));
+            TextComponent hoverText = new TextComponent("点击复制");
+            Component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{hoverText}));
+
+            player.sendMessage("§7物品信息");
+            player.sendMessage("§7物品ID: §f" + itemInHand.getType());
             player.sendMessage("§7物品名称: §f" + Objects.requireNonNull(itemInHand.getItemMeta()).getDisplayName());
-            player.sendMessage("§7物品NBT: §f" + itemInHand.getItemMeta().toString());
+            player.spigot().sendMessage(Component);
             if (itemInHand.getItemMeta().hasCustomModelData()) {
                 player.sendMessage("§7CustomModelData: §f" + itemInHand.getItemMeta().getCustomModelData());
             }

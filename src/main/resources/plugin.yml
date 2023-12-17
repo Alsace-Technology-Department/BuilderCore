@@ -14,6 +14,9 @@ permissions:
   alsace.afk.bypass:
     description: 绕过自动AFK
     default: op
+  alsace.blocked.bypass:
+    description: 绕过指令限制
+    default: op
 commands:
   alsacecore:
     description: 主命令
