@@ -1,5 +1,6 @@
 package work.alsace.alsacecore.listeners;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Cat;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,12 +12,17 @@ public class CatListener implements Listener {
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
-        if (!player.isSneaking()) { return; }
+        if (!player.isSneaking()) {
+            return;
+        }
         if (player.getInventory().getItemInMainHand().getType().isAir() && player.hasPermission("alsace.protect.place")) {
-            if (event.getRightClicked() instanceof Cat) {
-                Cat cat = (Cat) event.getRightClicked();
+            if (event.getRightClicked() instanceof Cat cat) {
                 Cat.Type newType = getNextCatType(cat.getCatType());
                 cat.setCatType(newType);
+            }
+        } else if (player.getInventory().getItemInMainHand().getType() == Material.STICK && player.hasPermission("alsace.protect.place")) {
+            if (event.getRightClicked() instanceof Cat cat) {
+                cat.setSitting(!cat.isSitting());
             }
         }
     }
@@ -36,4 +42,5 @@ public class CatListener implements Listener {
             case WHITE -> Cat.Type.BLACK;
         };
     }
+
 }

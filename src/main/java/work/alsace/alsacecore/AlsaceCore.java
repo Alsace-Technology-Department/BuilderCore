@@ -162,7 +162,7 @@ public class AlsaceCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new AdvanceFlyCommand(), this);
         getServer().getPluginManager().registerEvents(new SpawnListener(), this);
         getServer().getPluginManager().registerEvents(new CatListener(), this);
-        getServer().getPluginManager().registerEvents(new JoinListener(), this);
+        getServer().getPluginManager().registerEvents(new HorseListener(), this);
 
         if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new Placeholder(this).register();

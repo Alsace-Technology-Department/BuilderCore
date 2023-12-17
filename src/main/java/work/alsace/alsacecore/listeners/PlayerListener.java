@@ -4,6 +4,7 @@ import com.puddingkc.commands.puddingUtilities.AdvanceFlyCommand;
 import com.puddingkc.events.BlockEvent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -45,6 +46,9 @@ public class PlayerListener implements Listener {
         if (plugin.agreement) {
             boolean hasAgreed = databaseManager.hasPlayerAgreed(player.getUniqueId());
             if (!hasAgreed) {
+                if (!event.getPlayer().hasPlayedBefore()) {
+                    Bukkit.broadcastMessage("§a欢迎新玩家 §f" + event.getPlayer().getName() + " §a加入§f阿尔萨斯§a服务器");
+                }
                 sendAgreementMessage(player);
                 plugin.hasAgree.put(player.getName(), true); //disagree
             } else {
