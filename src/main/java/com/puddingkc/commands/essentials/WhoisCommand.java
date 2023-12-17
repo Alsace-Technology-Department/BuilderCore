@@ -29,7 +29,7 @@ public class WhoisCommand implements CommandExecutor {
             Component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{hoverText}));
 
             sender.sendMessage("§7用户名: §f" + player.getName());
-            player.spigot().sendMessage(Component);
+            sender.spigot().sendMessage(Component);
             sender.sendMessage("§7IP地址: §f" + player.getAddress().getHostString());
             sender.sendMessage("§7OP权限: §f" + player.isOp());
             sender.sendMessage("§7游戏模式: §f" + player.getGameMode());
