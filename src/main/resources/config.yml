@@ -1,5 +1,8 @@
+#homes/warps可用字符
 illegal-characters: ^[A-Za-z][A-Za-z0-9]*$
+#开启玩家必须强制阅读用户协议方可进入
 agreement: false
+#用户协议数据库配置
 database:
   host: "your_mysql_host"
   port: 3306
@@ -7,5 +10,5 @@ database:
   username: "your_username"
   password: "your_password"
 afk:
-  threshold: 300
-  placeholder: "[AFK]"
+  threshold: 300 #自动afk时间
+  placeholder: "[AFK]" #papi变量
