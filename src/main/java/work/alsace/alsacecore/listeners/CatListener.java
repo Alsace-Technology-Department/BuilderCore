@@ -12,15 +12,14 @@ public class CatListener implements Listener {
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
-        if (!player.isSneaking()) {
-            return;
-        }
-        if (player.getInventory().getItemInMainHand().getType().isAir() && player.hasPermission("alsace.protect.place")) {
+        if (player.getInventory().getItemInMainHand().getType() == Material.DEBUG_STICK && player.hasPermission("alsace.protect.place") && player.isSneaking()) {
             if (event.getRightClicked() instanceof Cat cat) {
+                event.setCancelled(true);
                 Cat.Type newType = getNextCatType(cat.getCatType());
                 cat.setCatType(newType);
             }
-        } else if (player.getInventory().getItemInMainHand().getType() == Material.STICK && player.hasPermission("alsace.protect.place")) {
+        } else if (player.getInventory().getItemInMainHand().getType() == Material.DEBUG_STICK && player.hasPermission("alsace.protect.place")) {
+            event.setCancelled(true);
             if (event.getRightClicked() instanceof Cat cat) {
                 cat.setSitting(!cat.isSitting());
             }

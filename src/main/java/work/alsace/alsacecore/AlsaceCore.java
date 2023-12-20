@@ -24,6 +24,7 @@ import work.alsace.alsacecore.commands.home.HomesCommand;
 import work.alsace.alsacecore.commands.home.SetHomeCommand;
 import work.alsace.alsacecore.commands.teleport.TPACommand;
 import work.alsace.alsacecore.commands.teleport.TPCommand;
+import work.alsace.alsacecore.commands.teleport.TPHereCommand;
 import work.alsace.alsacecore.commands.teleport.TPIgnoreCommand;
 import work.alsace.alsacecore.commands.warp.DelWarpCommand;
 import work.alsace.alsacecore.commands.warp.SetWarpCommand;
@@ -136,6 +137,8 @@ public class AlsaceCore extends JavaPlugin {
         Objects.requireNonNull(getCommand("delwarp")).setExecutor(new DelWarpCommand());
         Objects.requireNonNull(getCommand("delwarp")).setTabCompleter(new DelWarpCommand());
 
+        Objects.requireNonNull(getCommand("tphere")).setExecutor(new TPHereCommand());
+
         if (agreement) {
             Objects.requireNonNull(getCommand("agree")).setExecutor(new AgreeCommand(this));
             Objects.requireNonNull(getCommand("disagree")).setExecutor(new DisagreeCommand(this));
@@ -163,6 +166,7 @@ public class AlsaceCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new SpawnListener(), this);
         getServer().getPluginManager().registerEvents(new CatListener(), this);
         getServer().getPluginManager().registerEvents(new HorseListener(), this);
+        getServer().getPluginManager().registerEvents(new FoxListener(), this);
 
         if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new Placeholder(this).register();

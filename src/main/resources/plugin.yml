@@ -163,7 +163,10 @@ commands:
     aliases:
       - 'inbt'
   itemcolor:
-    description: aa
+    description: 修改手中皮革物品颜色
     permission: alsace.commands.itemcolor
     aliases:
       - 'icolor'
+  tphere:
+    description: 将指定玩家传送到你的位置
+    permission: alsace.commands.tphere
