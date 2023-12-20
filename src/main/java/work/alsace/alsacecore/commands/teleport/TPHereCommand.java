@@ -26,6 +26,8 @@ public class TPHereCommand implements CommandExecutor {
             }
 
             player1.teleport(player.getLocation());
+            player1.sendMessage("§f" + sender.getName() + " §7将你传送到了他的位置");
+            sender.sendMessage("§7已将 §f" + player1.getName() + " §7传送到你的位置");
             return true;
         }
         sender.sendMessage(error);
