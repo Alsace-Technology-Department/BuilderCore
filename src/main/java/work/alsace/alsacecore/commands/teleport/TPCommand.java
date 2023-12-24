@@ -73,7 +73,6 @@ public class TPCommand implements TabExecutor {
                         }
 
                         teleportAfterDelay(commander, player);
-                        commander.sendMessage(ChatColor.GRAY + "正在传送至" + name);
                     } else {
                         commander.sendMessage(ChatColor.RED + "你没有使用该命令或传送到目标世界权限");
                     }
@@ -83,17 +82,18 @@ public class TPCommand implements TabExecutor {
                 sender.sendMessage(ChatColor.RED + "该指令仅限玩家执行");
                 return true;
             }
-            //tp玩家到坐标
+            //tp玩家到玩家
             case 2 -> {
-                if (sender instanceof Player commander) {
-                    if (!sender.hasPermission("alsace.commands.tp.location")) {
+                if (sender instanceof Player) {
+                    if (!sender.hasPermission("alsace.commands.tp")) {
                         sender.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
-                        return true;
+                        return false;
                     }
                     if (!sender.hasPermission("alsace.commands.tp.other")) {
                         sender.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
+                        return false;
                     } else {
-                        commander = Bukkit.getPlayer(args[0]);
+                        Player commander = Bukkit.getPlayer(args[0]);
                         player = Bukkit.getPlayer(args[1]);
                         if (commander == null) {
                             sender.sendMessage(ChatColor.RED + "玩家" + args[0] + "不在线");
@@ -104,8 +104,7 @@ public class TPCommand implements TabExecutor {
                             }
 
                             teleportAfterDelay(commander, player);
-                            String var10001 = commander.getName();
-                            sender.sendMessage(ChatColor.GRAY + "已将" + var10001 + "传送至" + player.getName());
+                            sender.sendMessage(ChatColor.GRAY + "已将" + commander.getName() + "传送至" + player.getName());
                         }
                     }
                     return true;
@@ -118,7 +117,6 @@ public class TPCommand implements TabExecutor {
                         sender.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
                         return true;
                     }
-
                     try {
                         x = this.getLocation(1, sender, args[0]);
                         y = this.getLocation(2, sender, args[1]);
@@ -218,7 +216,8 @@ public class TPCommand implements TabExecutor {
     }
 
     private void teleportAfterDelay(Player fromPlayer, Player toPlayer) {
-        toPlayer.sendMessage(fromPlayer.getName() + ChatColor.GRAY + " 正在传送到你身边，请稍候...");
+        fromPlayer.sendMessage(ChatColor.GRAY + "正在传送至" + ChatColor.WHITE + toPlayer.getName());
+        toPlayer.sendMessage(fromPlayer.getName() + ChatColor.GRAY + " 正在传送到你身边...");
         new BukkitRunnable() {
             @Override
             public void run() {
