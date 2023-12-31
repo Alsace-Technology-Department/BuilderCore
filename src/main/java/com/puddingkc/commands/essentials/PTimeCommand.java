@@ -61,7 +61,7 @@ public class PTimeCommand implements CommandExecutor, TabCompleter {
             case "sunset" -> time = 12000;
             case "midnight" -> time = 18000;
             case "reset" -> {
-                targetPlayer.setPlayerTime(0, false);
+                targetPlayer.resetPlayerTime();
                 targetPlayer.sendMessage(ChatColor.GRAY + "已将你的客户端时间重置");
                 if (strings.length == 2) {
                     sender.sendMessage(ChatColor.GRAY + "已将玩家 §f" + targetPlayer.getName() + " §7的客户端时间重置");

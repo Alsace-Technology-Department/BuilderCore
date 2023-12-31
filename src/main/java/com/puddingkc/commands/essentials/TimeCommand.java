@@ -98,13 +98,13 @@ public class TimeCommand implements CommandExecutor, TabCompleter {
     private long getTimeFromKeyword(String keyword) {
         switch (keyword.toLowerCase()) {
             case "sunrise" -> {
-                return 23000;
+                return 21000;
             }
             case "day" -> {
                 return 0;
             }
             case "morning" -> {
-                return 1000;
+                return 3000;
             }
             case "noon" -> {
                 return 6000;
@@ -116,7 +116,7 @@ public class TimeCommand implements CommandExecutor, TabCompleter {
                 return 12000;
             }
             case "night" -> {
-                return 14000;
+                return 15000;
             }
             case "midnight" -> {
                 return 18000;
