@@ -118,6 +118,7 @@ public class AlsaceCore extends JavaPlugin {
         Objects.requireNonNull(getCommand("afk")).setExecutor(new AFKCommand(this));
 
         Objects.requireNonNull(getCommand("tp")).setExecutor(new TPCommand(this));
+        Objects.requireNonNull(getCommand("tphere")).setExecutor(new TPHereCommand());
         Objects.requireNonNull(getCommand("tpignore")).setExecutor(new TPIgnoreCommand(this));
         Objects.requireNonNull(getCommand("tpahere")).setExecutor(new TPACommand(this));
         Objects.requireNonNull(getCommand("tpaccept")).setExecutor(new TPACommand(this));
@@ -137,7 +138,6 @@ public class AlsaceCore extends JavaPlugin {
         Objects.requireNonNull(getCommand("delwarp")).setExecutor(new DelWarpCommand());
         Objects.requireNonNull(getCommand("delwarp")).setTabCompleter(new DelWarpCommand());
 
-        Objects.requireNonNull(getCommand("tphere")).setExecutor(new TPHereCommand());
 
         if (agreement) {
             Objects.requireNonNull(getCommand("agree")).setExecutor(new AgreeCommand(this));
