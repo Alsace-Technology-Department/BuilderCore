@@ -13,7 +13,6 @@ import work.alsace.alsacecore.Util.WarpDataLoader;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class DelWarpCommand implements CommandExecutor, TabCompleter {
 

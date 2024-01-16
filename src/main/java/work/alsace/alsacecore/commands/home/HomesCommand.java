@@ -4,7 +4,6 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -14,7 +13,6 @@ import work.alsace.alsacecore.AlsaceCore;
 import work.alsace.alsacecore.Util.HomeDataLoader;
 
 import java.util.List;
-import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 public class HomesCommand implements CommandExecutor {

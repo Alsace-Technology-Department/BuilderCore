@@ -1,8 +1,5 @@
 package com.puddingkc.events;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -17,6 +14,9 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class BlockEvent implements Listener {
     public static Set<Player> slabs = new HashSet<>();

@@ -12,7 +12,6 @@ import work.alsace.alsacecore.AlsaceCore;
 import work.alsace.alsacecore.Util.HomeDataLoader;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class DelHomeCommand implements CommandExecutor, TabCompleter {

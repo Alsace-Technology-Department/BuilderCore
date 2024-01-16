@@ -2,7 +2,6 @@ package work.alsace.alsacecore.listeners;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Ageable;
-import org.bukkit.entity.Cat;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;

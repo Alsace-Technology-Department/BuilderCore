@@ -12,8 +12,8 @@ import org.bukkit.entity.Player;
 import work.alsace.alsacecore.AlsaceCore;
 import work.alsace.alsacecore.Util.HomeDataLoader;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeCommand implements CommandExecutor, TabCompleter {
 

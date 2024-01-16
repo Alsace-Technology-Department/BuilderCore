@@ -1,11 +1,5 @@
 package com.puddingkc.commands.puddingUtilities;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
@@ -17,6 +11,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
+
+import java.util.*;
 
 public class AdvanceFlyCommand implements CommandExecutor, Listener {
     private static final List<String> slower = new ArrayList();
