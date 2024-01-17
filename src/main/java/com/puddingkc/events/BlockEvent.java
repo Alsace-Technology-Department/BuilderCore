@@ -94,6 +94,6 @@ public class BlockEvent implements Listener {
             start.add(player.getLocation().getDirection().multiply(0.05));
         }
 
-        return start.getY() % 1.0 > 0.5;
+        return Math.abs(start.getY()) % 1.0 > 0.5;
     }
 }
