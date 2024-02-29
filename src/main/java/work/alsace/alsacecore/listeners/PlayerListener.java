@@ -69,6 +69,7 @@ public class PlayerListener implements Listener {
             AdvanceFlyCommand.enabledPlayers.remove(event.getPlayer());
             BlockEvent.slabs.remove(event.getPlayer());
         }
+        event.getPlayer().removeMetadata("afk", plugin);
     }
 
     @EventHandler
@@ -112,7 +113,7 @@ public class PlayerListener implements Listener {
         if (plugin.agreement) {
             if (!databaseManager.hasPlayerAgreed(player.getUniqueId())) {
                 event.setCancelled(true);
-                player.sendMessage(ChatColor.RED + "你必须先同意用户协议才能聊天！");
+                player.sendMessage(ChatColor.RED + "你必须先阅读并同意用户协议才能聊天！");
             }
         }
     }

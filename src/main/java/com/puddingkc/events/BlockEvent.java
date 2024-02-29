@@ -93,7 +93,10 @@ public class BlockEvent implements Listener {
         while (!start.getBlock().equals(block) && start.distance(player.getEyeLocation()) < 6.0) {
             start.add(player.getLocation().getDirection().multiply(0.05));
         }
-
-        return Math.abs(start.getY()) % 1.0 > 0.5;
+        if (start.getY() > 0) {
+            return start.getY() % 1.0 > 0.5;
+        } else {
+            return Math.abs(start.getY()) % 1.0 < 0.5;
+        }
     }
 }
