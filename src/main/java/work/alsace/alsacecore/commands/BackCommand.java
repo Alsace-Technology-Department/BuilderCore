@@ -20,21 +20,44 @@ public class BackCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage(ChatColor.RED + "该命令只能由玩家使用");
             return false;
         }
 
-        Player player = (Player) sender;
-
         if (locationHistory.isEmpty()) {
-            player.sendMessage(ChatColor.RED + "没有上一个位置记录");
+            player.sendMessage(ChatColor.RED + "没有位置记录");
             return false;
         }
 
-        Location lastLocation = locationHistory.pop();
-        player.teleport(lastLocation);
-        player.sendMessage(ChatColor.GRAY + "返回上一个位置");
+        int backSteps = 1; // 默认返回上一个位置
+        if (args.length > 0) {
+            try {
+                backSteps = Integer.parseInt(args[0]);
+                if (backSteps < 1 || backSteps > plugin.backHistory) {
+                    player.sendMessage(ChatColor.RED + "无效的参数，只能是1-5");
+                    return false;
+                }
+            } catch (NumberFormatException e) {
+                player.sendMessage(ChatColor.RED + "无效的参数，只能是数字");
+                return false;
+            }
+        }
+
+        if (locationHistory.size() < backSteps) {
+            player.sendMessage(ChatColor.RED + "没有足够的位置记录");
+            return false;
+        }
+
+        Location targetLocation = null;
+        for (int i = 0; i < backSteps; i++) {
+            targetLocation = locationHistory.pop();
+        }
+
+        if (targetLocation != null) {
+            player.teleport(targetLocation);
+            player.sendMessage(ChatColor.GRAY + "返回到之前的位置");
+        }
 
         return true;
     }
@@ -43,7 +66,7 @@ public class BackCommand implements CommandExecutor {
         Location currentLocation = player.getLocation().clone();
         locationHistory.push(currentLocation);
 
-        int maxHistorySize = 5;
+        int maxHistorySize = plugin.backHistory;
         while (locationHistory.size() > maxHistorySize) {
             locationHistory.remove(0);
         }

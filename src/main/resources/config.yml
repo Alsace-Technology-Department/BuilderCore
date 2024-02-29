@@ -2,6 +2,8 @@
 illegal-characters: ^[A-Za-z][A-Za-z0-9]*$
 #开启玩家必须强制阅读用户协议方可进入
 agreement: false
+#可以返回的位置
+backHistory: 5
 #用户协议数据库配置
 database:
   host: "your_mysql_host"

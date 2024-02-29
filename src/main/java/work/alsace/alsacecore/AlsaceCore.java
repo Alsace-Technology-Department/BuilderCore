@@ -7,7 +7,6 @@ import com.puddingkc.events.BlockEvent;
 import com.puddingkc.events.Misc;
 import com.puddingkc.events.Protect;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -43,10 +42,10 @@ public class AlsaceCore extends JavaPlugin {
     public Boolean agreement;
     public HashMap<UUID, HomeDataLoader> homeProfiles = new HashMap<UUID, HomeDataLoader>();
     public HashMap<String, WarpDataLoader> warpProfiles = new HashMap<String, WarpDataLoader>();
-    private final Map<UUID, Deque<Location>> backHistory = new HashMap<>();
     private TPAHandler tpaHandler;
 
     public List<String> illegalCharacters = new ArrayList<>();
+    public int backHistory;
     private DataBaseManager databaseManager;
 
     private String host;
@@ -201,14 +200,11 @@ public class AlsaceCore extends JavaPlugin {
         userName = dbConfig.getString("username");
         password = dbConfig.getString("password");
         afkPrefix = this.getConfig().getConfigurationSection("afk").getString("placeholder");
+        backHistory = this.getConfig().getInt("backHistory");
     }
 
     public DataBaseManager getDatabaseManager() {
         return databaseManager;
-    }
-
-    public Map<UUID, Deque<Location>> getBackHistory() {
-        return backHistory;
     }
 
     private void loadPlayerAgreementStatus() {
