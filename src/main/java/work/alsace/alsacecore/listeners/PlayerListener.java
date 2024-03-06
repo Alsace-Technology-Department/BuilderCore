@@ -1,7 +1,5 @@
 package work.alsace.alsacecore.listeners;
 
-import com.puddingkc.commands.puddingUtilities.AdvanceFlyCommand;
-import com.puddingkc.events.BlockEvent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -21,7 +19,8 @@ import work.alsace.alsacecore.AlsaceCore;
 import work.alsace.alsacecore.Util.DataBaseManager;
 import work.alsace.alsacecore.Util.HomeDataLoader;
 import work.alsace.alsacecore.Util.NoClipUtil;
-import work.alsace.alsacecore.commands.BackCommand;
+import work.alsace.alsacecore.commands.builderTools.AdvanceFlyCommand;
+import work.alsace.alsacecore.commands.teleport.BackCommand;
 
 import java.util.Objects;
 import java.util.regex.Matcher;
