@@ -11,7 +11,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import work.alsace.alsacecore.AlsaceCore;
-import work.alsace.alsacecore.Util.WarpDataLoader;
+import work.alsace.alsacecore.service.WarpDataLoader;
 
 import java.util.ArrayList;
 import java.util.HashMap;

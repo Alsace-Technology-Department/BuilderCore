@@ -18,10 +18,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import java.util.HashSet;
 import java.util.Set;
 
-public class BlockEvent implements Listener {
+public class BlockListener implements Listener {
     public static Set<Player> slabs = new HashSet<>();
 
-    public BlockEvent() {
+    public BlockListener() {
     }
 
     @EventHandler

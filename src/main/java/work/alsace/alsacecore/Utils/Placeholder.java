@@ -1,4 +1,4 @@
-package work.alsace.alsacecore.Util;
+package work.alsace.alsacecore.Utils;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;

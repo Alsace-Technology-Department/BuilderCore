@@ -1,4 +1,4 @@
-package work.alsace.alsacecore.Util;
+package work.alsace.alsacecore.service;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

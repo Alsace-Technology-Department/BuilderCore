@@ -6,7 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import work.alsace.alsacecore.AlsaceCore;
-import work.alsace.alsacecore.Util.TPAHandler;
+import work.alsace.alsacecore.service.TPAHandler;
 
 public class TPACommand implements CommandExecutor {
     private final AlsaceCore plugin;

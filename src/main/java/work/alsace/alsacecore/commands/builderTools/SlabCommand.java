@@ -5,7 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import work.alsace.alsacecore.listeners.BlockEvent;
+import work.alsace.alsacecore.listeners.BlockListener;
 
 public class SlabCommand implements CommandExecutor {
     public SlabCommand() {
@@ -18,11 +18,11 @@ public class SlabCommand implements CommandExecutor {
             return false;
         } else {
             Player player = (Player) sender;
-            if (BlockEvent.slabs.contains(player)) {
-                BlockEvent.slabs.remove(player);
+            if (BlockListener.slabs.contains(player)) {
+                BlockListener.slabs.remove(player);
                 player.sendMessage(ChatColor.GRAY + "已禁用半砖破坏模式");
             } else {
-                BlockEvent.slabs.add(player);
+                BlockListener.slabs.add(player);
                 player.sendMessage(ChatColor.GRAY + "已启用半砖破坏模式");
             }
 

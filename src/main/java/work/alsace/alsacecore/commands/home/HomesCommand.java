@@ -10,7 +10,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import work.alsace.alsacecore.AlsaceCore;
-import work.alsace.alsacecore.Util.HomeDataLoader;
+import work.alsace.alsacecore.service.HomeDataLoader;
 
 import java.util.List;
 import java.util.stream.Collectors;

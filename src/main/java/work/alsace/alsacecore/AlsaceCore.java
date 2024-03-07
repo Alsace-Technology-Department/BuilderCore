@@ -4,7 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import work.alsace.alsacecore.Util.*;
+import work.alsace.alsacecore.Utils.DataBaseManager;
+import work.alsace.alsacecore.Utils.NoClipUtil;
+import work.alsace.alsacecore.Utils.Placeholder;
 import work.alsace.alsacecore.commands.agree.AgreeCommand;
 import work.alsace.alsacecore.commands.agree.DisagreeCommand;
 import work.alsace.alsacecore.commands.alias.*;
@@ -29,6 +31,9 @@ import work.alsace.alsacecore.commands.warp.WarpsCommand;
 import work.alsace.alsacecore.commands.weather.PWeatherCommand;
 import work.alsace.alsacecore.commands.weather.WeatherCommand;
 import work.alsace.alsacecore.listeners.*;
+import work.alsace.alsacecore.service.HomeDataLoader;
+import work.alsace.alsacecore.service.TPAHandler;
+import work.alsace.alsacecore.service.WarpDataLoader;
 
 import java.io.File;
 import java.util.*;
@@ -158,7 +163,7 @@ public class AlsaceCore extends JavaPlugin {
         AlsaceCore.instance = this;
         getServer().getPluginManager().registerEvents(new Protect(), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
-        getServer().getPluginManager().registerEvents(new BlockEvent(), this);
+        getServer().getPluginManager().registerEvents(new BlockListener(), this);
         getServer().getPluginManager().registerEvents(new Misc(), this);
         getServer().getPluginManager().registerEvents(new AdvanceFlyCommand(), this);
         getServer().getPluginManager().registerEvents(new SpawnListener(), this);
@@ -194,11 +199,11 @@ public class AlsaceCore extends JavaPlugin {
         warpProfiles.put("warps", new WarpDataLoader(this));
         agreement = this.getConfig().getBoolean("agreement");
         ConfigurationSection dbConfig = this.getConfig().getConfigurationSection("database");
-        host = dbConfig.getString("host");
+        host = Objects.requireNonNull(dbConfig).getString("host");
         dataBase = dbConfig.getString("database");
         userName = dbConfig.getString("username");
         password = dbConfig.getString("password");
-        afkPrefix = this.getConfig().getConfigurationSection("afk").getString("placeholder");
+        afkPrefix = Objects.requireNonNull(this.getConfig().getConfigurationSection("afk")).getString("placeholder");
         backHistory = this.getConfig().getInt("backHistory");
     }
 

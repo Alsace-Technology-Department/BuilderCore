@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import work.alsace.alsacecore.AlsaceCore;
-import work.alsace.alsacecore.Util.WarpDataLoader;
+import work.alsace.alsacecore.service.WarpDataLoader;
 
 import java.util.ArrayList;
 import java.util.List;
