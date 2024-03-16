@@ -3,10 +3,9 @@ package work.alsace.buildercore.service
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
-import work.alsace.buildercore.BuilderCore
 import java.util.*
 
-class TPAHandler(plugin: BuilderCore?) {
+class TPAHandler {
     private val tpaRequests: MutableMap<String, String>
 
     init {

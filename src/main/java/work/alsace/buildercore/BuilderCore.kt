@@ -32,7 +32,7 @@ import work.alsace.buildercore.utils.Placeholder
 import java.io.File
 import java.util.*
 
-class BuilderCore() : JavaPlugin() {
+class BuilderCore : JavaPlugin() {
     val hasIgnored: MutableMap<String?, Boolean?> = HashMap()
     val homeProfiles = HashMap<UUID?, HomeDataLoader?>()
     val warpProfiles = HashMap<String?, WarpDataLoader?>()
@@ -46,7 +46,7 @@ class BuilderCore() : JavaPlugin() {
 
     override fun onEnable() {
         loadConfig()
-        this.tPAHandler = TPAHandler(this)
+        this.tPAHandler = TPAHandler()
         registerCommands()
         registerListeners()
         Bukkit.getScheduler().runTaskTimer(this, Runnable { NoClipUtil().checkBlock() }, 1L, 1L)
