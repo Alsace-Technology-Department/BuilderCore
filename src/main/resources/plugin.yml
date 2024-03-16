@@ -1,13 +1,15 @@
-main: work.alsace.alsacecore.AlsaceCore
-name: AlsaceCore
+main: work.alsace.buildercore.BuilderCore
+name: BuilderCore
 authors:
   - "Usine d' Alsace"
   - 'PuddingKC'
   - 'Hanamizu_'
   - 'CHuNan'
+  - 'zhuoxin_lzk'
 version: ${version}
 softdepend:
   - 'PlaceholderAPI'
+  - 'FastAsyncWorldEdit'
 description: 阿尔萨斯工业基础插件
 api-version: '1.16'
 permissions:
