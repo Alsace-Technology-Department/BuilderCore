@@ -6,7 +6,6 @@ import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import work.alsace.buildercore.BuilderCore
-import java.util.*
 
 class BuilderCoreCommand(private val plugin: BuilderCore) : CommandExecutor, TabCompleter {
     override fun onCommand(sender: CommandSender, cmd: Command, s: String, args: Array<String>): Boolean {
@@ -21,9 +20,7 @@ class BuilderCoreCommand(private val plugin: BuilderCore) : CommandExecutor, Tab
     ${ChatColor.GRAY}插件名称: §fBuilderCore
     §7插件版本: §f${plugin.description.version}
     §7插件作者: §f
-    """.trimIndent() + Arrays.toString(
-                        plugin.description.authors.toTypedArray()
-                    )
+    """.trimIndent() + plugin.description.authors.toTypedArray().contentToString()
                 )
 
                 "reload" -> {

@@ -1,4 +1,4 @@
-main: work.alsace.buildercore.BuilderCore
+main: work.buildercore.buildercore.BuilderCore
 name: BuilderCore
 authors:
   - "Usine d' Alsace"
@@ -15,162 +15,162 @@ softdepend:
 description: 建筑师基础插件
 api-version: '1.16'
 permissions:
-  alsace.afk.bypass:
+  buildercore.afk.bypass:
     description: 绕过自动AFK
     default: op
-  alsace.blocked.bypass:
+  buildercore.blocked.bypass:
     description: 绕过指令限制
     default: op
 commands:
-  alsacecore:
+  buildercore:
     description: 主命令
-    permission: alsace.admin
+    permission: buildercore.admin
   agree:
     description: 同意用户协议
   disagree:
     description: 不同意用户协议
   fly:
     description: 设置自己或指定玩家的飞行状态
-    permission: alsace.commands.fly
+    permission: buildercore.commands.fly
   speed:
     description: 设置自己或指定玩家的移动速度
-    permission: alsace.commands.speed
+    permission: buildercore.commands.speed
   gamemode:
     description: 设置自己或指定玩家的游戏模式
-    permission: alsace.commands.gamemode
+    permission: buildercore.commands.gamemode
     aliases:
       - 'gm'
   weather:
     description: 设置所在世界的天气
-    permission: alsace.commands.weather
+    permission: buildercore.commands.weather
   pweather:
-    permission: alsace.commands.pweather
+    permission: buildercore.commands.pweather
   time:
     description: 设置所在世界或指定世界的时间
-    permission: alsace.commands.time
+    permission: buildercore.commands.time
   ptime:
     description: 设置自己或指定玩家的客户端时间
-    permission: alsace.commands.ptime
+    permission: buildercore.commands.ptime
   back:
     description: 返回上一个位置
-    permission: alsace.commands.back
+    permission: buildercore.commands.back
   tp:
     description: 传送到指定玩家或坐标
-    permission: alsace.commands.tp
+    permission: buildercore.commands.tp
   tpignore:
     description: 忽略传送请求
-    permission: alsace.commands.tpignore
+    permission: buildercore.commands.tpignore
   tpahere:
     description: 向玩家发送传送请求
-    permission: alsace.commands.tp
+    permission: buildercore.commands.tp
   tpaccept:
     description: 同意请求
-    permission: alsace.commands.tp
+    permission: buildercore.commands.tp
   tpdeny:
     description: 拒绝请求
-    permission: alsace.commands.tp
+    permission: buildercore.commands.tp
   home:
     description: 传送到指定家
-    permission: alsace.commands.home
+    permission: buildercore.commands.home
   homes:
     description: 查看家
-    permission: alsace.commands.homes
+    permission: buildercore.commands.homes
   sethome:
     description: 设置家
-    permission: alsace.commands.sethome
+    permission: buildercore.commands.sethome
   delhome:
     description: 删除家
-    permission: alsace.commands.delhome
+    permission: buildercore.commands.delhome
   hat:
     description: 戴上手上的物品
-    permission: alsace.commands.hat
+    permission: buildercore.commands.hat
   head:
     description: 获取指定玩家的皮肤头颅
-    permission: alsace.commands.head
+    permission: buildercore.commands.head
     aliases:
       - 'skull'
   warps:
     description: 查看传送点
-    permission: alsace.commands.warps
+    permission: buildercore.commands.warps
   warp:
     description: 传送到指定传送点
-    permission: alsace.commands.warp
+    permission: buildercore.commands.warp
   delwarp:
     description: 删除传送点
-    permission: alsace.commands.delwarp
+    permission: buildercore.commands.delwarp
   setwarp:
     description: 设置传送点
-    permission: alsace.commands.setwarp
+    permission: buildercore.commands.setwarp
   night:
     description: 获取永久夜视效果
-    permission: alsace.commands.nightvision
+    permission: buildercore.commands.nightvision
     aliases:
       - 'nv'
       - 'n'
   noclip:
     description: 开关自动穿墙
-    permission: alsace.commands.noclip
+    permission: buildercore.commands.noclip
     aliases:
       - 'nc'
   advfly:
     description: 开关更好的飞行
-    permission: alsace.commands.advfly
+    permission: buildercore.commands.advfly
     aliases:
       - 'af'
   slab:
     description: 开关半砖破坏
-    permission: alsace.commands.slab
+    permission: buildercore.commands.slab
     aliases:
       - 'sb'
   debugstick:
     description: 获取调试棒
-    permission: alsace.commands.debugstick
+    permission: buildercore.commands.debugstick
     aliases:
       - 'dbs'
   /twist:
     description: 快捷执行创世神deform指令
-    permission: alsace.commands.twist
+    permission: buildercore.commands.twist
   /scale:
     description: 快捷执行创世神deform指令
-    permission: alsace.commands.scale
+    permission: buildercore.commands.scale
   /derot:
     description: 快捷执行创世神deform指令
-    permission: alsace.commands.derot
+    permission: buildercore.commands.derot
   /cuboid:
     description: 快捷执行创世神sel指令
-    permission: alsace.commands.cuboid
+    permission: buildercore.commands.cuboid
     aliases:
       - '/cub'
   /convex:
     description: 快捷执行创世神sel指令
-    permission: alsace.commands.convex
+    permission: buildercore.commands.convex
     aliases:
       - '/con'
   undo:
     description: 快捷执行创世神undo指令
-    permission: alsace.commands.undo
+    permission: buildercore.commands.undo
     aliases:
       - 'u'
   afk:
     description: 进入暂离状态
   whois:
     description: 查询指定玩家信息
-    permission: alsace.commands.whois
+    permission: buildercore.commands.whois
   itemname:
     description: 修改手中物品名称
-    permission: alsace.commands.itemname
+    permission: buildercore.commands.itemname
     aliases:
       - 'iname'
   itemnbt:
     description: 获取手中物品的详细信息
-    permission: alsace.commands.itemnbt
+    permission: buildercore.commands.itemnbt
     aliases:
       - 'inbt'
   itemcolor:
     description: 修改手中皮革物品颜色
-    permission: alsace.commands.itemcolor
+    permission: buildercore.commands.itemcolor
     aliases:
       - 'icolor'
   tphere:
     description: 将指定玩家传送到你的位置
-    permission: alsace.commands.tphere
+    permission: buildercore.commands.tphere
