@@ -50,4 +50,4 @@ afk:
   placeholder: "[AFK]" #papi变量
 ```
 
-[查看WIKI]()
+[查看WIKI](https://github.com/Alsace-Technology-Department/BuilderCore/wiki)

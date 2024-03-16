@@ -1,36 +1,37 @@
-package work.alsace.buildercore.listeners;
+package work.alsace.buildercore.listeners
 
-import org.bukkit.Material;
-import org.bukkit.entity.Fox;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.Material
+import org.bukkit.entity.Fox
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerInteractEntityEvent
 
-public class FoxListener implements Listener {
+class FoxListener : Listener {
     @EventHandler
-    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        Player player = event.getPlayer();
-        if (player.getInventory().getItemInMainHand().getType() == Material.STICK && player.hasPermission("buildercore.protect.place") && player.isSneaking()) {
-            if (event.getRightClicked() instanceof Fox fox) {
-                event.setCancelled(true);
-                switch (fox.getFoxType()) {
-                    case SNOW -> fox.setFoxType(Fox.Type.RED);
-                    case RED -> fox.setFoxType(Fox.Type.SNOW);
+    fun onPlayerInteractEntity(event: PlayerInteractEntityEvent) {
+        val player = event.player
+        if (player.inventory.itemInMainHand.type == Material.STICK && player.hasPermission("buildercore.protect.place") && player.isSneaking) {
+            if (event.rightClicked is Fox) {
+                val fox: Fox = event.rightClicked as Fox
+                event.isCancelled = true
+                when (fox.foxType) {
+                    Fox.Type.SNOW -> fox.foxType = Fox.Type.RED
+                    Fox.Type.RED -> fox.foxType = Fox.Type.SNOW
                 }
             }
-        } else if (player.getInventory().getItemInMainHand().getType() == Material.STICK && player.hasPermission("buildercore.protect.place")) {
-            event.setCancelled(true);
-            if (event.getRightClicked() instanceof Fox fox) {
-                if (fox.isSitting()) {
-                    fox.setSitting(false);
-                    fox.setSleeping(true);
-                } else if (fox.isSleeping()) {
-                    fox.setSitting(false);
-                    fox.setSleeping(false);
+        } else if (player.inventory.itemInMainHand.type == Material.STICK && player.hasPermission("buildercore.protect.place")) {
+            event.isCancelled = true
+            if (event.rightClicked is Fox) {
+                val fox: Fox = event.rightClicked as Fox
+                if (fox.isSitting) {
+                    fox.isSitting = false
+                    fox.isSleeping = true
+                } else if (fox.isSleeping) {
+                    fox.isSitting = false
+                    fox.isSleeping = false
                 } else {
-                    fox.setSitting(true);
-                    fox.setSleeping(false);
+                    fox.isSitting = true
+                    fox.isSleeping = false
                 }
             }
         }

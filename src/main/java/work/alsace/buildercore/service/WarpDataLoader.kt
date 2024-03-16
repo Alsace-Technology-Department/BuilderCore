@@ -1,125 +1,122 @@
-package work.alsace.buildercore.service;
+package work.alsace.buildercore.service
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.configuration.file.YamlConfiguration;
-import work.alsace.buildercore.BuilderCore;
+import org.bukkit.Bukkit
+import org.bukkit.Location
+import org.bukkit.World
+import org.bukkit.configuration.file.YamlConfiguration
+import work.alsace.buildercore.BuilderCore
+import java.io.File
+import java.io.IOException
+import java.util.*
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
+class WarpDataLoader(plugin: BuilderCore) {
+    private val warps = Collections.synchronizedMap(HashMap<String, Location>())
+    private val aliases = Collections.synchronizedMap(HashMap<String, String>())
+    private val warpsFile: File
+    private var warpConfig: YamlConfiguration? = null
 
-public class WarpDataLoader {
-    private final Map<String, Location> warps = Collections.synchronizedMap(new HashMap<>());
-    private final Map<String, String> aliases = Collections.synchronizedMap(new HashMap<>());
-    private final File warpsFile;
-    private YamlConfiguration warpConfig;
-
-    public WarpDataLoader(BuilderCore plugin) {
-        this.warpsFile = new File(plugin.getDataFolder() + File.separator + "warps.yml");
-        this.loadWarps();
+    init {
+        warpsFile = File(plugin.dataFolder.toString() + File.separator + "warps.yml")
+        loadWarps()
     }
 
-    private synchronized void loadWarps() {
+    @Synchronized
+    private fun loadWarps() {
         if (!warpsFile.exists()) {
             try {
-                warpsFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
+                warpsFile.createNewFile()
+            } catch (e: IOException) {
+                e.printStackTrace()
             }
         }
-        warpConfig = YamlConfiguration.loadConfiguration(warpsFile);
-
-        if (warpConfig.getConfigurationSection("Warps") != null) {
-            for (String i : Objects.requireNonNull(warpConfig.getConfigurationSection("Warps")).getKeys(false)) {
-                warps.put(i, new Location(
-                        Bukkit.getWorld(Objects.requireNonNull(warpConfig.getString("Warps." + i + ".World"))),
-                        warpConfig.getDouble("Warps." + i + ".X"),
-                        warpConfig.getDouble("Warps." + i + ".Y"),
-                        warpConfig.getDouble("Warps." + i + ".Z"),
-                        warpConfig.getLong("Warps." + i + ".Yaw"),
-                        warpConfig.getLong("Warps." + i + ".Pitch")));
+        warpConfig = YamlConfiguration.loadConfiguration(warpsFile)
+        if (warpConfig!!.getConfigurationSection("Warps") != null) {
+            for (i in Objects.requireNonNull(warpConfig!!.getConfigurationSection("Warps"))?.getKeys(false)!!) {
+                warps[i] = Location(
+                    Objects.requireNonNull(warpConfig!!.getString("Warps.$i.World"))?.let { Bukkit.getWorld(it) },
+                    warpConfig!!.getDouble("Warps.$i.X"),
+                    warpConfig!!.getDouble("Warps.$i.Y"),
+                    warpConfig!!.getDouble("Warps.$i.Z"),
+                    warpConfig!!.getLong("Warps.$i.Yaw").toFloat(),
+                    warpConfig!!.getLong("Warps.$i.Pitch").toFloat()
+                )
 
                 // 加载别名
-                String alias = warpConfig.getString("Aliases." + i);
+                val alias = warpConfig!!.getString("Aliases.$i")
                 if (alias != null) {
-                    aliases.put(alias, i);
+                    aliases[alias] = i
                 }
             }
         }
     }
 
-    public void addWarp(String name, String alias, Location location) {
-        synchronized (warps) {
-            warps.put(name, location);
-            warpConfig.set("Warps." + name + ".World", Objects.requireNonNull(location.getWorld()).getName());
-            warpConfig.set("Warps." + name + ".X", location.getX());
-            warpConfig.set("Warps." + name + ".Y", location.getY());
-            warpConfig.set("Warps." + name + ".Z", location.getZ());
-            warpConfig.set("Warps." + name + ".Yaw", location.getYaw());
-            warpConfig.set("Warps." + name + ".Pitch", location.getPitch());
-
-            if (alias != null && !alias.isEmpty()) {
-                warpConfig.set("Aliases." + alias, name);
-                aliases.put(alias, name);
+    fun addWarp(name: String, alias: String?, location: Location) {
+        synchronized(warps) {
+            warps[name] = location
+            warpConfig!!["Warps.$name.World"] = Objects.requireNonNull(location.world)?.name
+            warpConfig!!["Warps.$name.X"] = location.x
+            warpConfig!!["Warps.$name.Y"] = location.y
+            warpConfig!!["Warps.$name.Z"] = location.z
+            warpConfig!!["Warps.$name.Yaw"] = location.yaw
+            warpConfig!!["Warps.$name.Pitch"] = location.pitch
+            if (!alias.isNullOrEmpty()) {
+                warpConfig!!["Aliases.$alias"] = name
+                aliases[alias] = name
             }
-
             try {
-                warpConfig.save(warpsFile);
-            } catch (IOException e) {
-                e.printStackTrace();
+                warpConfig!!.save(warpsFile)
+            } catch (e: IOException) {
+                e.printStackTrace()
             }
         }
     }
 
-    public void delWarp(String name) {
-        synchronized (warps) {
-            warps.remove(name);
-            warpConfig.set("Warps." + name, null);
+    fun delWarp(name: String) {
+        synchronized(warps) {
+            warps.remove(name)
+            warpConfig!!["Warps.$name"] = null
 
             // 删除别名
-            String alias = getWarpAlias(name);
+            val alias = getWarpAlias(name)
             if (alias != null) {
-                warpConfig.set("Aliases." + alias, null);
-                aliases.remove(alias);
+                warpConfig!!["Aliases.$alias"] = null
+                aliases.remove(alias)
             }
-
             try {
-                warpConfig.save(warpsFile);
-            } catch (IOException e) {
-                e.printStackTrace();
+                warpConfig!!.save(warpsFile)
+            } catch (e: IOException) {
+                e.printStackTrace()
             }
         }
     }
 
-    public Location getWarp(String nameOrAlias) {
-        synchronized (warps) {
-            Location location = warps.get(nameOrAlias);
+    fun getWarp(nameOrAlias: String): Location? {
+        synchronized(warps) {
+            var location = warps[nameOrAlias]
             if (location == null) {
-                String realName = aliases.get(nameOrAlias);
+                val realName = aliases[nameOrAlias]
                 if (realName != null) {
-                    location = warps.get(realName);
+                    location = warps[realName]
                 }
             }
-            return location;
+            return location
         }
     }
 
-    public Set<String> getWarps() {
-        return new HashSet<>(warps.keySet());
+    fun getWarps(): Set<String> {
+        return HashSet(warps.keys)
     }
 
-    public World getWarpWorld(String name) {
-        Location location = getWarp(name);
-        return (location != null) ? location.getWorld() : null;
+    fun getWarpWorld(name: String): World? {
+        val location = getWarp(name)
+        return location?.world
     }
 
-    public String getWarpAlias(String name) {
-        return aliases.get(name);
+    fun getWarpAlias(name: String): String? {
+        return aliases[name]
     }
 
-    public String getRealWarpName(String alias) {
-        return aliases.getOrDefault(alias, alias);
+    fun getRealWarpName(alias: String): String {
+        return aliases.getOrDefault(alias, alias)
     }
 }

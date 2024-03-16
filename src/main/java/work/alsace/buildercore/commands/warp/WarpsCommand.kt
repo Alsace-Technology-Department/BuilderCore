@@ -1,89 +1,71 @@
 // WarpsCommand.java
-package work.alsace.buildercore.commands.warp;
+package work.alsace.buildercore.commands.warp
 
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import work.alsace.buildercore.BuilderCore;
-import work.alsace.buildercore.service.WarpDataLoader;
+import net.md_5.bungee.api.chat.BaseComponent
+import net.md_5.bungee.api.chat.ClickEvent
+import net.md_5.bungee.api.chat.HoverEvent
+import net.md_5.bungee.api.chat.TextComponent
+import org.bukkit.ChatColor
+import org.bukkit.command.Command
+import org.bukkit.command.CommandExecutor
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
+import work.alsace.buildercore.BuilderCore
+import java.util.function.Consumer
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public class WarpsCommand implements CommandExecutor {
-    private final BuilderCore plugin;
-
-    public WarpsCommand(BuilderCore plugin) {
-        this.plugin = plugin;
-    }
-
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage(ChatColor.RED + "该指令仅限玩家执行");
-            return false;
+class WarpsCommand(private val plugin: BuilderCore) : CommandExecutor {
+    override fun onCommand(sender: CommandSender, cmd: Command, commandLabel: String, args: Array<String>): Boolean {
+        if (sender !is Player) {
+            sender.sendMessage(ChatColor.RED.toString() + "该指令仅限玩家执行")
+            return false
         }
         if (!sender.hasPermission("buildercore.commands.warps")) {
-            sender.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
-            return false;
+            sender.sendMessage(ChatColor.RED.toString() + "你没有使用该命令的权限")
+            return false
         }
-
-        WarpDataLoader warpDataLoader = plugin.getWarpProfiles().get("warps");
-
-        Map<String, List<String>> worldWarps = getWorldWarps(player);
-
+        val worldWarps = getWorldWarps(sender)
         if (worldWarps.isEmpty()) {
-            player.sendMessage(ChatColor.RED + "没有可用的传送点");
-            return false;
+            sender.sendMessage(ChatColor.RED.toString() + "没有可用的传送点")
+            return false
         }
-
-        player.sendMessage(ChatColor.GRAY + "可用传送点:");
-
-        for (Map.Entry<String, List<String>> entry : worldWarps.entrySet()) {
-            String worldName = entry.getKey();
-            List<String> warps = entry.getValue();
-            TextComponent message = new TextComponent(ChatColor.GRAY + worldName + ": ");
-            for (String warp : warps) {
-                TextComponent warpComponent = createClickableWarpComponent(warp);
-                message.addExtra(warpComponent);
-                message.addExtra(" §7| ");
+        sender.sendMessage(ChatColor.GRAY.toString() + "可用传送点:")
+        for ((worldName, warps) in worldWarps) {
+            val message = TextComponent(ChatColor.GRAY.toString() + worldName + ": ")
+            for (warp in warps) {
+                val warpComponent = createClickableWarpComponent(warp)
+                message.addExtra(warpComponent)
+                message.addExtra(" §7| ")
             }
-
-            player.spigot().sendMessage(message);
+            sender.spigot().sendMessage(message)
         }
-
-        return true;
+        return true
     }
 
-    private Map<String, List<String>> getWorldWarps(Player sender) {
-        Map<String, List<String>> worldWarps = new HashMap<>();
-        plugin.getWarpProfiles().get("warps").getWarps().forEach(warp -> {
-            String worldName = plugin.getWarpProfiles().get("warps").getWarpWorld(warp).getName();
-            String alias = plugin.getWarpProfiles().get("warps").getWarpAlias(warp);
-
-            if (sender.hasPermission("multiverse.access." + worldName)) {
-                worldWarps.computeIfAbsent(worldName, k -> new ArrayList<>()).add(alias != null ? alias : warp);
+    private fun getWorldWarps(sender: Player): Map<String, MutableList<String>> {
+        val worldWarps: MutableMap<String, MutableList<String>> = HashMap()
+        plugin.warpProfiles["warps"]?.getWarps()?.forEach(Consumer { warp: String ->
+            val worldName = plugin.warpProfiles["warps"]?.getWarpWorld(warp)?.name
+            val alias = plugin.warpProfiles["warps"]?.getWarpAlias(warp)
+            if (sender.hasPermission("multiverse.access.$worldName")) {
+                worldName?.let {
+                    worldWarps.computeIfAbsent(it) { ArrayList() }
+                        .add(alias ?: warp)
+                }
             }
-        });
-        return worldWarps;
+        })
+        return worldWarps
     }
 
-    private TextComponent createClickableWarpComponent(String warp) {
-        String realWarp = plugin.getWarpProfiles().get("warps").getRealWarpName(warp);
-
-        TextComponent warpComponent = new TextComponent(ChatColor.GOLD + warp);
-        warpComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/warp " + realWarp));
-        TextComponent hoverText = new TextComponent("点击快捷传送");
-        warpComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{hoverText}));
-        return warpComponent;
+    private fun createClickableWarpComponent(warp: String): TextComponent {
+        val realWarp = plugin.warpProfiles["warps"]?.getRealWarpName(warp)
+        val warpComponent = TextComponent(ChatColor.GOLD.toString() + warp)
+        warpComponent.clickEvent =
+            ClickEvent(ClickEvent.Action.RUN_COMMAND, "/warp $realWarp")
+        val hoverText = TextComponent("点击快捷传送")
+        warpComponent.hoverEvent = HoverEvent(
+            HoverEvent.Action.SHOW_TEXT,
+            arrayOf<BaseComponent>(hoverText)
+        )
+        return warpComponent
     }
 }

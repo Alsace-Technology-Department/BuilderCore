@@ -1,59 +1,37 @@
-package work.alsace.buildercore.Utils;
+package work.alsace.buildercore.utils
 
-import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import work.alsace.buildercore.BuilderCore;
+import me.clip.placeholderapi.expansion.PlaceholderExpansion
+import org.bukkit.entity.Player
+import work.alsace.buildercore.BuilderCore
 
-import java.util.Arrays;
-
-public class Placeholder extends PlaceholderExpansion {
-
-    private final BuilderCore plugin;
-
-    public Placeholder(BuilderCore plugin) {
-        this.plugin = plugin;
+class Placeholder(private val plugin: BuilderCore) : PlaceholderExpansion() {
+    override fun getIdentifier(): String {
+        return "buildercore"
     }
 
-    @Override
-    public @NotNull String getIdentifier() {
-        return "buildercore";
+    override fun getAuthor(): String {
+        return plugin.description.authors.toTypedArray().contentToString()
     }
 
-    @Override
-    public @NotNull String getAuthor() {
-        return Arrays.toString(plugin.getDescription().getAuthors().toArray());
+    override fun getVersion(): String {
+        return plugin.description.version
     }
 
-    @Override
-    public @NotNull String getVersion() {
-        return plugin.getDescription().getVersion();
+    override fun canRegister(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean canRegister() {
-        return true;
+    override fun persist(): Boolean {
+        return true
     }
 
-    @Override
-    public boolean persist() {
-        return true;
-    }
-
-    @Override
-    public String onPlaceholderRequest(Player player, @NotNull String params) {
-        if (player == null) {
-            return null;
-        }
-
-        if (params.equalsIgnoreCase("afk")) {
+    override fun onPlaceholderRequest(player: Player, params: String): String? {
+        return if (params.equals("afk", ignoreCase = true)) {
             if (player.hasMetadata("afk")) {
-                return plugin.getAfkPrefix().replace("&", "§");
+                plugin.afkPrefix?.replace("&", "§")
             } else {
-                return "";
+                ""
             }
-        }
-
-        return null;
+        } else null
     }
 }

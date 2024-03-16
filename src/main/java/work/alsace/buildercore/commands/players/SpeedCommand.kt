@@ -1,165 +1,168 @@
-package work.alsace.buildercore.commands.players;
+package work.alsace.buildercore.commands.players
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.command.Command
+import org.bukkit.command.CommandExecutor
+import org.bukkit.command.CommandSender
+import org.bukkit.command.TabCompleter
+import org.bukkit.entity.Player
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+class SpeedCommand : CommandExecutor, TabCompleter {
+    private val error = """
+         ${ChatColor.GRAY}正确指令:
+         §f/speed <速度> §7- 设置你的飞行或步行速度(0.1~10)
+         §f/speed <类型> <速度> [玩家] §7- 设置指定玩家的指定类型速度
+         """.trimIndent()
 
-public class SpeedCommand implements CommandExecutor, TabCompleter {
-
-    private final String error = ChatColor.GRAY + "正确指令:\n§f/speed <速度> §7- 设置你的飞行或步行速度(0.1~10)\n§f/speed <类型> <速度> [玩家] §7- 设置指定玩家的指定类型速度";
-    private static final List<String> types = Arrays.asList("walk", "fly", "1", "1.5", "1.75", "2");
-    private static final List<String> speeds = Arrays.asList("1", "1.5", "1.75", "2");
-
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] strings) {
-        if (strings.length == 1 && sender instanceof Player player) {
-            if (!player.hasPermission("buildercore.commands.speed")) {
-                player.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
-                return false;
+    override fun onCommand(sender: CommandSender, command: Command, s: String, strings: Array<String>): Boolean {
+        if (strings.size == 1 && sender is Player) {
+            if (!sender.hasPermission("buildercore.commands.speed")) {
+                sender.sendMessage(ChatColor.RED.toString() + "你没有使用该命令的权限")
+                return false
             }
-            try {
-                float speed = Float.parseFloat(strings[0]);
+            return try {
+                val speed = strings[0].toFloat()
                 if (speed > 10 || speed < 0.1) {
-                    player.sendMessage(error);
-                    return false;
+                    sender.sendMessage(error)
+                    return false
                 }
-                if (player.isFlying()) {
-                    player.setFlySpeed(speed / 10F);
-                    player.sendMessage(ChatColor.GRAY + "已将你的 §f飞行 §7速度设置为 §f" + speed);
+                if (sender.isFlying) {
+                    sender.flySpeed = speed / 10f
+                    sender.sendMessage(ChatColor.GRAY.toString() + "已将你的 §f飞行 §7速度设置为 §f" + speed)
                 } else {
-                    player.setWalkSpeed(speed / 10F);
-                    player.sendMessage(ChatColor.GRAY + "已将你的 §f步行 §7速度设置为 §f" + speed);
+                    sender.walkSpeed = speed / 10f
+                    sender.sendMessage(ChatColor.GRAY.toString() + "已将你的 §f步行 §7速度设置为 §f" + speed)
                 }
-                return true;
-            } catch (NumberFormatException e) {
-                player.sendMessage(error);
-                return false;
+                true
+            } catch (e: NumberFormatException) {
+                sender.sendMessage(error)
+                false
             }
         }
-
-        if (strings.length == 2 && sender instanceof Player player) {
-            if (!player.hasPermission("buildercore.commands.speed")) {
-                player.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
-                return false;
+        if (strings.size == 2 && sender is Player) {
+            if (!sender.hasPermission("buildercore.commands.speed")) {
+                sender.sendMessage(ChatColor.RED.toString() + "你没有使用该命令的权限")
+                return false
             }
-            switch (strings[0]) {
-                case "walk" -> {
+            return when (strings[0]) {
+                "walk" -> {
                     try {
-                        float speed = Float.parseFloat(strings[1]);
+                        val speed = strings[1].toFloat()
                         if (speed > 15 || speed < 0.1) {
-                            player.sendMessage(error);
-                            return false;
+                            sender.sendMessage(error)
+                            return false
                         }
-                        player.setWalkSpeed(speed / 10F);
-                        player.sendMessage(ChatColor.GRAY + "已将你的 §f步行 §7速度设置为 §f" + speed);
-                        return true;
-                    } catch (NumberFormatException e) {
-                        player.sendMessage(error);
-                        return false;
+                        sender.walkSpeed = speed / 10f
+                        sender.sendMessage(ChatColor.GRAY.toString() + "已将你的 §f步行 §7速度设置为 §f" + speed)
+                        true
+                    } catch (e: NumberFormatException) {
+                        sender.sendMessage(error)
+                        false
                     }
                 }
-                case "fly" -> {
+
+                "fly" -> {
                     try {
-                        float speed = Float.parseFloat(strings[1]);
+                        val speed = strings[1].toFloat()
                         if (speed > 10 || speed < 0.1) {
-                            player.sendMessage(error);
-                            return false;
+                            sender.sendMessage(error)
+                            return false
                         }
-                        player.setFlySpeed(speed / 10F);
-                        player.sendMessage(ChatColor.GRAY + "已将你的 §f飞行 §7速度设置为 §f" + speed);
-                        return true;
-                    } catch (NumberFormatException e) {
-                        player.sendMessage(error);
-                        return false;
+                        sender.flySpeed = speed / 10f
+                        sender.sendMessage(ChatColor.GRAY.toString() + "已将你的 §f飞行 §7速度设置为 §f" + speed)
+                        true
+                    } catch (e: NumberFormatException) {
+                        sender.sendMessage(error)
+                        false
                     }
                 }
-                default -> {
-                    player.sendMessage(error);
-                    return false;
+
+                else -> {
+                    sender.sendMessage(error)
+                    false
                 }
             }
         }
-
-        if (strings.length == 3) {
+        if (strings.size == 3) {
             if (!sender.hasPermission("buildercore.commands.speed.other")) {
-                sender.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
-                return false;
+                sender.sendMessage(ChatColor.RED.toString() + "你没有使用该命令的权限")
+                return false
             }
-
-            Player player = Bukkit.getPlayer(strings[2]);
-            if (player == null || !player.isOnline()) {
-                sender.sendMessage(ChatColor.RED + "指定的玩家不在线或不存在");
-                return false;
+            val player = Bukkit.getPlayer(strings[2])
+            if (player == null || !player.isOnline) {
+                sender.sendMessage(ChatColor.RED.toString() + "指定的玩家不在线或不存在")
+                return false
             }
-
-            switch (strings[0]) {
-                case "walk" -> {
+            return when (strings[0]) {
+                "walk" -> {
                     try {
-                        float speed = Float.parseFloat(strings[1]);
+                        val speed = strings[1].toFloat()
                         if (speed > 10 || speed < 0.1) {
-                            sender.sendMessage(error);
-                            return false;
+                            sender.sendMessage(error)
+                            return false
                         }
-                        player.setWalkSpeed(speed / 10F);
-                        sender.sendMessage(ChatColor.GRAY + "已将玩家 §f" + player.getName() + " §7的 §f步行 §7速度设置为 §f" + speed);
-                        player.sendMessage(ChatColor.GRAY + "已将你的 §f步行 §7速度设置为 §f" + speed);
-                        return true;
-                    } catch (NumberFormatException e) {
-                        sender.sendMessage(error);
-                        return false;
+                        player.walkSpeed = speed / 10f
+                        sender.sendMessage(ChatColor.GRAY.toString() + "已将玩家 §f" + player.name + " §7的 §f步行 §7速度设置为 §f" + speed)
+                        player.sendMessage(ChatColor.GRAY.toString() + "已将你的 §f步行 §7速度设置为 §f" + speed)
+                        true
+                    } catch (e: NumberFormatException) {
+                        sender.sendMessage(error)
+                        false
                     }
                 }
-                case "fly" -> {
+
+                "fly" -> {
                     try {
-                        float speed = Float.parseFloat(strings[1]);
+                        val speed = strings[1].toFloat()
                         if (speed > 10 || speed < 0.1) {
-                            sender.sendMessage(error);
-                            return false;
+                            sender.sendMessage(error)
+                            return false
                         }
-                        player.setFlySpeed(speed / 10F);
-                        sender.sendMessage(ChatColor.GRAY + "已将玩家 §f" + player.getName() + " §7的 §f飞行 §7速度设置为 §f" + speed);
-                        player.sendMessage(ChatColor.GRAY + "已将你的 §f飞行 §7速度设置为 §f" + speed);
-                        return true;
-                    } catch (NumberFormatException e) {
-                        sender.sendMessage(error);
-                        return false;
+                        player.flySpeed = speed / 10f
+                        sender.sendMessage(ChatColor.GRAY.toString() + "已将玩家 §f" + player.name + " §7的 §f飞行 §7速度设置为 §f" + speed)
+                        player.sendMessage(ChatColor.GRAY.toString() + "已将你的 §f飞行 §7速度设置为 §f" + speed)
+                        true
+                    } catch (e: NumberFormatException) {
+                        sender.sendMessage(error)
+                        false
                     }
                 }
-                default -> {
-                    sender.sendMessage(error);
-                    return false;
+
+                else -> {
+                    sender.sendMessage(error)
+                    false
                 }
             }
         }
-        sender.sendMessage(error);
-        return false;
+        sender.sendMessage(error)
+        return false
     }
 
-    @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] strings) {
-        if (strings.length == 1 && sender.hasPermission("buildercore.commands.speed")) {
-            return types;
+    override fun onTabComplete(
+        sender: CommandSender,
+        command: Command,
+        s: String,
+        strings: Array<String>
+    ): List<String> {
+        if (strings.size == 1 && sender.hasPermission("buildercore.commands.speed")) {
+            return types
         }
-        if (strings.length == 2 && sender.hasPermission("buildercore.commands.speed")) {
-            return speeds;
+        if (strings.size == 2 && sender.hasPermission("buildercore.commands.speed")) {
+            return speeds
         }
-        if (strings.length == 3 && sender.hasPermission("buildercore.commands.speed.other")) {
-            List<String> list = new ArrayList<>();
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                list.add(p.getName());
+        if (strings.size == 3 && sender.hasPermission("buildercore.commands.speed.other")) {
+            val list: MutableList<String> = ArrayList()
+            for (p in Bukkit.getOnlinePlayers()) {
+                list.add(p.name)
             }
-            return list;
+            return list
         }
-        return Collections.emptyList();
+        return emptyList()
+    }
+
+    companion object {
+        private val types: List<String> = mutableListOf("walk", "fly", "1", "1.5", "1.75", "2")
+        private val speeds: List<String> = mutableListOf("1", "1.5", "1.75", "2")
     }
 }

@@ -1,33 +1,27 @@
-package work.alsace.buildercore.commands.builderTools;
+package work.alsace.buildercore.commands.builderTools
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import work.alsace.buildercore.listeners.BlockListener;
+import org.bukkit.ChatColor
+import org.bukkit.command.Command
+import org.bukkit.command.CommandExecutor
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
+import work.alsace.buildercore.listeners.BlockListener
 
-public class SlabCommand implements CommandExecutor {
-    public SlabCommand() {
-    }
-
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] strings) {
-        if (!(sender instanceof Player)) {
-            return false;
+class SlabCommand : CommandExecutor {
+    override fun onCommand(sender: CommandSender, command: Command, s: String, strings: Array<String>): Boolean {
+        return if (sender !is Player) {
+            false
         } else if (!sender.hasPermission("buildercore.commands.slab")) {
-            return false;
+            false
         } else {
-            Player player = (Player) sender;
-            if (BlockListener.slabs.contains(player)) {
-                BlockListener.slabs.remove(player);
-                player.sendMessage(ChatColor.GRAY + "已禁用半砖破坏模式");
+            if (BlockListener.slabs.contains(sender)) {
+                BlockListener.slabs.remove(sender)
+                sender.sendMessage(ChatColor.GRAY.toString() + "已禁用半砖破坏模式")
             } else {
-                BlockListener.slabs.add(player);
-                player.sendMessage(ChatColor.GRAY + "已启用半砖破坏模式");
+                BlockListener.slabs.add(sender)
+                sender.sendMessage(ChatColor.GRAY.toString() + "已启用半砖破坏模式")
             }
-
-            return true;
+            true
         }
     }
 }

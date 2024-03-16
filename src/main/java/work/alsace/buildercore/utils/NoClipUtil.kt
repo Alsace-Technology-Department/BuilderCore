@@ -1,56 +1,65 @@
-package work.alsace.buildercore.Utils;
+package work.alsace.buildercore.utils
 
-import org.bukkit.GameMode;
-import org.bukkit.entity.Player;
+import org.bukkit.GameMode
+import org.bukkit.entity.Player
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-public class NoClipUtil {
-    public static Set<Player> noclip = new HashSet<>();
-
-    public void checkBlock() {
-        Iterator<Player> var1 = noclip.iterator();
-
+class NoClipUtil {
+    fun checkBlock() {
+        val var1: Iterator<Player> = noclip.iterator()
         while (true) {
-            Player id;
+            var id: Player
             do {
                 do {
                     if (!var1.hasNext()) {
-                        return;
+                        return
                     }
-
-                    id = var1.next();
-                } while (id == null);
-            } while (!id.isOnline());
-
-            boolean noClip;
-            if (id.getGameMode() == GameMode.CREATIVE) {
-                if (id.getLocation().add(0.0, -0.1, 0.0).getBlock().getType().isSolid() && id.isSneaking()) {
-                    noClip = true;
+                    id = var1.next()
+                } while (false)
+            } while (!id.isOnline)
+            var noClip: Boolean
+            if (id.gameMode == GameMode.CREATIVE) {
+                noClip = if (id.location.add(0.0, -0.1, 0.0).block.type.isSolid && id.isSneaking) {
+                    true
                 } else {
-                    noClip = this.shouldNoClip(id);
+                    shouldNoClip(id)
                 }
-
                 if (noClip) {
-                    id.setGameMode(GameMode.SPECTATOR);
+                    id.gameMode = GameMode.SPECTATOR
                 }
-            } else if (id.getGameMode() == GameMode.SPECTATOR) {
-                if (id.getLocation().add(0.0, -0.1, 0.0).getBlock().getType().isSolid()) {
-                    noClip = true;
+            } else if (id.gameMode == GameMode.SPECTATOR) {
+                noClip = if (id.location.add(0.0, -0.1, 0.0).block.type.isSolid) {
+                    true
                 } else {
-                    noClip = this.shouldNoClip(id);
+                    shouldNoClip(id)
                 }
-
                 if (!noClip) {
-                    id.setGameMode(GameMode.CREATIVE);
+                    id.gameMode = GameMode.CREATIVE
                 }
             }
         }
     }
 
-    private boolean shouldNoClip(Player player) {
-        return player.getLocation().add(0.4, 0.0, 0.0).getBlock().getType().isSolid() || player.getLocation().add(-0.4, 0.0, 0.0).getBlock().getType().isSolid() || player.getLocation().add(0.0, 0.0, 0.4).getBlock().getType().isSolid() || player.getLocation().add(0.0, 0.0, -0.4).getBlock().getType().isSolid() || player.getLocation().add(0.4, 1.0, 0.0).getBlock().getType().isSolid() || player.getLocation().add(-0.4, 1.0, 0.0).getBlock().getType().isSolid() || player.getLocation().add(0.0, 1.0, 0.4).getBlock().getType().isSolid() || player.getLocation().add(0.0, 1.0, -0.4).getBlock().getType().isSolid() || player.getLocation().add(0.0, 1.9, 0.0).getBlock().getType().isSolid();
+    private fun shouldNoClip(player: Player?): Boolean {
+        return player!!.location.add(0.4, 0.0, 0.0).block.type.isSolid || player.location.add(
+            -0.4,
+            0.0,
+            0.0
+        ).block.type.isSolid || player.location.add(0.0, 0.0, 0.4).block.type.isSolid || player.location.add(
+            0.0,
+            0.0,
+            -0.4
+        ).block.type.isSolid || player.location.add(0.4, 1.0, 0.0).block.type.isSolid || player.location.add(
+            -0.4,
+            1.0,
+            0.0
+        ).block.type.isSolid || player.location.add(0.0, 1.0, 0.4).block.type.isSolid || player.location.add(
+            0.0,
+            1.0,
+            -0.4
+        ).block.type.isSolid || player.location.add(0.0, 1.9, 0.0).block.type.isSolid
+    }
+
+    companion object {
+        var noclip: MutableSet<Player> = HashSet()
     }
 }

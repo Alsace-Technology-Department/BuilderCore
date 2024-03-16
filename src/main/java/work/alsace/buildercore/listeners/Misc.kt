@@ -1,27 +1,22 @@
-package work.alsace.buildercore.listeners;
+package work.alsace.buildercore.listeners
 
-import org.bukkit.ChatColor;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import work.alsace.buildercore.BuilderCore;
+import org.bukkit.ChatColor
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerCommandPreprocessEvent
+import work.alsace.buildercore.BuilderCore
+import java.util.*
 
-public class Misc implements Listener {
-    private final BuilderCore plugin;
-
-    public Misc(BuilderCore plugin) {
-        this.plugin = plugin;
-    }
-
+class Misc(private val plugin: BuilderCore) : Listener {
     @EventHandler
-    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-        String command = event.getMessage();
-        if (plugin.getBlockedCommands().contains(command.toLowerCase())) {
-            if (event.getPlayer().hasPermission("buildercore.blocked.bypass")) {
-                return;
+    fun onPlayerCommandPreprocess(event: PlayerCommandPreprocessEvent) {
+        val command = event.message
+        if (plugin.blockedCommands?.contains(command.lowercase(Locale.getDefault())) == true) {
+            if (event.player.hasPermission("buildercore.blocked.bypass")) {
+                return
             }
-            event.setCancelled(true);
-            event.getPlayer().sendMessage(ChatColor.WHITE + "Unknown command. Type \"/help\" for help.");
+            event.isCancelled = true
+            event.player.sendMessage(ChatColor.WHITE.toString() + "Unknown command. Type \"/help\" for help.")
         }
     }
 }

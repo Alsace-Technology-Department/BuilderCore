@@ -1,116 +1,109 @@
-package work.alsace.buildercore.service;
+package work.alsace.buildercore.service
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.permissions.PermissionAttachmentInfo;
-import work.alsace.buildercore.BuilderCore;
+import org.bukkit.Bukkit
+import org.bukkit.Location
+import org.bukkit.configuration.file.YamlConfiguration
+import work.alsace.buildercore.BuilderCore
+import java.io.File
+import java.io.IOException
+import java.util.*
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+class HomeDataLoader(playerUUID: UUID, plugin: BuilderCore) {
+    private val homes = HashMap<String, Location>()
+    private var userFile: File =
+        File(plugin.dataFolder.toString() + File.separator + "userdata" + File.separator + playerUUID.toString() + ".yml")
+    private var userConfig: YamlConfiguration = YamlConfiguration.loadConfiguration(userFile)
+    private var maxHomes: Int = 5
+    private val plugin: BuilderCore? = null
 
-public class HomeDataLoader {
-    private final UUID playerUUID;
-    private final HashMap<String, Location> homes = new HashMap<>();
-    private File userFile;
-    private YamlConfiguration userConfig;
-    private int maxHomes = 0;
-    private BuilderCore plugin;
-
-    public HomeDataLoader(final UUID uuid, BuilderCore plugin) {
-        this.playerUUID = uuid;
-        Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-            userFile = new File(plugin.getDataFolder() + File.separator + "userdata" + File.separator + playerUUID.toString() + ".yml");
+    init {
+        Bukkit.getServer().scheduler.runTaskAsynchronously(plugin, Runnable {
             if (!userFile.exists()) {
                 try {
-                    userFile.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    userFile.createNewFile()
+                } catch (e: IOException) {
+                    e.printStackTrace()
                 }
             }
-            userConfig = YamlConfiguration.loadConfiguration(userFile);
             if (userConfig.getConfigurationSection("Home") != null) {
-                for (String i : Objects.requireNonNull(userConfig.getConfigurationSection("Home")).getKeys(false)) {
-                    homes.put(i, new Location(
-                            Bukkit.getServer().getWorld(Objects.requireNonNull(userConfig.getString("Home." + i + ".World"))),
-                            userConfig.getDouble("Home." + i + ".X"),
-                            userConfig.getDouble("Home." + i + ".Y"),
-                            userConfig.getDouble("Home." + i + ".Z"),
-                            userConfig.getLong("Home." + i + ".Yaw"),
-                            userConfig.getLong("Home." + i + ".Pitch")));
+                for (i in Objects.requireNonNull(userConfig.getConfigurationSection("Home"))?.getKeys(false)!!) {
+                    homes[i] = Location(
+                        Objects.requireNonNull(userConfig.getString("Home.$i.World"))
+                            ?.let { Bukkit.getServer().getWorld(it) },
+                        userConfig.getDouble("Home.$i.X"),
+                        userConfig.getDouble("Home.$i.Y"),
+                        userConfig.getDouble("Home.$i.Z"),
+                        userConfig.getLong("Home.$i.Yaw").toFloat(),
+                        userConfig.getLong("Home.$i.Pitch").toFloat()
+                    )
                 }
             }
-        });
-        Player player = Bukkit.getServer().getPlayer(uuid);
+        })
+        val player = Bukkit.getServer().getPlayer(playerUUID)
         if (player != null) {
-            for (PermissionAttachmentInfo i : player.getEffectivePermissions()) {
-                if (i.getPermission().equalsIgnoreCase("buildercore.home.max.unlimited")) {
-                    maxHomes = Integer.MAX_VALUE;
-                    break;
+            for (i in player.effectivePermissions) {
+                if (i.permission.equals("buildercore.home.max.unlimited", ignoreCase = true)) {
+                    maxHomes = Int.MAX_VALUE
+                    break
                 }
-                if (i.getPermission().startsWith("buildercore.home.max.")) {
-                    int value = Integer.parseInt(i.getPermission().replace("buildercore.home.max.", ""));
+                if (i.permission.startsWith("buildercore.home.max.")) {
+                    val value = i.permission.replace("buildercore.home.max.", "").toInt()
                     if (value > maxHomes) {
-                        maxHomes = value;
+                        maxHomes = value
                     }
                 }
             }
         }
     }
 
-    public void addHome(final String name, final Location location) {
-        Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-            homes.put(name, location);
-            userConfig.set("Home." + name + ".World", Objects.requireNonNull(location.getWorld()).getName());
-            userConfig.set("Home." + name + ".X", location.getX());
-            userConfig.set("Home." + name + ".Y", location.getY());
-            userConfig.set("Home." + name + ".Z", location.getZ());
-            userConfig.set("Home." + name + ".Yaw", location.getYaw());
-            userConfig.set("Home." + name + ".Pitch", location.getPitch());
+    fun addHome(name: String, location: Location) {
+        Bukkit.getServer().scheduler.runTaskAsynchronously(plugin!!, Runnable {
+            homes[name] = location
+            userConfig["Home.$name.World"] = Objects.requireNonNull(location.world)?.name
+            userConfig["Home.$name.X"] = location.x
+            userConfig["Home.$name.Y"] = location.y
+            userConfig["Home.$name.Z"] = location.z
+            userConfig["Home.$name.Yaw"] = location.yaw
+            userConfig["Home.$name.Pitch"] = location.pitch
             try {
-                userConfig.save(userFile);
-            } catch (IOException e) {
-                e.printStackTrace();
+                userConfig.save(userFile)
+            } catch (e: IOException) {
+                e.printStackTrace()
             }
-        });
+        })
     }
 
-    public void delHome(final String name) {
-        Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-            for (String i : homes.keySet()) {
-                if (i.equalsIgnoreCase(name)) {
-                    homes.remove(i);
-                    userConfig.set("Home." + i, null);
-                    break;
+    fun delHome(name: String?) {
+        Bukkit.getServer().scheduler.runTaskAsynchronously(plugin!!, Runnable {
+            for (i in homes.keys) {
+                if (i.equals(name, ignoreCase = true)) {
+                    homes.remove(i)
+                    userConfig["Home.$i"] = null
+                    break
                 }
             }
             try {
-                userConfig.save(userFile);
-            } catch (IOException e) {
-                e.printStackTrace();
+                userConfig.save(userFile)
+            } catch (e: IOException) {
+                e.printStackTrace()
             }
-        });
+        })
     }
 
-    public Location getHome(String name) {
-        for (String i : homes.keySet()) {
-            if (i.equalsIgnoreCase(name)) {
-                return homes.get(i);
+    fun getHome(name: String): Location? {
+        for (i in homes.keys) {
+            if (i.equals(name, ignoreCase = true)) {
+                return homes[i]
             }
         }
-        return null;
+        return null
     }
 
-    public Set<String> getHomes() {
-        return homes.keySet();
+    fun getHomes(): Set<String> {
+        return homes.keys
     }
 
-    public int getMaxHomes() {
-        return maxHomes;
+    fun getMaxHomes(): Int {
+        return maxHomes
     }
 }

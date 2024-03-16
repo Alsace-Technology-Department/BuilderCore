@@ -1,29 +1,27 @@
-package work.alsace.buildercore.commands.builderTools;
+package work.alsace.buildercore.commands.builderTools
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import work.alsace.buildercore.Utils.NoClipUtil;
+import org.bukkit.ChatColor
+import org.bukkit.command.Command
+import org.bukkit.command.CommandExecutor
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
+import work.alsace.buildercore.utils.NoClipUtil
 
-public class NoClipCommand implements CommandExecutor {
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] strings) {
-        if (!(sender instanceof Player)) {
-            return false;
+class NoClipCommand : CommandExecutor {
+    override fun onCommand(sender: CommandSender, command: Command, s: String, strings: Array<String>): Boolean {
+        return if (sender !is Player) {
+            false
         } else if (!sender.hasPermission("buildercore.commands.noclip")) {
-            return false;
+            false
         } else {
-            Player player = (Player) sender;
-            if (NoClipUtil.noclip.contains(player)) {
-                NoClipUtil.noclip.remove(player);
-                player.sendMessage(ChatColor.GRAY + "已禁用自动穿墙");
+            if (NoClipUtil.noclip.contains(sender)) {
+                NoClipUtil.noclip.remove(sender)
+                sender.sendMessage(ChatColor.GRAY.toString() + "已禁用自动穿墙")
             } else {
-                NoClipUtil.noclip.add(player);
-                player.sendMessage(ChatColor.GRAY + "已启用自动穿墙");
+                NoClipUtil.noclip.add(sender)
+                sender.sendMessage(ChatColor.GRAY.toString() + "已启用自动穿墙")
             }
-            return true;
+            true
         }
     }
 }

@@ -1,46 +1,44 @@
-package work.alsace.buildercore.commands.alias;
+package work.alsace.buildercore.commands.alias
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.ChatColor
+import org.bukkit.command.Command
+import org.bukkit.command.CommandExecutor
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 
-public class DerotCommand implements CommandExecutor {
+class DerotCommand : CommandExecutor {
+    private val error = """
+         ${ChatColor.GRAY}正确指令:
+         §f//derot [轴线 X,Y,Z] [度数] §7- 快捷执行创世神deform指令
+         """.trimIndent()
 
-    private final String error = ChatColor.GRAY + "正确指令:\n§f//derot [轴线 X,Y,Z] [度数] §7- 快捷执行创世神deform指令";
-
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] strings) {
-        if (strings.length == 2 && sender instanceof Player player) {
-            if (!player.hasPermission("buildercore.aliases")) {
-                player.sendMessage(error);
-                return false;
+    override fun onCommand(sender: CommandSender, command: Command, s: String, strings: Array<String>): Boolean {
+        if (strings.size == 2 && sender is Player) {
+            if (!sender.hasPermission("buildercore.aliases")) {
+                sender.sendMessage(error)
+                return false
             }
-
-            int degrees;
-            try {
-                degrees = Integer.parseInt(strings[1]);
-            } catch (Exception var8) {
-                player.sendMessage(error);
-                return false;
+            val degrees: Int = try {
+                strings[1].toInt()
+            } catch (var8: Exception) {
+                sender.sendMessage(error)
+                return false
             }
-
-            float radiansPerDegree = 0.0174533F;
-            float radian = (float)degrees * radiansPerDegree;
-            if (strings[0].equalsIgnoreCase("x")) {
-                player.performCommand("/deform rotate(y,z," + radian + ")");
-            } else if (strings[0].equalsIgnoreCase("y")) {
-                player.performCommand("/deform rotate(x,z," + radian + ")");
-            } else if (strings[0].equalsIgnoreCase("z")) {
-                player.performCommand("/deform rotate(x,y," + radian + ")");
+            val radiansPerDegree = 0.0174533f
+            val radian = degrees.toFloat() * radiansPerDegree
+            if (strings[0].equals("x", ignoreCase = true)) {
+                sender.performCommand("/deform rotate(y,z,$radian)")
+            } else if (strings[0].equals("y", ignoreCase = true)) {
+                sender.performCommand("/deform rotate(x,z,$radian)")
+            } else if (strings[0].equals("z", ignoreCase = true)) {
+                sender.performCommand("/deform rotate(x,y,$radian)")
             } else {
-                player.sendMessage(error);
-                return false;
+                sender.sendMessage(error)
+                return false
             }
-            return true;
+            return true
         }
-        sender.sendMessage(error);
-        return false;
+        sender.sendMessage(error)
+        return false
     }
 }

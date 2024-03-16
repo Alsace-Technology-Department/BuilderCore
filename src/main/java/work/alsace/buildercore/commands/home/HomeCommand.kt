@@ -1,114 +1,105 @@
-package work.alsace.buildercore.commands.home;
+package work.alsace.buildercore.commands.home
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import work.alsace.buildercore.BuilderCore;
-import work.alsace.buildercore.service.HomeDataLoader;
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.command.Command
+import org.bukkit.command.CommandExecutor
+import org.bukkit.command.CommandSender
+import org.bukkit.command.TabCompleter
+import org.bukkit.entity.Player
+import work.alsace.buildercore.BuilderCore
+import work.alsace.buildercore.service.HomeDataLoader
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class HomeCommand implements CommandExecutor, TabCompleter {
-    private final BuilderCore plugin;
-
-    public HomeCommand(BuilderCore plugin) {
-        this.plugin = plugin;
-    }
-
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + "该指令仅限玩家执行");
-            return false;
+class HomeCommand(private val plugin: BuilderCore) : CommandExecutor, TabCompleter {
+    override fun onCommand(sender: CommandSender, cmd: Command, commandLabel: String, args: Array<String>): Boolean {
+        if (sender !is Player) {
+            sender.sendMessage(ChatColor.RED.toString() + "该指令仅限玩家执行")
+            return false
         }
         if (!sender.hasPermission("buildercore.commands.home")) {
-            sender.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
-            return false;
+            sender.sendMessage(ChatColor.RED.toString() + "你没有使用该命令的权限")
+            return false
         }
-        if (args.length == 1) {
-            String homeName = args[0];
-            Player player = (Player) sender;
+        if (args.size == 1) {
+            var homeName = args[0]
             if (homeName.contains(":") && sender.hasPermission("buildercore.commands.home.other")) {
-                String user = homeName.split(":", 2)[0];
-                OfflinePlayer i = Bukkit.getServer().getOfflinePlayer(player.getUniqueId());
-                HomeDataLoader homeDataLoaderProfile;
-                if (i.isOnline()) {
-                    homeDataLoaderProfile = plugin.getHomeProfiles().get(i.getUniqueId());
+                val user = homeName.split(":".toRegex(), limit = 2).toTypedArray()[0]
+                val i = Bukkit.getServer().getOfflinePlayer(sender.uniqueId)
+                val homeDataLoaderProfile: HomeDataLoader? = if (i.isOnline) {
+                    plugin.homeProfiles[i.uniqueId]
                 } else if (!i.hasPlayedBefore()) {
-                    sender.sendMessage(ChatColor.RED + "玩家" + user + "不存在");
-                    return false;
+                    sender.sendMessage(ChatColor.RED.toString() + "玩家" + user + "不存在")
+                    return false
                 } else {
-                    homeDataLoaderProfile = new HomeDataLoader(player.getUniqueId(), plugin);
+                    HomeDataLoader(sender.uniqueId, plugin)
                 }
-                homeName = homeName.replaceFirst(user + ":", "");
-                Location location = homeDataLoaderProfile.getHome(homeName);
-                if (homeDataLoaderProfile.getHome(homeName) != null) {
-                    if (location.getWorld() == null) {
-                        sender.sendMessage(ChatColor.RED + "世界" + location.getWorld() + "不存在");
-                        return false;
+                homeName = homeName.replaceFirst("$user:".toRegex(), "")
+                val location = homeDataLoaderProfile?.getHome(homeName)
+                if (homeDataLoaderProfile != null) {
+                    if (homeDataLoaderProfile.getHome(homeName) != null) {
+                        if (location!!.world == null) {
+                            sender.sendMessage(ChatColor.RED.toString() + "世界" + location.world + "不存在")
+                            return false
+                        }
+                        sender.teleport(location)
+                        sender.sendMessage(ChatColor.GRAY.toString() + "已传送至玩家" + user + "的家" + homeName)
+                    } else {
+                        sender.sendMessage(ChatColor.RED.toString() + "玩家" + user + "没有传送点" + homeName)
+                        return false
                     }
-                    player.teleport(location);
-                    sender.sendMessage(ChatColor.GRAY + "已传送至玩家" + user + "的家" + homeName);
-                } else {
-                    sender.sendMessage(ChatColor.RED + "玩家" + user + "没有传送点" + homeName);
-                    return false;
                 }
             } else {
-                HomeDataLoader homeDataLoader = plugin.getHomeProfiles().get(player.getUniqueId());
-                Location loc = homeDataLoader.getHome(homeName);
+                val homeDataLoader = plugin.homeProfiles[sender.uniqueId]
+                val loc = homeDataLoader!!.getHome(homeName)
                 if (loc == null) {
-                    sender.sendMessage(ChatColor.RED + "你没有传送点" + homeName);
-                    return false;
+                    sender.sendMessage(ChatColor.RED.toString() + "你没有传送点" + homeName)
+                    return false
                 } else {
-                    if (loc.getWorld() == null) {
-                        sender.sendMessage(ChatColor.RED + "世界" + loc.getWorld() + "不存在");
-                        return false;
+                    if (loc.world == null) {
+                        sender.sendMessage(ChatColor.RED.toString() + "世界" + loc.world + "不存在")
+                        return false
                     }
-                    player.teleport(loc);
-                    sender.sendMessage(ChatColor.GRAY + "已传送至家" + homeName);
+                    sender.teleport(loc)
+                    sender.sendMessage(ChatColor.GRAY.toString() + "已传送至家" + homeName)
                 }
             }
         } else {
-            sender.sendMessage(ChatColor.GRAY + "正确指令:\n§f/home <传送点> §7- 传送至你的家\n§f/home <玩家>:<传送点> §7- 传送至指定玩家的家");
+            sender.sendMessage(
+                """
+    ${ChatColor.GRAY}正确指令:
+    §f/home <传送点> §7- 传送至你的家
+    §f/home <玩家>:<传送点> §7- 传送至指定玩家的家
+    """.trimIndent()
+            )
         }
-
-        return true;
+        return true
     }
 
-    @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] args) {
-        if (args.length != 1)
-            return new ArrayList<>(0);
-        List<String> list = new ArrayList<>();
-        if (sender instanceof Player && args[0].contains(":")) {
-            String user = args[0].split(":", 2)[0];
-            OfflinePlayer i = Bukkit.getServer().getOfflinePlayer(((Player) sender).getUniqueId());
-            HomeDataLoader homeDataLoaderProfile;
-            if (i.isOnline()) {
-                homeDataLoaderProfile = plugin.getHomeProfiles().get(i.getUniqueId());
+    override fun onTabComplete(sender: CommandSender, command: Command, s: String, args: Array<String>): List<String> {
+        if (args.size != 1) return ArrayList(0)
+        val list: MutableList<String> = ArrayList()
+        return if (sender is Player && args[0].contains(":")) {
+            val user = args[0].split(":".toRegex(), limit = 2).toTypedArray()[0]
+            val i = Bukkit.getServer().getOfflinePlayer(sender.uniqueId)
+            val homeDataLoaderProfile: HomeDataLoader? = if (i.isOnline) {
+                plugin.homeProfiles[i.uniqueId]
             } else if (!i.hasPlayedBefore()) {
-                return new ArrayList<>(0);
+                return ArrayList(0)
             } else {
-                homeDataLoaderProfile = new HomeDataLoader(i.getUniqueId(), plugin);
+                HomeDataLoader(i.uniqueId, plugin)
             }
-            list.addAll(homeDataLoaderProfile.getHomes().stream().map(s1 -> user + ":" + s1).toList());
-            return list;
+            if (homeDataLoaderProfile != null) {
+                list.addAll(homeDataLoaderProfile.getHomes().stream().map { s1: String? -> "$user:$s1" }.toList())
+            }
+            list
         } else {
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                list.add(p.getName());
+            for (p in Bukkit.getOnlinePlayers()) {
+                list.add(p.name)
             }
-            if (sender instanceof Player) {
-                list.addAll(plugin.getHomeProfiles().get(((Player) sender).getUniqueId()).getHomes());
+            if (sender is Player) {
+                plugin.homeProfiles[sender.uniqueId]?.let { list.addAll(it.getHomes()) }
             }
-            return list;
+            list
         }
     }
 }

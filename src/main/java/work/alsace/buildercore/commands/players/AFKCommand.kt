@@ -1,48 +1,43 @@
-package work.alsace.buildercore.commands.players;
+package work.alsace.buildercore.commands.players
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.jetbrains.annotations.NotNull;
-import work.alsace.buildercore.BuilderCore;
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.command.Command
+import org.bukkit.command.CommandExecutor
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
+import org.bukkit.metadata.FixedMetadataValue
+import work.alsace.buildercore.BuilderCore
 
-public class AFKCommand implements CommandExecutor {
-    private final BuilderCore plugin;
-
-    public AFKCommand(BuilderCore plugin) {
-        this.plugin = plugin;
-    }
-
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage(ChatColor.RED + "该指令仅限玩家执行");
-            return false;
+class AFKCommand(private val plugin: BuilderCore) : CommandExecutor {
+    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
+        if (sender !is Player) {
+            sender.sendMessage(ChatColor.RED.toString() + "该指令仅限玩家执行")
+            return false
         }
-
-        if (args.length == 0) {
-            toggleAFK(player);
-            return true;
+        if (args.isEmpty()) {
+            toggleAFK(sender)
+            return true
         } else {
-            player.sendMessage(ChatColor.RED + "正确指令:\n§f/afk §7- 进入暂离状态");
+            sender.sendMessage(
+                """
+    ${ChatColor.RED}正确指令:
+    §f/afk §7- 进入暂离状态
+    """.trimIndent()
+            )
         }
-
-        return false;
+        return false
     }
 
-    private void toggleAFK(Player player) {
+    private fun toggleAFK(player: Player) {
         if (player.hasMetadata("afk")) {
-            player.sendMessage(ChatColor.GRAY + "你已取消暂离状态");
-            player.removeMetadata("afk", plugin);
-            Bukkit.broadcastMessage("§7玩家 §f" + player.getName() + " §7回来了");
+            player.sendMessage(ChatColor.GRAY.toString() + "你已取消暂离状态")
+            player.removeMetadata("afk", plugin)
+            Bukkit.broadcastMessage("§7玩家 §f" + player.name + " §7回来了")
         } else {
-            player.sendMessage(ChatColor.GRAY + "你已进入暂离状态");
-            player.setMetadata("afk", new FixedMetadataValue(plugin, true));
-            Bukkit.broadcastMessage("§7玩家 §f" + player.getName() + " §7暂时离开了");
+            player.sendMessage(ChatColor.GRAY.toString() + "你已进入暂离状态")
+            player.setMetadata("afk", FixedMetadataValue(plugin, true))
+            Bukkit.broadcastMessage("§7玩家 §f" + player.name + " §7暂时离开了")
         }
     }
 }

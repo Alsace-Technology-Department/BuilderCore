@@ -1,27 +1,24 @@
-package work.alsace.buildercore.commands.builderTools;
+package work.alsace.buildercore.commands.builderTools
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.ChatColor
+import org.bukkit.Material
+import org.bukkit.command.Command
+import org.bukkit.command.CommandExecutor
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 
-public class DebugStickCommand implements CommandExecutor {
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] strings) {
-        if (!(sender instanceof Player)) {
-            return false;
+class DebugStickCommand : CommandExecutor {
+    override fun onCommand(sender: CommandSender, command: Command, s: String, strings: Array<String>): Boolean {
+        return if (sender !is Player) {
+            false
         } else if (!sender.hasPermission("buildercore.commands.debugstick")) {
-            return false;
+            false
         } else {
-            Player player = (Player) sender;
-            ItemStack itemStack = new ItemStack(Material.DEBUG_STICK, 1);
-            player.getInventory().addItem(itemStack);
-            player.sendMessage(ChatColor.GRAY + "你获得了一个调试棒");
-            return true;
+            val itemStack = ItemStack(Material.DEBUG_STICK, 1)
+            sender.inventory.addItem(itemStack)
+            sender.sendMessage(ChatColor.GRAY.toString() + "你获得了一个调试棒")
+            true
         }
     }
 }

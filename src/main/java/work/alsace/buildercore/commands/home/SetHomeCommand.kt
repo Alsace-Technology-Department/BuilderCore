@@ -1,65 +1,61 @@
-package work.alsace.buildercore.commands.home;
+package work.alsace.buildercore.commands.home
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import work.alsace.buildercore.BuilderCore;
-import work.alsace.buildercore.service.HomeDataLoader;
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.command.Command
+import org.bukkit.command.CommandExecutor
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
+import work.alsace.buildercore.BuilderCore
+import work.alsace.buildercore.service.HomeDataLoader
 
-public class SetHomeCommand implements CommandExecutor {
-    private final BuilderCore plugin;
-
-    public SetHomeCommand(BuilderCore plugin) {
-        this.plugin = plugin;
-    }
-
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + "该指令仅限玩家执行");
-            return false;
+class SetHomeCommand(private val plugin: BuilderCore) : CommandExecutor {
+    override fun onCommand(sender: CommandSender, cmd: Command, commandLabel: String, args: Array<String>): Boolean {
+        if (sender !is Player) {
+            sender.sendMessage(ChatColor.RED.toString() + "该指令仅限玩家执行")
+            return false
         }
         if (!sender.hasPermission("buildercore.commands.sethome")) {
-            sender.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
-            return false;
+            sender.sendMessage(ChatColor.RED.toString() + "你没有使用该命令的权限")
+            return false
         }
-        if (args.length == 1) {
-            String homeName = args[0];
-            HomeDataLoader homeDataLoader;
-            Player player = (Player) sender;
+        if (args.size == 1) {
+            var homeName = args[0]
+            val homeDataLoader: HomeDataLoader?
             if (homeName.contains(":") && sender.hasPermission("buildercore.commands.sethome.other")) {
-                String username = args[0].split(":", 2)[0];
-                homeName = args[0].replaceFirst(username + ":", "");
-                OfflinePlayer i = Bukkit.getServer().getOfflinePlayer(player.getUniqueId());
-                if (i.isOnline()) {
-                    homeDataLoader = plugin.getHomeProfiles().get(i.getUniqueId());
+                val username = args[0].split(":".toRegex(), limit = 2).toTypedArray()[0]
+                homeName = args[0].replaceFirst("$username:".toRegex(), "")
+                val i = Bukkit.getServer().getOfflinePlayer(sender.uniqueId)
+                homeDataLoader = if (i.isOnline) {
+                    plugin.homeProfiles[i.uniqueId]
                 } else if (!i.hasPlayedBefore()) {
-                    sender.sendMessage(ChatColor.RED + "玩家不存在");
-                    return false;
+                    sender.sendMessage(ChatColor.RED.toString() + "玩家不存在")
+                    return false
                 } else {
-                    homeDataLoader = new HomeDataLoader(i.getUniqueId(), plugin);
+                    HomeDataLoader(i.uniqueId, plugin)
                 }
             } else {
-                homeDataLoader = plugin.getHomeProfiles().get(player.getUniqueId());
+                homeDataLoader = plugin.homeProfiles[sender.uniqueId]
             }
-            if (homeDataLoader.getHome(homeName) != null) {
-                sender.sendMessage(ChatColor.RED + "已经存在传送点" + homeName);
-                return false;
+            if (homeDataLoader?.getHome(homeName) != null) {
+                sender.sendMessage(ChatColor.RED.toString() + "已经存在传送点" + homeName)
+                return false
             }
-            if (homeDataLoader.getHomes().size() >= homeDataLoader.getMaxHomes() && !player.hasPermission("buildercore.commands.sethome.other")) {
-                sender.sendMessage(ChatColor.RED + "你的家已经达到最大传送点数量");
-                return false;
+            if (homeDataLoader?.getHomes()?.size!! >= homeDataLoader.getMaxHomes() && !sender.hasPermission("buildercore.commands.sethome.other")) {
+                sender.sendMessage(ChatColor.RED.toString() + "你的家已经达到最大传送点数量")
+                return false
             }
-            homeDataLoader.addHome(homeName, player.getLocation());
-            sender.sendMessage(String.format(ChatColor.GRAY + "成功设置传送点%s", homeName));
+            homeDataLoader.addHome(homeName, sender.location)
+            sender.sendMessage(String.format(ChatColor.GRAY.toString() + "成功设置传送点%s", homeName))
         } else {
-            sender.sendMessage(ChatColor.GRAY + "正确指令:\n§f/sethome <传送点> §7- 设置你的家\n§f/sethome <玩家>:<传送点> §7- 设置指定玩家的家");
+            sender.sendMessage(
+                """
+    ${ChatColor.GRAY}正确指令:
+    §f/sethome <传送点> §7- 设置你的家
+    §f/sethome <玩家>:<传送点> §7- 设置指定玩家的家
+    """.trimIndent()
+            )
         }
-        return true;
+        return true
     }
 }

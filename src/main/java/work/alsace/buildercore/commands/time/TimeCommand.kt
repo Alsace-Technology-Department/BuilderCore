@@ -1,157 +1,181 @@
-package work.alsace.buildercore.commands.time;
+package work.alsace.buildercore.commands.time
 
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.World;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.apache.commons.lang.StringUtils
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.World
+import org.bukkit.command.Command
+import org.bukkit.command.CommandExecutor
+import org.bukkit.command.CommandSender
+import org.bukkit.command.TabCompleter
+import org.bukkit.entity.Player
+import java.util.*
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+class TimeCommand : CommandExecutor, TabCompleter {
+    private val error = """
+         ${ChatColor.GRAY}正确指令:
+         §f/time <时间> §7- 设置你当前世界的时间
+         §f/time <时间> <世界> §7- 设置指定世界的时间
+         """.trimIndent()
 
-public class TimeCommand implements CommandExecutor, TabCompleter {
-
-    private final String error = ChatColor.GRAY + "正确指令:\n§f/time <时间> §7- 设置你当前世界的时间\n§f/time <时间> <世界> §7- 设置指定世界的时间";
-    private static final List<String> times1 = Arrays.asList("sunrise", "day", "morning", "noon", "afternoon", "sunset", "night", "midnight", "5000");
-
-    private static final List<String> times0 = Arrays.asList("sunrise", "day", "morning", "noon", "afternoon", "sunset", "night", "midnight", "5000", "set", "add");
-
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] strings) {
-        if (strings.length == 1 && sender instanceof Player player) {
-            if (!player.hasPermission("buildercore.commands.time")) {
-                player.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
-                return false;
+    override fun onCommand(sender: CommandSender, command: Command, s: String, strings: Array<String>): Boolean {
+        if (strings.size == 1 && sender is Player) {
+            if (!sender.hasPermission("buildercore.commands.time")) {
+                sender.sendMessage(ChatColor.RED.toString() + "你没有使用该命令的权限")
+                return false
             }
-            World world = player.getWorld();
-            long timeTicks = getTimeFromKeyword(strings[0]);
-            if (timeTicks == -1) {
-                player.sendMessage(error);
-                return false;
+            val world: World = sender.world
+            val timeTicks = getTimeFromKeyword(strings[0])
+            if (timeTicks == -1L) {
+                sender.sendMessage(error)
+                return false
             }
-            world.setTime(timeTicks);
-            player.sendMessage(ChatColor.GRAY + "已将当前世界时间设置为 §f" + timeTicks + " ticks");
-            return true;
+            world.time = timeTicks
+            sender.sendMessage(ChatColor.GRAY.toString() + "已将当前世界时间设置为 §f" + timeTicks + " ticks")
+            return true
         }
-
-        if (strings.length == 2) {
-            Player player = (Player) sender;
-            switch (strings[0]) {
-                case "set" -> {
+        if (strings.size == 2) {
+            val player = sender as Player
+            when (strings[0]) {
+                "set" -> {
                     if (!player.hasPermission("buildercore.commands.time")) {
-                        player.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
-                        return false;
+                        player.sendMessage(ChatColor.RED.toString() + "你没有使用该命令的权限")
+                        return false
                     }
-                    long timeTicks = getTimeFromKeyword(strings[1]);
-                    if (timeTicks == -1) {
-                        sender.sendMessage(error);
-                        return false;
+                    val timeTicks = getTimeFromKeyword(strings[1])
+                    if (timeTicks == -1L) {
+                        sender.sendMessage(error)
+                        return false
                     }
-                    player.getWorld().setTime(timeTicks);
-                    player.sendMessage(ChatColor.GRAY + "已将当前世界时间设置为 §f" + strings[1] + " ticks");
-                    return true;
+                    player.world.time = timeTicks
+                    player.sendMessage(ChatColor.GRAY.toString() + "已将当前世界时间设置为 §f" + strings[1] + " ticks")
+                    return true
                 }
-                case "add" -> {
+
+                "add" -> {
                     if (!player.hasPermission("buildercore.commands.time")) {
-                        player.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
-                        return false;
+                        player.sendMessage(ChatColor.RED.toString() + "你没有使用该命令的权限")
+                        return false
                     }
                     if (!StringUtils.isNumeric(strings[1])) {
-                        sender.sendMessage(error);
-                        return false;
+                        sender.sendMessage(error)
+                        return false
                     }
-                    long var = Long.parseLong(strings[1]);
-                    long var1 = player.getWorld().getTime();
-                    player.getWorld().setTime(var + var1);
-                    player.sendMessage(ChatColor.GRAY + "已将当前世界时间增加 §f" + var + " ticks");
-                    return true;
+                    val `var` = strings[1].toLong()
+                    val var1 = player.world.time
+                    player.world.time = `var` + var1
+                    player.sendMessage(ChatColor.GRAY.toString() + "已将当前世界时间增加 §f" + `var` + " ticks")
+                    return true
                 }
             }
             if (!sender.hasPermission("buildercore.commands.time.other")) {
-                sender.sendMessage(ChatColor.RED + "你没有使用该命令的权限");
-                return false;
+                sender.sendMessage(ChatColor.RED.toString() + "你没有使用该命令的权限")
+                return false
             }
-            World world = Bukkit.getWorld(strings[1]);
+            val world = Bukkit.getWorld(strings[1])
             if (world == null) {
-                sender.sendMessage(ChatColor.RED + "指定的世界不存在");
-                return false;
+                sender.sendMessage(ChatColor.RED.toString() + "指定的世界不存在")
+                return false
             }
-            long timeTicks = getTimeFromKeyword(strings[0]);
-            if (timeTicks == -1) {
-                sender.sendMessage(error);
-                return false;
+            val timeTicks = getTimeFromKeyword(strings[0])
+            if (timeTicks == -1L) {
+                sender.sendMessage(error)
+                return false
             }
-            world.setTime(timeTicks);
-            sender.sendMessage(ChatColor.GRAY + "已将世界 §f" + strings[1] + " §7的时间设置为 §f" + timeTicks + " ticks");
-            return true;
+            world.time = timeTicks
+            sender.sendMessage(ChatColor.GRAY.toString() + "已将世界 §f" + strings[1] + " §7的时间设置为 §f" + timeTicks + " ticks")
+            return true
         }
-        sender.sendMessage(error);
-        return false;
+        sender.sendMessage(error)
+        return false
     }
 
-    private long getTimeFromKeyword(String keyword) {
-        switch (keyword.toLowerCase()) {
-            case "sunrise" -> {
-                return 21000;
+    private fun getTimeFromKeyword(keyword: String): Long {
+        return when (keyword.lowercase(Locale.getDefault())) {
+            "sunrise" -> {
+                21000
             }
-            case "day" -> {
-                return 0;
+
+            "day" -> {
+                0
             }
-            case "morning" -> {
-                return 3000;
+
+            "morning" -> {
+                3000
             }
-            case "noon" -> {
-                return 6000;
+
+            "noon" -> {
+                6000
             }
-            case "afternoon" -> {
-                return 9000;
+
+            "afternoon" -> {
+                9000
             }
-            case "sunset" -> {
-                return 12000;
+
+            "sunset" -> {
+                12000
             }
-            case "night" -> {
-                return 15000;
+
+            "night" -> {
+                15000
             }
-            case "midnight" -> {
-                return 18000;
+
+            "midnight" -> {
+                18000
             }
-            default -> {
+
+            else -> {
                 try {
-                    return Long.parseLong(keyword);
-                } catch (NumberFormatException e) {
-                    return -1;
+                    keyword.toLong()
+                } catch (e: NumberFormatException) {
+                    -1
                 }
             }
         }
     }
 
-    @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] strings) {
-        if (strings.length == 1 && sender.hasPermission("buildercore.commands.time")) {
-            return times0;
+    override fun onTabComplete(
+        sender: CommandSender,
+        command: Command,
+        s: String,
+        strings: Array<String>
+    ): List<String> {
+        if (strings.size == 1 && sender.hasPermission("buildercore.commands.time")) {
+            return times0
         }
-        if (strings.length == 2 && strings[0].equals("set") && sender.hasPermission("buildercore.commands.time")) {
-            return times1;
+        if (strings.size == 2 && strings[0] == "set" && sender.hasPermission("buildercore.commands.time")) {
+            return times1
         }
-        if (strings.length == 2 && strings[0].equals("add") && sender.hasPermission("buildercore.commands.time")) {
-            List<String> list = new ArrayList<>();
-            list.add("1000");
-            return list;
+        if (strings.size == 2 && strings[0] == "add" && sender.hasPermission("buildercore.commands.time")) {
+            val list: MutableList<String> = ArrayList()
+            list.add("1000")
+            return list
         }
-        if (strings.length == 2 && sender.hasPermission("buildercore.commands.time.other")) {
-            List<String> list = new ArrayList<>();
-            for (World w : Bukkit.getWorlds()) {
-                list.add(w.getName());
+        if (strings.size == 2 && sender.hasPermission("buildercore.commands.time.other")) {
+            val list: MutableList<String> = ArrayList()
+            for (w in Bukkit.getWorlds()) {
+                list.add(w.name)
             }
-            return list;
+            return list
         }
-        return Collections.emptyList();
+        return emptyList()
+    }
+
+    companion object {
+        private val times1: List<String> =
+            mutableListOf("sunrise", "day", "morning", "noon", "afternoon", "sunset", "night", "midnight", "5000")
+        private val times0: List<String> = mutableListOf(
+            "sunrise",
+            "day",
+            "morning",
+            "noon",
+            "afternoon",
+            "sunset",
+            "night",
+            "midnight",
+            "5000",
+            "set",
+            "add"
+        )
     }
 }

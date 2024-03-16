@@ -1,45 +1,44 @@
-package work.alsace.buildercore.listeners;
+package work.alsace.buildercore.listeners
 
-import org.bukkit.Material;
-import org.bukkit.entity.Cat;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.Material
+import org.bukkit.entity.Cat
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerInteractEntityEvent
 
-public class CatListener implements Listener {
-
+class CatListener : Listener {
     @EventHandler
-    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        Player player = event.getPlayer();
-        if (player.getInventory().getItemInMainHand().getType() == Material.DEBUG_STICK && player.hasPermission("buildercore.protect.place") && player.isSneaking()) {
-            if (event.getRightClicked() instanceof Cat cat) {
-                event.setCancelled(true);
-                Cat.Type newType = getNextCatType(cat.getCatType());
-                cat.setCatType(newType);
+    fun onPlayerInteractEntity(event: PlayerInteractEntityEvent) {
+        val player = event.player
+        if (player.inventory.itemInMainHand.type == Material.DEBUG_STICK && player.hasPermission("buildercore.protect.place") && player.isSneaking) {
+            if (event.rightClicked is Cat) {
+                val cat: Cat = event.rightClicked as Cat
+                event.isCancelled = true
+                val newType = getNextCatType(cat.catType)
+                cat.catType = newType
             }
-        } else if (player.getInventory().getItemInMainHand().getType() == Material.DEBUG_STICK && player.hasPermission("buildercore.protect.place")) {
-            event.setCancelled(true);
-            if (event.getRightClicked() instanceof Cat cat) {
-                cat.setSitting(!cat.isSitting());
+        } else if (player.inventory.itemInMainHand.type == Material.DEBUG_STICK && player.hasPermission("buildercore.protect.place")) {
+            event.isCancelled = true
+            if (event.rightClicked is Cat) {
+                val cat: Cat = event.rightClicked as Cat
+                cat.isSitting = !cat.isSitting
             }
         }
     }
 
-    private Cat.Type getNextCatType(Cat.Type currentType) {
-        return switch (currentType) {
-            case BLACK -> Cat.Type.BRITISH_SHORTHAIR;
-            case BRITISH_SHORTHAIR -> Cat.Type.CALICO;
-            case CALICO -> Cat.Type.JELLIE;
-            case JELLIE -> Cat.Type.PERSIAN;
-            case PERSIAN -> Cat.Type.RAGDOLL;
-            case RAGDOLL -> Cat.Type.RED;
-            case RED -> Cat.Type.SIAMESE;
-            case SIAMESE -> Cat.Type.TABBY;
-            case TABBY -> Cat.Type.ALL_BLACK;
-            case ALL_BLACK -> Cat.Type.WHITE;
-            case WHITE -> Cat.Type.BLACK;
-        };
+    private fun getNextCatType(currentType: Cat.Type): Cat.Type {
+        return when (currentType) {
+            Cat.Type.BLACK -> Cat.Type.BRITISH_SHORTHAIR
+            Cat.Type.BRITISH_SHORTHAIR -> Cat.Type.CALICO
+            Cat.Type.CALICO -> Cat.Type.JELLIE
+            Cat.Type.JELLIE -> Cat.Type.PERSIAN
+            Cat.Type.PERSIAN -> Cat.Type.RAGDOLL
+            Cat.Type.RAGDOLL -> Cat.Type.RED
+            Cat.Type.RED -> Cat.Type.SIAMESE
+            Cat.Type.SIAMESE -> Cat.Type.TABBY
+            Cat.Type.TABBY -> Cat.Type.ALL_BLACK
+            Cat.Type.ALL_BLACK -> Cat.Type.WHITE
+            Cat.Type.WHITE -> Cat.Type.BLACK
+        }
     }
-
 }
