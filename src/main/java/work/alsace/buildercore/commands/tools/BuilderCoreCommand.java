@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AlsaceCoreCommand implements CommandExecutor, TabCompleter {
+public class BuilderCoreCommand implements CommandExecutor, TabCompleter {
     private final BuilderCore plugin;
 
     private static final List<String> commands = Arrays.asList("reload", "info");
 
-    public AlsaceCoreCommand(BuilderCore plugin) {
+    public BuilderCoreCommand(BuilderCore plugin) {
         this.plugin = plugin;
     }
 
@@ -30,7 +30,7 @@ public class AlsaceCoreCommand implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             switch (args[0]) {
                 case "info" ->
-                        sender.sendMessage(ChatColor.GRAY + "插件名称: §fAlsaceCore\n§7插件版本: §f" + plugin.getDescription().getVersion() + "\n§7插件作者: §f" + Arrays.toString(plugin.getDescription().getAuthors().toArray()));
+                        sender.sendMessage(ChatColor.GRAY + "插件名称: §fBuilderCore\n§7插件版本: §f" + plugin.getDescription().getVersion() + "\n§7插件作者: §f" + Arrays.toString(plugin.getDescription().getAuthors().toArray()));
                 case "reload" -> {
                     plugin.loadConfig();
                     sender.sendMessage(ChatColor.GRAY + "重载成功");

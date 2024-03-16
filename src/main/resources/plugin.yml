@@ -7,10 +7,12 @@ authors:
   - 'CHuNan'
   - 'zhuoxin_lzk'
 version: ${version}
+depend:
+  - 'Multiverse-Core'
+  - 'FastAsyncWorldEdit'
 softdepend:
   - 'PlaceholderAPI'
-  - 'FastAsyncWorldEdit'
-description: 阿尔萨斯工业基础插件
+description: 建筑师基础插件
 api-version: '1.16'
 permissions:
   alsace.afk.bypass:

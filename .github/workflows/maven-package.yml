@@ -3,7 +3,7 @@ name: Package and Release on Merge
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build-and-release:

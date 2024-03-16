@@ -18,7 +18,7 @@ import work.alsace.buildercore.commands.players.*;
 import work.alsace.buildercore.commands.teleport.*;
 import work.alsace.buildercore.commands.time.PTimeCommand;
 import work.alsace.buildercore.commands.time.TimeCommand;
-import work.alsace.buildercore.commands.tools.AlsaceCoreCommand;
+import work.alsace.buildercore.commands.tools.BuilderCoreCommand;
 import work.alsace.buildercore.commands.tools.WhoisCommand;
 import work.alsace.buildercore.commands.warp.DelWarpCommand;
 import work.alsace.buildercore.commands.warp.SetWarpCommand;
@@ -118,8 +118,8 @@ public class BuilderCore extends JavaPlugin {
         Objects.requireNonNull(getCommand("delwarp")).setExecutor(new DelWarpCommand(this));
         Objects.requireNonNull(getCommand("delwarp")).setTabCompleter(new DelWarpCommand(this));
 
-        Objects.requireNonNull(getCommand("buildercore")).setExecutor(new AlsaceCoreCommand(this));
-        Objects.requireNonNull(getCommand("buildercore")).setTabCompleter(new AlsaceCoreCommand(this));
+        Objects.requireNonNull(getCommand("buildercore")).setExecutor(new BuilderCoreCommand(this));
+        Objects.requireNonNull(getCommand("buildercore")).setTabCompleter(new BuilderCoreCommand(this));
 
         Objects.requireNonNull(getCommand("whois")).setExecutor(new WhoisCommand());
         Objects.requireNonNull(getCommand("itemname")).setExecutor(new ItemNameCommand());
