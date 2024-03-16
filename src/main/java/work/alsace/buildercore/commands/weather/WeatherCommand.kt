@@ -37,7 +37,7 @@ class WeatherCommand : CommandExecutor, TabCompleter {
                 }
 
                 "thunder" -> {
-                    world.setStorm(false)
+                    world.setStorm(true)
                     world.isThundering = true
                     sender.sendMessage("已将当前世界天气设置为 §f雷暴")
                     true
