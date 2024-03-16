@@ -1,4 +1,4 @@
-main: work.buildercore.buildercore.BuilderCore
+main: work.alsace.buildercore.BuilderCore
 name: BuilderCore
 authors:
   - "Usine d' Alsace"
